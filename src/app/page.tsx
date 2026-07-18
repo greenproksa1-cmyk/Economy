@@ -7,51 +7,63 @@ import * as random from 'maath/random/dist/maath-random.esm'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import type { Vector3 } from 'three'
 
-// ===== Three.js Particle Background Component =====
-function ParticleField({ count = 3000 }: { count?: number }) {
+// =============================================
+// THREE.JS - PARTICLE FIELD COMPONENT
+// =============================================
+function ParticleField({ count = 2500 }: { count?: number }) {
   const ref = useRef<any>(null)
   const [positions] = useState(() => 
-    Float32Array.from({ length: count * 3 }, () => (Math.random() - 0.5) * 15)
+    Float32Array.from({ length: count * 3 }, () => (Math.random() - 0.5) * 18)
   )
 
   useFrame((state, delta) => {
     if (ref.current) {
-      ref.current.rotation.x -= delta / 15
-      ref.current.rotation.y -= delta / 20
+      ref.current.rotation.x -= delta / 18
+      ref.current.rotation.y -= delta / 22
+      // Mouse interaction effect
+      const time = state.clock.elapsedTime
+      ref.current.position.y = Math.sin(time * 0.3) * 0.15
     }
   })
 
   return (
     <group rotation={[0, 0, Math.PI / 4]}>
-      <Points ref={ref} positions={positions} stride={3} frustumCulled={false}>
+      <Points 
+        ref={ref} 
+        positions={positions} 
+        stride={3} 
+        frustumCulled={false}
+      >
         <PointMaterial
           transparent
-          color="#D4AF37"
-          size={0.02}
+          color="#C9A227"
+          size={0.025}
           sizeAttenuation={true}
           depthWrite={false}
-          opacity={0.8}
+          opacity={0.85}
         />
       </Points>
     </group>
   )
 }
 
-// ===== Wave Mesh Background =====
+// =============================================
+// THREE.JS - WIREFRAME MESH (Economic Growth)
+// =============================================
 function WaveMesh() {
   const meshRef = useRef<any>(null)
   
   useFrame((state) => {
     if (meshRef.current) {
-      meshRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.2) * 0.1
+      meshRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.15) * 0.08
       const geometry = meshRef.current.geometry
       const positions = geometry.attributes.position.array
       
       for (let i = 0; i < positions.length; i += 3) {
         const x = positions[i]
         const y = positions[i + 1]
-        positions[i + 2] = Math.sin(x * 0.5 + state.clock.elapsedTime) * 0.3 + 
-                           Math.cos(y * 0.5 + state.clock.elapsedTime * 0.8) * 0.3
+        positions[i + 2] = Math.sin(x * 0.4 + state.clock.elapsedTime * 0.6) * 0.35 + 
+                           Math.cos(y * 0.4 + state.clock.elapsedTime * 0.5) * 0.35
       }
       
       geometry.attributes.position.needsUpdate = true
@@ -60,13 +72,15 @@ function WaveMesh() {
   
   return (
     <mesh ref={meshRef} position={[0, 0, -3]} rotation={[-Math.PI / 4, 0, 0]}>
-      <planeGeometry args={[20, 20, 50, 50]} />
-      <meshBasicMaterial color="#1E9BD7" wireframe transparent opacity={0.15} />
+      <planeGeometry args={[25, 25, 60, 60]} />
+      <meshBasicMaterial color="#1E9BD7" wireframe transparent opacity={0.12} />
     </mesh>
   )
 }
 
-// ===== Hero Scene Component =====
+// =============================================
+// HERO SCENE - THREE.JS CANVAS
+// =============================================
 function HeroScene() {
   return (
     <>
@@ -77,10 +91,11 @@ function HeroScene() {
   )
 }
 
-// ===== Language Translations =====
+// =============================================
+// TRANSLATIONS - ARABIC & ENGLISH
+// =============================================
 const translations = {
   ar: {
-    // Navbar
     nav: {
       home: 'الرئيسية',
       about: 'عن البرنامج',
@@ -90,9 +105,8 @@ const translations = {
       sponsorship: 'فرص الرعاية',
       contact: 'تواصل معنا',
     },
-    // Hero
     hero: {
-      badge: '🇸🇦 برنامج إعلامي سعودي',
+      badge: '🇸🦦 برنامج إعلامي سعودي',
       title: 'قادة',
       titleHighlight: 'الاقتصاد',
       subtitle: 'منصة إعلامية تُبرز دور القطاع الخاص في تحقيق مستهدفات رؤية السعودية 2030',
@@ -100,7 +114,6 @@ const translations = {
       cta2: 'كن راعياً / تواصل معنا',
       scroll: 'اكتشف المزيد',
     },
-    // About
     about: {
       badge: 'نبذة عن البرنامج',
       title: 'نحو اقتصاد متنوع ومستدام',
@@ -113,8 +126,8 @@ const translations = {
       statEpisodes: 'حلقة',
       statSectors: 'قطاع',
       statGuests: 'ضيف',
+      statViewers: 'مشاهد',
     },
-    // Vision & Mission
     vm: {
       badge: 'الرؤية والرسالة',
       visionTitle: 'الرؤية',
@@ -122,27 +135,25 @@ const translations = {
       missionTitle: 'الرسالة',
       missionText: 'إنتاج محتوى إعلامي نوعي يعكس إنجازات القيادات الاقتصادية الوطنية في مختلف القطاعات، ونسلط الضوء على دورهم في تحقيق مستهدفات رؤية 2030.',
     },
-    // Objectives
     objectives: {
       badge: 'أهداف البرنامج',
       title: '9 أهداف استراتيجية نسعى لتحقيقها',
       items: [
-        { title: 'إبراز القيادات الفاعلة', desc: 'في القطاع الخاص' },
-        { title: 'تسليط الضوء على قصص', desc: 'النجاح السعودي' },
-        { title: 'دعم توجهات الاستثمار', desc: 'والأعمال' },
-        { title: 'تعزيز الروابط بين', desc: 'رجال الأعمال 2030' },
-        { title: 'نشر الثقافة الاقتصادية', desc: 'للمجتمع' },
-        { title: 'تحفيز الشباب', desc: 'والكفاءات' },
-        { title: 'تسريع التحولات', desc: 'التنموية' },
-        { title: 'نشر الوعي', desc: 'بالمسؤولية' },
-        { title: 'إبراز المسارات', desc: 'التنموية' },
+        { icon: '👑', title: 'إبراز القيادات الفاعلة', desc: 'في القطاع الخاص' },
+        { icon: '💡', title: 'تسليط الضوء على قصص', desc: 'النجاح السعودي' },
+        { icon: '📈', title: 'دعم توجهات الاستثمار', desc: 'والأعمال' },
+        { icon: '🤝', title: 'تعزيز الروابط بين', desc: 'رجال الأعمال' },
+        { icon: '📚', title: 'نشر الثقافة الاقتصادية', desc: 'للمجتمع' },
+        { icon: '🚀', title: 'تحفيز الشباب', desc: 'والكفاءات' },
+        { icon: '⚡', title: 'تسريع التحولات', desc: 'التنموية' },
+        { icon: '🌱', title: 'نشر الوعي', desc: 'بالمسؤولية' },
+        { icon: '🎯', title: 'إبراز المسارات', desc: 'التنموية' },
       ],
     },
-    // Timeline / Episodes
     timeline: {
       badge: 'محاور الحلقة',
       title: 'رحلة شاملة في 10 محاور رئيسية',
-      subtitle: 'يتناول البرنامج في كل حلقة جوانب متعددة من حياة الضيف، ونواصلها؛ وقصص النجاح التي مر بها، وتزويد المشاهد برؤية إعلامية احترافية تُثري المعرفة الاقتصادية.',
+      subtitle: 'يتناول البرنامج في كل حلقة جوانب متعددة من حياة الضيف، من رحلة التأسيس إلى المساهمة في رؤية 2030.',
       items: [
         'رحلة التأسيس',
         'أبرز التحديات',
@@ -156,22 +167,11 @@ const translations = {
         'المساهمة في رؤية 2030',
       ],
     },
-    // Targets
     targets: {
       badge: 'الفئات والقطاعات المستهدفة',
       audiencesTitle: 'الفئات المستهدفة',
       sectorsTitle: 'القطاعات المستهدفة',
-      audiences: [
-        'رجال أعمال',
-        'المستثمرون',
-        'رواد أعمال',
-        'قيادات تنفيذية',
-        'صناع قرار',
-        'جهات حكومية',
-        'إعلام اقتصادي',
-        'طلاب جامعات',
-        'مهتمون بالاقتصاد',
-      ],
+      audiences: ['رجال أعمال', 'المستثمرون', 'رواد أعمال', 'قيادات تنفيذية', 'صناع قرار', 'جهات حكومية', 'إعلام اقتصادي', 'طلاب جامعات', 'مهتمون بالاقتصاد'],
       sectors: [
         { text: 'الصناعة', size: 'large' },
         { text: 'الطاقة', size: 'medium' },
@@ -191,54 +191,37 @@ const translations = {
         { text: 'الاقتصاد الرقمي', size: 'large' },
       ],
     },
-    // National Value
     nationalValue: {
       title: 'القيمة الوطنية للبرنامج',
       p1: 'يسهم برنامج "قادة الاقتصاد" في تعزيز',
       highlight: 'الهوية الاقتصادية للمملكة',
-      p2: '، ويبرز كيانات رائدة في التطور والنمو، ويضيف للإعلاميات الوطنية في الشأن الاقتصادي الذي يعد فخراً لهوية الاقتصاد السعودي ووجهته على الخريطة الإعلامية.',
+      p2: '، ويبرز كيانات رائدة في التطور والنمو، ويضيف للإعلاميات الوطنية في الشأن الاقتصادي فخراً لهوية الاقتصاد السعودي.',
     },
-    // Production
     production: {
       badge: 'عناصر الإنتاج وخطة النشر',
       productionTitle: 'عناصر الإنتاج',
       publishingTitle: 'خطة النشر',
-      productionItems: [
-        'تصوير احترافي',
-        'شرف الطاقم الفني',
-        'إعداد محتوى علمي دقيق',
-        'تقديمة مميزة',
-        'حضور عنصر الإثارة',
-        'إعداد التقارير الإخبارية',
-      ],
-      publishingItems: [
-        'تصوير تقرير إعلاني',
-        'إجراء عبر الواقع',
-        'قصر مباشر',
-        'أفلام رسوم متحركة',
-        'تغطية موسيقى مناسبة',
-        'موسيقى تصويرية مناسبة',
-      ],
+      productionItems: ['تصوير احترافي', 'شرف الطاقم الفني', 'إعداد محتوى علمي دقيق', 'تقديمة مميزة', 'حضور عنصر الإثارة', 'إعداد التقارير'],
+      publishingItems: ['تصوير تقرير إعلاني', 'بث عبر الواقع', 'قصر مباشر', 'أفلام رسوم متحركة', 'تغطية موسيقى', 'موسيقى تصويرية'],
     },
-    // Sponsorship
     sponsorship: {
       badge: 'فرص الرعاية',
       title: '6 فرص ذهبية للرعاة والشركاء',
       items: [
-        { icon: '📺', title: 'الظهور الإعلامي', desc: 'تواجد علامتك التجارية أمام جمهور واسع ومتخصص من خلال ظهورها في جميع حلقات البرنامج ومحتواه.' },
+        { icon: '📺', title: 'الظهور الإعلامي', desc: 'تواجد علامتك التجارية أمام جمهور واسع ومتخصص من خلال ظهورها في جميع حلقات البرنامج.' },
         { icon: '🏢', title: 'تعزيز الهوية المؤسسية', desc: 'ربط اسم مؤسستك بمحتوى وطني نوعي يعكس القيم والمبادئ التي تؤمن بها.' },
-        { icon: '💻', title: 'الحضور الرقمي', desc: 'تواجد فعال على جميع المنصات الرقمية مع محتوى خاص يبرز دوركم في دعم الاقتصاد.' },
-        { icon: '👥', title: 'الوصول لجمهور متخصص', desc: 'الوصول المباشر لصناع القرار ورجال الأعمال والمستثمرين في المملكة.' },
-        { icon: '🔗', title: 'الاستفادة من خطة النشر', desc: 'التواجد في حملات تسويقية متكاملة تشمل جميع قنوات التواصل والمنصات الإعلامية.' },
-        { icon: '🇸🇦', title: 'الارتباط بمحتوى وطني نوعي', desc: 'المشاركة في مشروع وطني يساهم في تحقيق رؤية 2030 وبناء اقتصاد مزدهر.' },
+        { icon: '💻', title: 'الحضور الرقمي', desc: 'تواجد فعال على جميع المنصات الرقمية مع محتوى خاص يبرز دوركم.' },
+        { icon: '👥', title: 'الوصول لجمهور متخصص', desc: 'الوصول المباشر لصناع القرار ورجال الأعمال والمستثمرين.' },
+        { icon: '🔗', title: 'الاستفادة من خطة النشر', desc: 'التواجد في حملات تسويقية متكاملة تشمل جميع القنوات.' },
+        { icon: '🇸🇦', title: 'الارتباط بمحتوى وطني نوعي', desc: 'المشاركة في مشروع وطني يساهم في تحقيق رؤية 2030.' },
       ],
     },
-    // Why Us
     whyUs: {
       badge: 'لماذا قادة الاقتصاد؟',
-      quote: 'لأن كل تقدم مرهون بإسهاماتنا سوياً، لأننا من خلال هذا البرنامج نعمد إلى جمع أصحاب العزم وسواند، لأن المحتوى الاقتصادي الذي سيروى في بيان اقتباسات الاقتصادية الملكة المحلية، بلورة مكاسب الاقتصاديات وإعلامياتها.',
+      quotePart1: 'لأن كل تقدم مرهون بإسهاماتنا سوياً، لأننا من خلال هذا البرنامج نعمد إلى جمع أصحاب العزم وسواند، لأن المحتوى الاقتصادي الذي سيروى',
+      quoteHighlight: 'ي crystallizes gains of economies',
+      quotePart2: 'وإعلامياتها.',
     },
-    // Contact
     contact: {
       title: 'تواصل معنا',
       subtitle: 'نحن سعداء بتواصلكم معنا',
@@ -266,7 +249,7 @@ const translations = {
       contact: 'Contact',
     },
     hero: {
-      badge: '🇸🇦 Saudi Media Program',
+      badge: '🇸🦦 Saudi Media Program',
       title: 'Economy',
       titleHighlight: 'Leaders',
       subtitle: 'A media platform highlighting the private sector role in achieving Saudi Vision 2030 goals',
@@ -286,6 +269,7 @@ const translations = {
       statEpisodes: 'Episodes',
       statSectors: 'Sectors',
       statGuests: 'Guests',
+      statViewers: 'Viewers',
     },
     vm: {
       badge: 'Vision & Mission',
@@ -298,21 +282,21 @@ const translations = {
       badge: 'Program Objectives',
       title: '9 Strategic Goals We Aim to Achieve',
       items: [
-        { title: 'Highlight Active Leaders', desc: 'In Private Sector' },
-        { title: 'Spotlight Success Stories', desc: 'Saudi Success' },
-        { title: 'Support Investment Trends', desc: '& Business' },
-        { title: 'Strengthen Links Between', desc: 'Businessmen 2030' },
-        { title: 'Spread Economic Culture', desc: 'To Society' },
-        { title: 'Empower Youth', desc: '& Talents' },
-        { title: 'Accelerate Development', desc: 'Transformations' },
-        { title: 'Raise Awareness', desc: 'Of Responsibility' },
-        { title: 'Highlight Development', desc: 'Pathways' },
+        { icon: '👑', title: 'Highlight Active Leaders', desc: 'In Private Sector' },
+        { icon: '💡', title: 'Spotlight Success Stories', desc: 'Saudi Success' },
+        { icon: '📈', title: 'Support Investment Trends', desc: '& Business' },
+        { icon: '🤝', title: 'Strengthen Links Between', desc: 'Businessmen' },
+        { icon: '📚', title: 'Spread Economic Culture', desc: 'To Society' },
+        { icon: '🚀', title: 'Empower Youth', desc: '& Talents' },
+        { icon: '⚡', title: 'Accelerate Development', desc: 'Transformations' },
+        { icon: '🌱', title: 'Raise Awareness', desc: 'Of Responsibility' },
+        { icon: '🎯', title: 'Highlight Development', desc: 'Pathways' },
       ],
     },
     timeline: {
       badge: 'Episode Themes',
       title: 'A Comprehensive Journey in 10 Main Themes',
-      subtitle: 'Each episode covers multiple aspects of the guest\'s life, and we continue; and the success stories they went through, providing viewers with professional media perspective that enriches economic knowledge.',
+      subtitle: 'Each episode covers multiple aspects of the guest\'s journey, from founding to Vision 2030 contribution.',
       items: [
         'Founding Journey',
         'Key Challenges',
@@ -330,17 +314,7 @@ const translations = {
       badge: 'Target Audiences & Sectors',
       audiencesTitle: 'Target Audiences',
       sectorsTitle: 'Target Sectors',
-      audiences: [
-        'Businessmen',
-        'Investors',
-        'Entrepreneurs',
-        'Executives',
-        'Decision Makers',
-        'Government Bodies',
-        'Economic Media',
-        'University Students',
-        'Economy Enthusiasts',
-      ],
+      audiences: ['Businessmen', 'Investors', 'Entrepreneurs', 'Executives', 'Decision Makers', 'Government Bodies', 'Economic Media', 'University Students', 'Economy Enthusiasts'],
       sectors: [
         { text: 'Industry', size: 'large' },
         { text: 'Energy', size: 'medium' },
@@ -364,44 +338,32 @@ const translations = {
       title: 'National Value of the Program',
       p1: '"Economy Leaders" program contributes to enhancing the',
       highlight: 'National Economic Identity',
-      p2: ', highlighting pioneering entities in development and growth, adding to national economic media content that reflects pride in Saudi economy identity and direction on the media map.',
+      p2: ', highlighting pioneering entities in development and growth, adding pride to Saudi economy identity.',
     },
     production: {
       badge: 'Production Elements & Publishing Plan',
       productionTitle: 'Production Elements',
       publishingTitle: 'Publishing Plan',
-      productionItems: [
-        'Professional Photography',
-        'Technical Team Honor',
-        'Accurate Scientific Content',
-        'Special Presentation',
-        'Excitement Element',
-        'News Reports Preparation',
-      ],
-      publishingItems: [
-        'Ad Report Filming',
-        'Via Reality',
-        'Direct Palace',
-        'Animation Films',
-        'Music Coverage',
-        'Appropriate Soundtrack',
-      ],
+      productionItems: ['Professional Photography', 'Technical Team Honor', 'Accurate Scientific Content', 'Special Presentation', 'Excitement Element', 'News Reports'],
+      publishingItems: ['Ad Report Filming', 'Via Reality', 'Direct Palace', 'Animation Films', 'Music Coverage', 'Appropriate Soundtrack'],
     },
     sponsorship: {
       badge: 'Sponsorship Opportunities',
       title: '6 Golden Opportunities for Sponsors & Partners',
       items: [
-        { icon: '📺', title: 'Media Exposure', desc: 'Your brand presence before a wide and specialized audience through appearance in all program episodes and content.' },
-        { icon: '🏢', title: 'Corporate Identity Enhancement', desc: 'Link your institution name with quality national content reflecting values and principles you believe in.' },
-        { icon: '💻', title: 'Digital Presence', desc: 'Effective presence on all digital platforms with special content highlighting your role in supporting economy.' },
-        { icon: '👥', title: 'Access to Specialized Audience', desc: 'Direct access to decision makers, businessmen and investors in the Kingdom.' },
-        { icon: '🔗', title: 'Benefit from Publishing Plan', desc: 'Presence in integrated marketing campaigns covering all communication channels and media platforms.' },
-        { icon: '🇸🇦', title: 'Association with Quality National Content', desc: 'Participation in a national project contributing to achieving Vision 2030 and building a prosperous economy.' },
+        { icon: '📺', title: 'Media Exposure', desc: 'Your brand presence before a wide and specialized audience through all program episodes.' },
+        { icon: '🏢', title: 'Corporate Identity Enhancement', desc: 'Link your institution name with quality national content reflecting your values.' },
+        { icon: '💻', title: 'Digital Presence', desc: 'Effective presence on all digital platforms with special content highlighting your role.' },
+        { icon: '👥', title: 'Access to Specialized Audience', desc: 'Direct access to decision makers, businessmen and investors.' },
+        { icon: '🔗', title: 'Benefit from Publishing Plan', desc: 'Presence in integrated marketing campaigns covering all channels.' },
+        { icon: '🇸🇦', title: 'Association with Quality National Content', desc: 'Participation in a national project contributing to Vision 2030.' },
       ],
     },
     whyUs: {
       badge: 'Why Economy Leaders?',
-      quote: 'Because every progress depends on our contributions together, because through this program we aim to gather determined people, because the economic content that will be told crystallizes gains of economies and their media.',
+      quotePart1: 'Because every progress depends on our contributions together, because through this program we aim to gather determined people, because the economic content that will be told',
+      quoteHighlight: 'crystallizes gains of economies',
+      quotePart2: 'and their media.',
     },
     contact: {
       title: 'Contact Us',
@@ -421,7 +383,96 @@ const translations = {
   },
 }
 
-// ===== Main Page Component =====
+// =============================================
+// STATS COUNTER COMPONENT
+// =============================================
+function StatsCounter({ lang }: { lang: 'ar' | 'en' }) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const [counts, setCounts] = useState({ episodes: 0, sectors: 0, guests: 0, viewers: 0 })
+
+  const targetCounts = { episodes: 20, sectors: 16, guests: 50, viewers: 500000 }
+
+  useEffect(() => {
+    if (isInView) {
+      const duration = 2200
+      const steps = 65
+      const interval = duration / steps
+
+      let step = 0
+      const timer = setInterval(() => {
+        step++
+        const progress = step / steps
+        // Ease out cubic
+        const easeOut = 1 - Math.pow(1 - progress, 3)
+
+        setCounts({
+          episodes: Math.round(targetCounts.episodes * easeOut),
+          sectors: Math.round(targetCounts.sectors * easeOut),
+          guests: Math.round(targetCounts.guests * easeOut),
+          viewers: Math.round(targetCounts.viewers * easeOut),
+        })
+
+        if (step >= steps) clearInterval(timer)
+      }, interval)
+
+      return () => clearInterval(timer)
+    }
+  }, [isInView])
+
+  const t = translations[lang]
+
+  return (
+    <section ref={ref} className="stats-section">
+      <div className="stats-grid">
+        <motion.div 
+          className="stat-item"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+        >
+          <div className="stat-number">{counts.episodes}+</div>
+          <div className="stat-label">{t.about.statEpisodes}</div>
+        </motion.div>
+        <motion.div 
+          className="stat-item"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.12 }}
+        >
+          <div className="stat-number">{counts.sectors}</div>
+          <div className="stat-label">{t.about.statSectors}</div>
+        </motion.div>
+        <motion.div 
+          className="stat-item"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.24 }}
+        >
+          <div className="stat-number">{counts.guests}+</div>
+          <div className="stat-label">{t.about.statGuests}</div>
+        </motion.div>
+        <motion.div 
+          className="stat-item"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.36 }}
+        >
+          <div className="stat-label">{t.about.statViewers}</div>
+          <div className="stat-number">{counts.viewers.toLocaleString()}+</div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+// =============================================
+// MAIN PAGE COMPONENT
+// =============================================
 export default function Home() {
   const [lang, setLang] = useState<'ar' | 'en'>('ar')
   const [isScrolled, setIsScrolled] = useState(false)
@@ -431,14 +482,14 @@ export default function Home() {
 
   // Preloader Effect
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2500)
+    const timer = setTimeout(() => setIsLoading(false), 2800)
     return () => clearTimeout(timer)
   }, [])
 
   // Scroll Effect for Navbar
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
+      setIsScrolled(window.scrollY > 60)
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
@@ -448,7 +499,7 @@ export default function Home() {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
       setMobileMenuOpen(false)
     }
   }
@@ -460,29 +511,30 @@ export default function Home() {
 
   // Animation Variants
   const fadeInUp = {
-    hidden: { opacity: 0, y: 60 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } }
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.75, ease: "easeOut" } }
   }
 
   const staggerContainer = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.15 } }
+    visible: { transition: { staggerChildren: 0.14 } }
   }
 
   const scaleIn = {
-    hidden: { opacity: 0, scale: 0.85 },
+    hidden: { opacity: 0, scale: 0.88 },
     visible: { opacity: 1, scale: 1, transition: { duration: 0.6 } }
   }
 
   return (
-    <div dir={lang === 'ar' ? 'rtl' : 'ltr'} className="min-h-screen">
+    <div dir={lang === 'ar' ? 'rtl' : 'ltr'} style={{ minHeight: '100vh' }}>
+      
       {/* ===== PRELOADER ===== */}
       <AnimatePresence>
         {isLoading && (
           <motion.div
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.55 }}
             className="preloader"
           >
             <div className="preloader-content">
@@ -499,12 +551,13 @@ export default function Home() {
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
+        transition={{ duration: 0.65, delay: 0.35, ease: "easeOut" }}
         className={`navbar ${isScrolled ? 'scrolled' : ''}`}
       >
         <div className="navbar-container">
-          <a href="#" className="navbar-logo">
-            🏛️ <span>{lang === 'ar' ? 'قادة الاقتصاد' : 'Economy Leaders'}</span>
+          <a href="#" className="navbar-logo" onClick={(e) => { e.preventDefault(); scrollToSection('hero') }}>
+            <span className="logo-icon">🏛️</span>
+            <span>{lang === 'ar' ? 'قادة الاقتصاد' : 'Economy Leaders'}<span className="logo-text-highlight"> | </span></span>
           </a>
 
           <ul className="navbar-links">
@@ -532,7 +585,7 @@ export default function Home() {
       <div className={`mobile-menu-overlay ${mobileMenuOpen ? 'active' : ''}`} onClick={() => setMobileMenuOpen(false)} />
       <div className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`}>
         <div className="mobile-menu-header">
-          <span style={{ color: '#D4AF37', fontWeight: 700, fontSize: '1.25rem' }}>
+          <span style={{ color: '#C9A227', fontWeight: 800, fontSize: '1.2rem' }}>
             {lang === 'ar' ? 'قادة الاقتصاد' : 'Economy Leaders'}
           </span>
           <button className="mobile-menu-close" onClick={() => setMobileMenuOpen(false)}>✕</button>
@@ -550,25 +603,27 @@ export default function Home() {
 
       {/* ===== HERO SECTION ===== */}
       <section id="hero" className="hero-section">
+        {/* Three.js Canvas Background */}
         <div className="hero-canvas-container">
-          <Canvas camera={{ position: [0, 0, 5], fov: 60 }}>
+          <Canvas camera={{ position: [0, 0, 5.5], fov: 58 }} dpr={[1, 1.5]} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
             <Suspense fallback={null}>
               <HeroScene />
             </Suspense>
           </Canvas>
         </div>
 
+        {/* Hero Content */}
         <motion.div 
           className="hero-content"
           initial={{ opacity: 0 }}
           animate={{ opacity: isLoading ? 0 : 1 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
+          transition={{ duration: 0.85, delay: 0.45 }}
         >
           <motion.div 
-            className="hero-badge"
+            className="hero-badge animate__animated animate__fadeInDown"
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
+            transition={{ duration: 0.6, delay: 0.75 }}
           >
             {t.hero.badge}
           </motion.div>
@@ -577,7 +632,7 @@ export default function Home() {
             className="hero-title"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
+            transition={{ duration: 0.8, delay: 0.95 }}
           >
             {t.hero.title} <span className="highlight">{t.hero.titleHighlight}</span>
           </motion.h1>
@@ -586,7 +641,7 @@ export default function Home() {
             className="hero-subtitle"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.2 }}
+            transition={{ duration: 0.8, delay: 1.15 }}
           >
             {t.hero.subtitle}
           </motion.p>
@@ -595,9 +650,9 @@ export default function Home() {
             className="hero-buttons"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.5 }}
+            transition={{ duration: 0.8, delay: 1.4 }}
           >
-            <button className="btn-primary" onClick={() => scrollToSection('episodes')}>
+            <button className="btn-primary animate__animated animate__pulse" onClick={() => scrollToSection('episodes')}>
               ▶ {t.hero.cta1}
             </button>
             <button className="btn-secondary" onClick={() => scrollToSection('contact')}>
@@ -606,6 +661,7 @@ export default function Home() {
           </motion.div>
         </motion.div>
 
+        {/* Scroll Indicator */}
         <div className="scroll-indicator">
           <a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about') }}>
             <div className="scroll-mouse">
@@ -617,20 +673,21 @@ export default function Home() {
       </section>
 
       {/* ===== ABOUT SECTION ===== */}
-      <section id="about" className="section about-section">
+      <section id="about" className="section section-light">
         <div className="container">
           <motion.div 
             className="about-grid"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "-120px" }}
             variants={staggerContainer}
           >
             <motion.div variants={fadeInUp} className="about-image-wrapper">
               <img 
-                src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80" 
-                alt="Saudi Economy" 
+                src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=850&q=85" 
+                alt="Saudi Economy Skyline" 
                 className="about-image"
+                loading="lazy"
               />
               <div className="about-image-overlay">
                 <div className="about-stats-mini">
@@ -693,14 +750,14 @@ export default function Home() {
             variants={fadeInUp}
           >
             <div className="section-badge">{t.vm.badge}</div>
-            <h2 className="section-title" style={{ color: 'white' }}>{t.vm.badge}</h2>
+            <h2 className="section-title">{t.vm.badge}</h2>
           </motion.div>
 
           <motion.div 
             className="vision-mission-grid"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "-120px" }}
             variants={staggerContainer}
           >
             <motion.div variants={scaleIn} className="vm-card">
@@ -738,7 +795,7 @@ export default function Home() {
             className="objectives-grid"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
+            viewport={{ once: true, margin: "-80px" }}
             variants={staggerContainer}
           >
             {t.objectives.items.map((item, index) => (
@@ -746,10 +803,10 @@ export default function Home() {
                 key={index} 
                 variants={scaleIn}
                 className="objective-card"
-                whileHover={{ scale: 1.05, y: -10 }}
+                whileHover={{ scale: 1.04, y: -10 }}
               >
                 <div className="objective-card-number">{String(index + 1).padStart(2, '0')}</div>
-                <div className="objective-card-icon">🎯</div>
+                <div className="objective-card-icon">{item.icon}</div>
                 <h4>{item.title}</h4>
                 <p>{item.desc}</p>
               </motion.div>
@@ -777,7 +834,7 @@ export default function Home() {
             className="timeline-container"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
+            viewport={{ once: true, margin: "-80px" }}
             variants={staggerContainer}
           >
             <div className="timeline-line"></div>
@@ -817,7 +874,7 @@ export default function Home() {
             className="targets-grid"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "-120px" }}
             variants={staggerContainer}
           >
             <motion.div variants={fadeInUp} className="target-category">
@@ -828,9 +885,9 @@ export default function Home() {
                     key={index}
                     variants={scaleIn}
                     className="audience-card"
-                    whileHover={{ scale: 1.05, y: -5 }}
+                    whileHover={{ scale: 1.05, y: -6 }}
                   >
-                    <div className="audience-card-icon">👤</div>
+                    <i className="audience-card-icon fi fi-rr-user"></i>
                     <span>{audience}</span>
                   </motion.div>
                 ))}
@@ -859,9 +916,10 @@ export default function Home() {
       {/* ===== NATIONAL VALUE SECTION ===== */}
       <section id="national-value" className="national-value-section">
         <img 
-          src="https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?w=1400&q=80" 
-          alt="Saudi Arabia Economy" 
+          src="https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?w=1500&q=85" 
+          alt="Saudi Arabia Kingdom Tower" 
           className="national-value-bg"
+          loading="lazy"
         />
         <div className="national-value-overlay"></div>
         
@@ -897,7 +955,7 @@ export default function Home() {
             className="production-grid"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "-120px" }}
             variants={staggerContainer}
           >
             <motion.div variants={fadeInUp} className="production-column">
@@ -953,7 +1011,7 @@ export default function Home() {
             className="sponsorship-grid"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "-120px" }}
             variants={staggerContainer}
           >
             {t.sponsorship.items.map((item, index) => (
@@ -962,9 +1020,9 @@ export default function Home() {
                 variants={scaleIn}
                 className="sponsorship-card"
                 whileHover={{ 
-                  y: -15, 
+                  y: -16, 
                   rotateX: 5,
-                  boxShadow: '0 35px 70px rgba(11, 61, 98, 0.2)'
+                  boxShadow: '0 40px 80px rgba(11, 44, 72, 0.18)'
                 }}
                 style={{ transformStyle: 'preserve-3d' }}
               >
@@ -979,9 +1037,9 @@ export default function Home() {
       </section>
 
       {/* ===== WHY US QUOTE SECTION ===== */}
-      <section id="why-us" className="section quote-section">
-        <div className="quote-decoration quote-left">"</div>
-        <div className="quote-decoration quote-right">"</div>
+      <section id="why-us" className="quote-section">
+        <div className="quote-decoration quote-left">&ldquo;</div>
+        <div className="quote-decoration quote-right">&rdquo;</div>
         
         <motion.div 
           className="quote-content"
@@ -992,23 +1050,21 @@ export default function Home() {
         >
           <div className="section-badge">{t.whyUs.badge}</div>
           <motion.blockquote variants={fadeInUp}>
-            {t.whyUs.quote.split('،').map((part, i) => (
-              <span key={i}>
-                {i === 1 ? <span className="highlight">{part}،</span> : part}{i < 2 && ' '}
-              </span>
-            ))}
+            {t.whyUs.quotePart1}{' '}
+            <span className="highlight">{t.whyUs.quoteHighlight}</span>{' '}
+            {t.whyUs.quotePart2}
           </motion.blockquote>
         </motion.div>
       </section>
 
       {/* ===== CONTACT & FOOTER SECTION ===== */}
-      <section id="contact" className="section contact-footer-section">
+      <section id="contact" className="contact-footer-section">
         <div className="container">
           <motion.div 
             className="contact-footer-grid"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "-120px" }}
             variants={staggerContainer}
           >
             {/* Contact Form */}
@@ -1019,7 +1075,7 @@ export default function Home() {
               <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
                 <div className="form-group">
                   <label>{t.contact.name}</label>
-                  <input type="text" placeholder={t.contact.name} />
+                  <input type="text" placeholder={t.contact.name} required />
                 </div>
                 <div className="form-group">
                   <label>{t.contact.organization}</label>
@@ -1027,11 +1083,11 @@ export default function Home() {
                 </div>
                 <div className="form-group">
                   <label>{t.contact.email}</label>
-                  <input type="email" placeholder={t.contact.email} />
+                  <input type="email" placeholder={t.contact.email} required />
                 </div>
                 <div className="form-group">
                   <label>{t.contact.message}</label>
-                  <textarea placeholder={t.contact.message}></textarea>
+                  <textarea placeholder={t.contact.message} required></textarea>
                 </div>
                 <button type="submit" className="btn-submit">
                   {t.contact.submit} →
@@ -1066,7 +1122,7 @@ export default function Home() {
               </div>
 
               <div className="social-links">
-                <a href="#" className="social-link" aria-label="Twitter">𝕏</a>
+                <a href="#" className="social-link" aria-label="Twitter/X">𝕏</a>
                 <a href="#" className="social-link" aria-label="LinkedIn">in</a>
                 <a href="#" className="social-link" aria-label="Instagram">📷</a>
                 <a href="#" className="social-link" aria-label="YouTube">▶</a>
@@ -1079,94 +1135,12 @@ export default function Home() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
           >
             {t.contact.copyright}
           </motion.div>
         </div>
       </section>
     </div>
-  )
-}
-
-// ===== Stats Counter Component =====
-function StatsCounter({ lang }: { lang: 'ar' | 'en' }) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const [counts, setCounts] = useState({ episodes: 0, sectors: 0, guests: 0, audience: 0 })
-
-  const targetCounts = { episodes: 20, sectors: 16, guests: 50, audience: 500000 }
-
-  useEffect(() => {
-    if (isInView) {
-      const duration = 2000
-      const steps = 60
-      const interval = duration / steps
-
-      let step = 0
-      const timer = setInterval(() => {
-        step++
-        const progress = step / steps
-        const easeOut = 1 - Math.pow(1 - progress, 3)
-
-        setCounts({
-          episodes: Math.round(targetCounts.episodes * easeOut),
-          sectors: Math.round(targetCounts.sectors * easeOut),
-          guests: Math.round(targetCounts.guests * easeOut),
-          audience: Math.round(targetCounts.audience * easeOut),
-        })
-
-        if (step >= steps) clearInterval(timer)
-      }, interval)
-
-      return () => clearInterval(timer)
-    }
-  }, [isInView])
-
-  const t = translations[lang]
-
-  return (
-    <section ref={ref} className="stats-section">
-      <div className="stats-grid">
-        <motion.div 
-          className="stat-item"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <div className="stat-number">{counts.episodes}+</div>
-          <div className="stat-label">{t.about.statEpisodes}</div>
-        </motion.div>
-        <motion.div 
-          className="stat-item"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-        >
-          <div className="stat-number">{counts.sectors}</div>
-          <div className="stat-label">{t.about.statSectors}</div>
-        </motion.div>
-        <motion.div 
-          className="stat-item"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-        >
-          <div className="stat-number">{counts.guests}+</div>
-          <div className="stat-label">{t.about.statGuests}</div>
-        </motion.div>
-        <motion.div 
-          className="stat-item"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-        >
-          <div className="stat-label">{lang === 'ar' ? 'مشاهد' : 'Viewers'}</div>
-          <div className="stat-number">{counts.audience.toLocaleString()}+</div>
-        </motion.div>
-      </div>
-    </section>
   )
 }
