@@ -1,0 +1,1502 @@
+     1→'use client'
+     2→
+     3→import { useState, useEffect, useRef, Suspense } from 'react'
+     4→import { Canvas, useFrame } from '@react-three/fiber'
+     5→import { Points, PointMaterial } from '@react-three/drei'
+     6→import * as random from 'maath/random/dist/maath-random.esm'
+     7→import { motion, AnimatePresence, useInView } from 'framer-motion'
+     8→import type { Vector3 } from 'three'
+     9→
+    10→// =============================================
+    11→// THREE.JS - PARTICLE FIELD COMPONENT
+    12→// =============================================
+    13→function ParticleField({ count = 2500 }: { count?: number }) {
+    14→  const ref = useRef<any>(null)
+    15→  const [positions] = useState(() => 
+    16→    Float32Array.from({ length: count * 3 }, () => (Math.random() - 0.5) * 18)
+    17→  )
+    18→
+    19→  useFrame((state, delta) => {
+    20→    if (ref.current) {
+    21→      ref.current.rotation.x -= delta / 18
+    22→      ref.current.rotation.y -= delta / 22
+    23→      const time = state.clock.elapsedTime
+    24→      ref.current.position.y = Math.sin(time * 0.3) * 0.15
+    25→    }
+    26→  })
+    27→
+    28→  return (
+    29→    <group rotation={[0, 0, Math.PI / 4]}>
+    30→      <Points 
+    31→        ref={ref} 
+    32→        positions={positions} 
+    33→        stride={3} 
+    34→        frustumCulled={false}
+    35→      >
+    36→        <PointMaterial
+    37→          transparent
+    38→          color="#C9A227"
+    39→          size={0.025}
+    40→          sizeAttenuation={true}
+    41→          depthWrite={false}
+    42→          opacity={0.85}
+    43→        />
+    44→      </Points>
+    45→    </group>
+    46→  )
+    47→}
+    48→
+    49→// =============================================
+    50→// THREE.JS - WIREFRAME MESH (Economic Growth)
+    51→// =============================================
+    52→function WaveMesh() {
+    53→  const meshRef = useRef<any>(null)
+    54→  
+    55→  useFrame((state) => {
+    56→    if (meshRef.current) {
+    57→      meshRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.15) * 0.08
+    58→      const geometry = meshRef.current.geometry
+    59→      const positions = geometry.attributes.position.array
+    60→      
+    61→      for (let i = 0; i < positions.length; i += 3) {
+    62→        const x = positions[i]
+    63→        const y = positions[i + 1]
+    64→        positions[i + 2] = Math.sin(x * 0.4 + state.clock.elapsedTime * 0.6) * 0.35 + 
+    65→                           Math.cos(y * 0.4 + state.clock.elapsedTime * 0.5) * 0.35
+    66→      }
+    67→      
+    68→      geometry.attributes.position.needsUpdate = true
+    69→    }
+    70→  })
+    71→  
+    72→  return (
+    73→    <mesh ref={meshRef} position={[0, 0, -3]} rotation={[-Math.PI / 4, 0, 0]}>
+    74→      <planeGeometry args={[25, 25, 60, 60]} />
+    75→      <meshBasicMaterial color="#1E9BD7" wireframe transparent opacity={0.12} />
+    76→    </mesh>
+    77→  )
+    78→}
+    79→
+    80→// =============================================
+    81→// HERO SCENE - THREE.JS CANVAS
+    82→// =============================================
+    83→function HeroScene() {
+    84→  return (
+    85→    <>
+    86→      <ambientLight intensity={0.5} />
+    87→      <ParticleField />
+    88→      <WaveMesh />
+    89→    </>
+    90→  )
+    91→}
+    92→
+    93→// =============================================
+    94→// ICON MAPPING - Flaticon UIcons
+    95→// =============================================
+    96→const iconMap = {
+    97→  // Vision & Mission
+    98→  vision: 'fi fi-rr-eye',
+    99→  mission: 'fi fi-rr-target',
+   100→  
+   101→  // Objectives (9 items)
+   102→  crown: 'fi fi-rr-crown',
+   103→  bulb: 'fi fi-rr-lightbulb',
+   104→  chart: 'fi fi-rr-chart-line-up',
+   105→  handshake: 'fi fi-rr-handshake',
+   106→  book: 'fi fi-rr-book-open',
+   107→  rocket: 'fi fi-rr-rocket',
+   108→  bolt: 'fi fi-rr-bolt',
+   109→  leaf: 'fi fi-rr-leaf',
+   110→  target: 'fi fi-rr-crosshairs',
+   111→  
+   112→  // About Features
+   113→  comment: 'fi fi-rr-comment-quote',
+   114→  star: 'fi fi-rr-star',
+   115→  stats: 'fi fi-rr-chart-pie',
+   116→  trophy: 'fi fi-rr-trophy',
+   117→  
+   118→  // Target Audiences (specific icons per audience)
+   119→  businessman: 'fi fi-rr-briefcase',
+   120→  investor: 'fi fi-rr-chart-line-up',
+   121→  entrepreneur: 'fi fi-rr-rocket-lunch',
+   122→  executive: 'fi fi-rr-user-tie',
+   123→  decisionMaker: 'fi fi-rr-flag',
+   124→  government: 'fi fi-rr-building',
+   125→  media: 'fi fi-rr-newspaper',
+   126→  student: 'fi fi-rr-graduation-cap',
+   127→  enthusiast: 'fi fi-rr-user',
+   128→  
+   129→  // Sectors icons
+   130→  industry: 'fi fi-rr-factory',
+   131→  energy: 'fi fi-rr-battery-full',
+   132→  mining: 'fi fi-rr-digging',
+   133→  agriculture: 'fi fi-rr-wheat',
+   134→  technology: 'fi fi-rr-microchip',
+   135→  logistics: 'fi fi-rr-truck',
+   136→  realEstate: 'fi fi-rr-building',
+   137→  tourism: 'fi fi-rr-suitcase',
+   138→  health: 'fi fi-rr-heart-pulse',
+   139→  education: 'fi fi-rr-book-alt',
+   140→  finance: 'fi fi-rr-coins',
+   141→  insurance: 'fi fi-rr-shield-check',
+   142→  telecom: 'fi fi-rf-antenna',
+   143→  trade: 'fi fi-rr-shopping-cart',
+   144→  foodSecurity: 'fi fi-rr-wheat',
+   145→  digitalEconomy: 'fi fi-rr-circle-nodes',
+   146→  
+   147→  // Production Elements
+   148→  camera: 'fi fi-rr-camera',
+   149→  director: 'fi fi-rr-clapperboard',
+   150→  report: 'fi fi-rr-document',
+   151→  infographic: 'fi fi-rr-chart-bar',
+   152→  audio: 'fi fi-rr-microphone',
+   153→  music: 'fi fi-rr-music',
+   154→  videoBroadcast: 'fi fi-rr-video-camera',
+   155→  shortClip: 'fi fi-rr-scissors',
+   156→  guestContent: 'fi fi-rr-user-guest',
+   157→  pressCoverage: 'fi fi-rr-newspaper',
+   158→  digitalCampaign: 'fi fi-rf-mobile-button',
+   159→  quote: 'fi fi-rr-quote-right',
+   160→  
+   161→  // Sponsorship Opportunities
+   162→  mediaTV: 'fi fi-rr-tv',
+   163→  branding: 'fi fi-rr-palette',
+   164→  digitalPresence: 'fi fi-rr-globe',
+   165→  audience: 'fi fi-rr-users',
+   166→  publishingPlan: 'fi fi-rr-share',
+   167→  nationalContent: 'fi fi-rr-medal',
+   168→  
+   169→  // Contact & Footer
+   170→  location: 'fi fi-rr-map-pin',
+   171→  phone: 'fi fi-rr-phone-call',
+   172→  email: 'fi fi-rr-envelope',
+   173→  building: 'fi fi-rr-building-columns',
+   174→  logo: 'fi fi-rr-building-columns',
+   175→  saudiBadge: 'fi rr-flag',
+   176→  
+   177→  // Social Media
+   178→  twitter: '𝕏',
+   179→  linkedin: 'in',
+   180→  instagram: 'fi fi-rr-camera',
+   181→  youtube: 'fi fi-rr-youtube',
+   182→}
+   183→
+   184→// =============================================
+   185→// TRANSLATIONS - ARABIC & ENGLISH
+   186→// =============================================
+   187→const translations = {
+   188→  ar: {
+   189→    nav: {
+   190→      home: 'الرئيسية',
+   191→      about: 'عن البرنامج',
+   192→      vision: 'الرؤية',
+   193→      objectives: 'الأهداف',
+   194→      episodes: 'محاور الحلقات',
+   195→      sponsorship: 'فرص الرعاية',
+   196→      contact: 'تواصل معنا',
+   197→    },
+   198→    hero: {
+   199→      badge: 'برنامج إعلامي سعودي',
+   200→      title: 'قادة',
+   201→      titleHighlight: 'الاقتصاد',
+   202→      subtitle: 'منصة إعلامية تُبرز دور القطاع الخاص في تحقيق مستهدفات رؤية السعودية 2030',
+   203→      cta1: 'شاهد الحلقات',
+   204→      cta2: 'كن راعياً / تواصل معنا',
+   205→      scroll: 'اكتشف المزيد',
+   206→    },
+   207→    about: {
+   208→      badge: 'نبذة عن البرنامج',
+   209→      title: 'نحو اقتصاد متنوع ومستدام',
+   210→      p1: 'يشهد الاقتصادي السعودي تحولاً تاريخياً غير مسبوق يهدف إلى تنويع مصادر الدخل وتقليل الاعتماد على النفط. وفي قلب هذا التحول، يأتي دور القطاع الخاص كمحرك أساسي للنمو والابتكار.',
+   211→      p2: 'من هنا، يأتي برنامج "قادة الاقتصاد" ليكون منصة إعلامية رائدة تسلط الضوء على قصص النجاح والريادة في عالم الأعمال السعودي، مستضيفاً أبرز الشخصيات المؤثرة في مختلف القطاعات.',
+   212→      feature1: 'حوار عميق وجاد',
+   213→      feature2: 'شخصيات مؤثرة',
+   214→      feature3: 'رؤى اقتصادية',
+   215→      feature4: 'قصص نجاح ملهمة',
+   216→      statEpisodes: 'حلقة',
+   217→      statSectors: 'قطاع',
+   218→      statGuests: 'ضيف',
+   219→      statViewers: 'مشاهد',
+   220→    },
+   221→    vm: {
+   222→      badge: 'الرؤية والرسالة',
+   223→      visionTitle: 'الرؤية',
+   224→      visionText: 'أن نكون المنصة الإعلامية الأولى والأكثر تأثيراً في إبراز دور القيادات الاقتصادية السعودية، ونساهم في تعزيز ثقافة ريادة الأعمال والاستثمار المحلي.',
+   225→      missionTitle: 'الرسالة',
+   226→      missionText: 'إنتاج محتوى إعلامي نوعي يعكس إنجازات القيادات الاقتصادية الوطنية في مختلف القطاعات، ونسلط الضوء على دورهم في تحقيق مستهدفات رؤية 2030.',
+   227→    },
+   228→    objectives: {
+   229→      badge: 'أهداف البرنامج',
+   230→      title: '9 أهداف استراتيجية نسعى لتحقيقها',
+   231→      items: [
+   232→        { icon: 'crown', title: 'إبراز القيادات الفاعلة', desc: 'في القطاع الخاص' },
+   233→        { icon: 'star', title: 'تسليط الضوء على قصص', desc: 'النجاح السعودي' },
+   234→        { icon: 'chart', title: 'دعم توجهات الاستثمار', desc: 'والأعمال' },
+   235→        { icon: 'handshake', title: 'تعزيز الروابط بين', desc: 'رجال الأعمال' },
+   236→        { icon: 'book', title: 'نشر الثقافة الاقتصادية', desc: 'للمجتمع' },
+   237→        { icon: 'rocket', title: 'تحفيز الشباب', desc: 'والكفاءات' },
+   238→        { icon: 'bolt', title: 'تسريع التحولات', desc: 'التنموية' },
+   239→        { icon: 'leaf', title: 'نشر الوعي', desc: 'بالمسؤولية' },
+   240→        { icon: 'target', title: 'إبراز المسارات', desc: 'التنموية' },
+   241→      ],
+   242→    },
+   243→    timeline: {
+   244→      badge: 'محاور الحلقة',
+   245→      title: 'رحلة شاملة في 10 محاور رئيسية',
+   246→      subtitle: 'يتناول البرنامج في كل حلقة جوانب متعددة من حياة الضيف، من رحلة التأسيس إلى المساهمة في رؤية 2030.',
+   247→      items: [
+   248→        'رحلة التأسيس',
+   249→        'أبرز التحديات',
+   250→        'عوامل النجاح',
+   251→        'القيادة والإدارة',
+   252→        'الاستثمار والتوسع',
+   253→        'تنمية الكفاءات',
+   254→        'الابتكار والتحول',
+   255→        'المسؤولية الاجتماعية',
+   256→        'الخطط المستقبلية',
+   257→        'المساهمة في رؤية 2030',
+   258→      ],
+   259→    },
+   260→    targets: {
+   261→      badge: 'الفئات والقطاعات المستهدفة',
+   262→      audiencesTitle: 'الفئات المستهدفة',
+   263→      sectorsTitle: 'القطاعات المستهدفة',
+   264→      audiences: [
+   265→        { text: 'رجال أعمال', icon: 'businessman' },
+   266→        { text: 'المستثمرون', icon: 'investor' },
+   267→        { text: 'رواد أعمال', icon: 'entrepreneur' },
+   268→        { text: 'قيادات تنفيذية', icon: 'executive' },
+   269→        { text: 'صناع قرار', icon: 'decisionMaker' },
+   270→        { text: 'جهات حكومية', icon: 'government' },
+   271→        { text: 'إعلام اقتصادي', icon: 'media' },
+   272→        { text: 'طلاب جامعات', icon: 'student' },
+   273→        { text: 'مهتمون بالاقتصاد', icon: 'enthusiast' },
+   274→      ],
+   275→      sectors: [
+   276→        { text: 'الصناعة', size: 'large', icon: 'industry' },
+   277→        { text: 'الطاقة', size: 'medium', icon: 'energy' },
+   278→        { text: 'التعدين', size: 'small', icon: 'mining' },
+   279→        { text: 'الزراعة', size: 'medium', icon: 'agriculture' },
+   280→        { text: 'التقنية', size: 'large', icon: 'technology' },
+   281→        { text: 'اللوجستيات', size: 'medium', icon: 'logistics' },
+   282→        { text: 'العقار', size: 'small', icon: 'realEstate' },
+   283→        { text: 'السياحة', size: 'medium', icon: 'tourism' },
+   284→        { text: 'الصحة', size: 'large', icon: 'health' },
+   285→        { text: 'التعليم', size: 'small', icon: 'education' },
+   286→        { text: 'التمويل', size: 'medium', icon: 'finance' },
+   287→        { text: 'التأمين', size: 'small', icon: 'insurance' },
+   288→        { text: 'الاتصالات', size: 'medium', icon: 'telecom' },
+   289→        { text: 'التجارة', size: 'large', icon: 'trade' },
+   290→        { text: 'الأمن الغذائي', size: 'medium', icon: 'foodSecurity' },
+   291→        { text: 'الاقتصاد الرقمي', size: 'large', icon: 'digitalEconomy' },
+   292→      ],
+   293→    },
+   294→    nationalValue: {
+   295→      title: 'القيمة الوطنية للبرنامج',
+   296→      p1: 'يسهم برنامج "قادة الاقتصاد" في تعزيز',
+   297→      highlight: 'الهوية الاقتصادية للمملكة',
+   298→      p2: '، ويبرز كيانات رائدة في التطور والنمو، ويضيف للإعلاميات الوطنية في الشأن الاقتصادي فخراً لهوية الاقتصاد السعودي.',
+   299→    },
+   300→    production: {
+   301→      badge: 'عناصر الإنتاج وخطة النشر',
+   302→      productionTitle: 'عناصر الإنتاج',
+   303→      publishingTitle: 'خطة النشر',
+   304→      productionItems: [
+   305→        { text: 'تصوير احترافي', icon: 'camera' },
+   306→        { text: 'إخراج فني متقن', icon: 'director' },
+   307→        { text: 'تقارير ميدانية', icon: 'report' },
+   308→        { text: 'إنفوجرافيك', icon: 'infographic' },
+   309→        { text: 'تعليق صوتي', icon: 'audio' },
+   310→        { text: 'موسيقى تصويرية', icon: 'music' },
+   311→      ],
+   312→      publishingItems: [
+   313→        { text: 'بث فيديو الحلقات', icon: 'videoBroadcast' },
+   314→        { text: 'مقاطع قصيرة', icon: 'shortClip' },
+   315→        { text: 'محتوى خاص بالضيف', icon: 'guestContent' },
+   316→        { text: 'تغطية صحفية', icon: 'pressCoverage' },
+   317→        { text: 'حملات رقمية', icon: 'digitalCampaign' },
+   318→        { text: 'اقتباسات مميزة', icon: 'quote' },
+   319→      ],
+   320→    },
+   321→    sponsorship: {
+   322→      badge: 'فرص الرعاية',
+   323→      title: '6 فرص ذهبية للرعاة والشركاء',
+   324→      items: [
+   325→        { icon: 'mediaTV', title: 'الظهور الإعلامي', desc: 'تواجد علامتك التجارية أمام جمهور واسع ومتخصص من خلال ظهورها في جميع حلقات البرنامج.', popular: false },
+   326→        { icon: 'branding', title: 'تعزيز الهوية المؤسسية', desc: 'ربط اسم مؤسستك بمحتوى وطني نوعي يعكس القيم والمبادئ التي تؤمن بها.', popular: false },
+   327→        { icon: 'digitalPresence', title: 'الحضور الرقمي', desc: 'تواجد فعال على جميع المنصات الرقمية مع محتوى خاص يبرز دوركم.', popular: true },
+   328→        { icon: 'audience', title: 'الوصول لجمهور متخصص', desc: 'الوصول المباشر لصناع القرار ورجال الأعمال والمستثمرين.', popular: false },
+   329→        { icon: 'publishingPlan', title: 'الاستفادة من خطة النشر', desc: 'التواجد في حملات تسويقية متكاملة تشمل جميع القنوات.', popular: false },
+   330→        { icon: 'nationalContent', title: 'الارتباط بمحتوى وطني نوعي', desc: 'المشاركة في مشروع وطني يساهم في تحقيق رؤية 2030.', popular: false },
+   331→      ],
+   332→    },
+   333→    whyUs: {
+   334→      badge: 'لماذا قادة الاقتصاد؟',
+   335→      quotePart1: 'لأن كل تقدم مرهون بإسهاماتنا سوياً، لأننا من خلال هذا البرنامج نعمد إلى جمع أصحاب العزم والهمم، لأن المحتوى الاقتصادي الذي سيروى',
+   336→      quoteHighlight: 'يُبلور مكاسب Economies',
+   337→      quotePart2: 'وإعلامياتها.',
+   338→    },
+   339→    contact: {
+   340→      title: 'تواصل معنا',
+   341→      subtitle: 'نحن سعداء بتواصلكم معنا',
+   342→      name: 'الاسم الكامل',
+   343→      organization: 'الجهة / الشركة',
+   344→      email: 'البريد الإلكتروني',
+   345→      message: 'رسالتك',
+   346→      submit: 'إرسال الرسالة',
+   347→      companyTitle: 'شركة رام الجزيرة',
+   348→      companySubtitle: 'للإنتاج الإعلامي',
+   349→      address: 'الرياض - المعذر الشمالي - تقاطع طريق الملك فهد مع موسى بن النصير',
+   350→      phone: '+966 59 0401 777',
+   351→      email: 'ram@ram-est.com',
+   352→      copyright: '© 2024 قادة الاقتصاد - جميع الحقوق محفوظة | شركة رام الجزيرة للإنتاج الإعلامي',
+   353→    },
+   354→  },
+   355→  en: {
+   356→    nav: {
+   357→      home: 'Home',
+   358→      about: 'About',
+   359→      vision: 'Vision',
+   360→      objectives: 'Objectives',
+   361→      episodes: 'Episodes',
+   362→      sponsorship: 'Sponsorship',
+   363→      contact: 'Contact',
+   364→    },
+   365→    hero: {
+   366→      badge: 'Saudi Media Program',
+   367→      title: 'Economy',
+   368→      titleHighlight: 'Leaders',
+   369→      subtitle: 'A media platform highlighting the private sector role in achieving Saudi Vision 2030 goals',
+   370→      cta1: 'Watch Episodes',
+   371→      cta2: 'Become a Sponsor / Contact Us',
+   372→      scroll: 'Discover More',
+   373→    },
+   374→    about: {
+   375→      badge: 'About The Program',
+   376→      title: 'Towards a Diverse & Sustainable Economy',
+   377→      p1: 'The Saudi economy is witnessing an unprecedented historical transformation aimed at diversifying income sources and reducing dependence on oil. At the heart of this transformation comes the role of the private sector as a fundamental driver of growth and innovation.',
+   378→      p2: 'Hence, "Economy Leaders" program comes to be a leading media platform that highlights success stories and leadership in the Saudi business world, hosting the most influential figures in various sectors.',
+   379→      feature1: 'Deep Dialogue',
+   380→      feature2: 'Influential Figures',
+   381→      feature3: 'Economic Insights',
+   382→      feature4: 'Inspiring Stories',
+   383→      statEpisodes: 'Episodes',
+   384→      statSectors: 'Sectors',
+   385→      statGuests: 'Guests',
+   386→      statViewers: 'Viewers',
+   387→    },
+   388→    vm: {
+   389→      badge: 'Vision & Mission',
+   390→      visionTitle: 'Vision',
+   391→      visionText: 'To be the most impactful media platform in showcasing Saudi economic leadership, contributing to promoting entrepreneurship and local investment culture.',
+   392→      missionTitle: 'Mission',
+   393→      missionText: 'Producing quality media content reflecting national economic leaders\' achievements across all sectors, highlighting their role in achieving Vision 2030 goals.',
+   394→    },
+   395→    objectives: {
+   396→      badge: 'Program Objectives',
+   397→      title: '9 Strategic Goals We Aim to Achieve',
+   398→      items: [
+   399→        { icon: 'crown', title: 'Highlight Active Leaders', desc: 'In Private Sector' },
+   400→        { icon: 'star', title: 'Spotlight Success Stories', desc: 'Saudi Success' },
+   401→        { icon: 'chart', title: 'Support Investment Trends', desc: '& Business' },
+   402→        { icon: 'handshake', title: 'Strengthen Links Between', desc: 'Businessmen' },
+   403→        { icon: 'book', title: 'Spread Economic Culture', desc: 'To Society' },
+   404→        { icon: 'rocket', title: 'Empower Youth', desc: '& Talents' },
+   405→        { icon: 'bolt', title: 'Accelerate Development', desc: 'Transformations' },
+   406→        { icon: 'leaf', title: 'Raise Awareness', desc: 'Of Responsibility' },
+   407→        { icon: 'target', title: 'Highlight Development', desc: 'Pathways' },
+   408→      ],
+   409→    },
+   410→    timeline: {
+   411→      badge: 'Episode Themes',
+   412→      title: 'A Comprehensive Journey in 10 Main Themes',
+   413→      subtitle: 'Each episode covers multiple aspects of the guest\'s journey, from founding to Vision 2030 contribution.',
+   414→      items: [
+   415→        'Founding Journey',
+   416→        'Key Challenges',
+   417→        'Success Factors',
+   418→        'Leadership & Management',
+   419→        'Investment & Expansion',
+   420→        'Talent Development',
+   421→        'Innovation & Transformation',
+   422→        'Social Responsibility',
+   423→        'Future Plans',
+   424→        'Contribution to Vision 2030',
+   425→      ],
+   426→    },
+   427→    targets: {
+   428→      badge: 'Target Audiences & Sectors',
+   429→      audiencesTitle: 'Target Audiences',
+   430→      sectorsTitle: 'Target Sectors',
+   431→      audiences: [
+   432→        { text: 'Businessmen', icon: 'businessman' },
+   433→        { text: 'Investors', icon: 'investor' },
+   434→        { text: 'Entrepreneurs', icon: 'entrepreneur' },
+   435→        { text: 'Executives', icon: 'executive' },
+   436→        { text: 'Decision Makers', icon: 'decisionMaker' },
+   437→        { text: 'Government Bodies', icon: 'government' },
+   438→        { text: 'Economic Media', icon: 'media' },
+   439→        { text: 'University Students', icon: 'student' },
+   440→        { text: 'Economy Enthusiasts', icon: 'enthusiast' },
+   441→      ],
+   442→      sectors: [
+   443→        { text: 'Industry', size: 'large', icon: 'industry' },
+   444→        { text: 'Energy', size: 'medium', icon: 'energy' },
+   445→        { text: 'Mining', size: 'small', icon: 'mining' },
+   446→        { text: 'Agriculture', size: 'medium', icon: 'agriculture' },
+   447→        { text: 'Technology', size: 'large', icon: 'technology' },
+   448→        { text: 'Logistics', size: 'medium', icon: 'logistics' },
+   449→        { text: 'Real Estate', size: 'small', icon: 'realEstate' },
+   450→        { text: 'Tourism', size: 'medium', icon: 'tourism' },
+   451→        { text: 'Healthcare', size: 'large', icon: 'health' },
+   452→        { text: 'Education', size: 'small', icon: 'education' },
+   453→        { text: 'Finance', size: 'medium', icon: 'finance' },
+   454→        { text: 'Insurance', size: 'small', icon: 'insurance' },
+   455→        { text: 'Telecom', size: 'medium', icon: 'telecom' },
+   456→        { text: 'Trade', size: 'large', icon: 'trade' },
+   457→        { text: 'Food Security', size: 'medium', icon: 'foodSecurity' },
+   458→        { text: 'Digital Economy', size: 'large', icon: 'digitalEconomy' },
+   459→      ],
+   460→    },
+   461→    nationalValue: {
+   462→      title: 'National Value of the Program',
+   463→      p1: '"Economy Leaders" program contributes to enhancing the',
+   464→      highlight: 'National Economic Identity',
+   465→      p2: ', highlighting pioneering entities in development and growth, adding pride to Saudi economy identity.',
+   466→    },
+   467→    production: {
+   468→      badge: 'Production Elements & Publishing Plan',
+   469→      productionTitle: 'Production Elements',
+   470→      publishingTitle: 'Publishing Plan',
+   471→      productionItems: [
+   472→        { text: 'Professional Photography', icon: 'camera' },
+   473→        { text: 'Technical Direction', icon: 'director' },
+   474→        { text: 'Field Reports', icon: 'report' },
+   475→        { text: 'Infographics', icon: 'infographic' },
+   476→        { text: 'Audio Commentary', icon: 'audio' },
+   477→        { text: 'Soundtrack Music', icon: 'music' },
+   478→      ],
+   479→      publishingItems: [
+   480→        { text: 'Video Episode Broadcast', icon: 'videoBroadcast' },
+   481→        { text: 'Short Clips', icon: 'shortClip' },
+   482→        { text: 'Guest-Specific Content', icon: 'guestContent' },
+   483→        { text: 'Press Coverage', icon: 'pressCoverage' },
+   484→        { text: 'Digital Campaigns', icon: 'digitalCampaign' },
+   485→        { text: 'Featured Quotes', icon: 'quote' },
+   486→      ],
+   487→    },
+   488→    sponsorship: {
+   489→      badge: 'Sponsorship Opportunities',
+   490→      title: '6 Golden Opportunities for Sponsors & Partners',
+   491→      items: [
+   492→        { icon: 'mediaTV', title: 'Media Exposure', desc: 'Your brand presence before a wide and specialized audience through all program episodes.', popular: false },
+   493→        { icon: 'branding', title: 'Corporate Identity Enhancement', desc: 'Link your institution name with quality national content reflecting your values.', popular: false },
+   494→        { icon: 'digitalPresence', title: 'Digital Presence', desc: 'Effective presence on all digital platforms with special content highlighting your role.', popular: true },
+   495→        { icon: 'audience', title: 'Access to Specialized Audience', desc: 'Direct access to decision makers, businessmen and investors.', popular: false },
+   496→        { icon: 'publishingPlan', title: 'Benefit from Publishing Plan', desc: 'Presence in integrated marketing campaigns covering all channels.', popular: false },
+   497→        { icon: 'nationalContent', title: 'Association with Quality National Content', desc: 'Participation in a national project contributing to Vision 2030.', popular: false },
+   498→      ],
+   499→    },
+   500→    whyUs: {
+   501→      badge: 'Why Economy Leaders?',
+   502→      quotePart1: 'Because every progress depends on our contributions together, because through this program we aim to gather determined people, because the economic content that will be told',
+   503→      quoteHighlight: 'crystallizes gains of economies',
+   504→      quotePart2: 'and their media.',
+   505→    },
+   506→    contact: {
+   507→      title: 'Contact Us',
+   508→      subtitle: 'We are happy to hear from you',
+   509→      name: 'Full Name',
+   510→      organization: 'Organization / Company',
+   511→      email: 'Email Address',
+   512→      message: 'Your Message',
+   513→      submit: 'Send Message',
+   514→      companyTitle: 'Ram Al-Jazeerah Company',
+   515→      companySubtitle: 'For Media Production',
+   516→      address: 'Riyadh - Al-Muamzar North - Intersection of King Fahd Road with Musa bin Nusair',
+   517→      phone: '+966 59 0401 777',
+   518→      email: 'ram@ram-est.com',
+   519→      copyright: '© 2024 Economy Leaders - All Rights Reserved | Ram Al-Jazeerah Media Production',
+   520→    },
+   521→  },
+   522→}
+   523→
+   524→// =============================================
+   525→// SPOTLIGHT CARD COMPONENT (with glow effect)
+   526→// =============================================
+   527→function SpotlightCard({ children, className = '', popular = false }: { 
+   528→  children: React.ReactNode; 
+   529→  className?: string;
+   530→  popular?: boolean;
+   531→}) {
+   532→  const divRef = useRef<HTMLDivElement>(null)
+   533→  const [isFocused, setIsFocused] = useState(false)
+   534→  const [position, setPosition] = useState({ x: 0, y: 0 })
+   535→  const [opacity, setOpacity] = useState(0)
+   536→
+   537→  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+   538→    if (!divRef.current) return
+   539→    const rect = divRef.current.getBoundingClientRect()
+   540→    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top })
+   541→  }
+   542→
+   543→  const handleFocus = () => {
+   544→    setIsFocused(true)
+   545→    setOpacity(1)
+   546→  }
+   547→
+   548→  const handleBlur = () => {
+   549→    setIsFocused(false)
+   550→    setOpacity(0)
+   551→  }
+   552→
+   553→  const handleMouseEnter = () => {
+   554→    setOpacity(1)
+   555→  }
+   556→
+   557→  const handleMouseLeave = () => {
+   558→    setOpacity(0)
+   559→  }
+   560→
+   561→  return (
+   562→    <div
+   563→      ref={divRef}
+   564→      className={`spotlight-card ${className}`}
+   565→      onMouseMove={handleMouseMove}
+   566→      onFocus={handleFocus}
+   567→      onBlur={handleBlur}
+   568→      onMouseEnter={handleMouseEnter}
+   569→      onMouseLeave={handleMouseLeave}
+   570→    >
+   571→      {/* Popular Badge */}
+   572→      {popular && (
+   573→        <div className="popular-badge">
+   574→          <i className="fi fi-rr-star"></i>
+   575→          <span>الأكثر طلباً</span>
+   576→        </div>
+   577→      )}
+   578→      
+   579→      {/* Spotlight Effect */}
+   580→      <div
+   581→        className="spotlight-effect"
+   582→        style={{
+   583→          opacity,
+   584→          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(201, 162, 39, 0.12), transparent 40%)`,
+   585→        }}
+   586→      />
+   587→      {children}
+   588→    </div>
+   589→  )
+   590→}
+   591→
+   592→// =============================================
+   593→// STATS COUNTER COMPONENT
+   594→// =============================================
+   595→function StatsCounter({ lang }: { lang: 'ar' | 'en' }) {
+   596→  const ref = useRef(null)
+   597→  const isInView = useInView(ref, { once: true, margin: "-100px" })
+   598→  const [counts, setCounts] = useState({ episodes: 0, sectors: 0, guests: 0, viewers: 0 })
+   599→  const [progress, setProgress] = useState({ episodes: 0, sectors: 0, guests: 0, viewers: 0 })
+   600→
+   601→  const targetCounts = { episodes: 20, sectors: 16, guests: 50, viewers: 500000 }
+   602→
+   603→  useEffect(() => {
+   604→    if (isInView) {
+   605→      const duration = 2200
+   606→      const steps = 65
+   607→      const interval = duration / steps
+   608→
+   609→      let step = 0
+   610→      const timer = setInterval(() => {
+   611→        step++
+   612→        const progressVal = step / steps
+   613→        const easeOut = 1 - Math.pow(1 - progressVal, 3)
+   614→
+   615→        setCounts({
+   616→          episodes: Math.round(targetCounts.episodes * easeOut),
+   617→          sectors: Math.round(targetCounts.sectors * easeOut),
+   618→          guests: Math.round(targetCounts.guests * easeOut),
+   619→          viewers: Math.round(targetCounts.viewers * easeOut),
+   620→        })
+   621→
+   622→        setProgress({
+   623→          episodes: progressVal * 100,
+   624→          sectors: progressVal * 100,
+   625→          guests: progressVal * 100,
+   626→          viewers: progressVal * 100,
+   627→        })
+   628→
+   629→        if (step >= steps) clearInterval(timer)
+   630→      }, interval)
+   631→
+   632→      return () => clearInterval(timer)
+   633→    }
+   634→  }, [isInView])
+   635→
+   636→  const t = translations[lang]
+   637→
+   638→  return (
+   639→    <section ref={ref} className="stats-section">
+   640→      <div className="stats-grid">
+   641→        <motion.div 
+   642→          className="stat-item"
+   643→          initial={{ opacity: 0, y: 35 }}
+   644→          whileInView={{ opacity: 1, y: 0 }}
+   645→          viewport={{ once: true }}
+   646→          transition={{ duration: 0.7 }}
+   647→        >
+   648→          <div className="stat-number">{counts.episodes}+</div>
+   649→          <div className="stat-progress-line">
+   650→            <div className="stat-progress-fill" style={{ width: `${progress.episodes}%` }}></div>
+   651→          </div>
+   652→          <div className="stat-label">{t.about.statEpisodes}</div>
+   653→        </motion.div>
+   654→        <motion.div 
+   655→          className="stat-item"
+   656→          initial={{ opacity: 0, y: 35 }}
+   657→          whileInView={{ opacity: 1, y: 0 }}
+   658→          viewport={{ once: true }}
+   659→          transition={{ duration: 0.7, delay: 0.12 }}
+   660→        >
+   661→          <div className="stat-number">{counts.sectors}</div>
+   662→          <div className="stat-progress-line">
+   663→            <div className="stat-progress-fill" style={{ width: `${progress.sectors}%` }}></div>
+   664→          </div>
+   665→          <div className="stat-label">{t.about.statSectors}</div>
+   666→        </motion.div>
+   667→        <motion.div 
+   668→          className="stat-item"
+   669→          initial={{ opacity: 0, y: 35 }}
+   670→          whileInView={{ opacity: 1, y: 0 }}
+   671→          viewport={{ once: true }}
+   672→          transition={{ duration: 0.7, delay: 0.24 }}
+   673→        >
+   674→          <div className="stat-number">{counts.guests}+</div>
+   675→          <div className="stat-progress-line">
+   676→            <div className="stat-progress-fill" style={{ width: `${progress.guests}%` }}></div>
+   677→          </div>
+   678→          <div className="stat-label">{t.about.statGuests}</div>
+   679→        </motion.div>
+   680→        <motion.div 
+   681→          className="stat-item"
+   682→          initial={{ opacity: 0, y: 35 }}
+   683→          whileInView={{ opacity: 1, y: 0 }}
+   684→          viewport={{ once: true }}
+   685→          transition={{ duration: 0.7, delay: 0.36 }}
+   686→        >
+   687→          <div className="stat-label">{t.about.statViewers}</div>
+   688→          <div className="stat-number">{counts.viewers.toLocaleString()}+</div>
+   689→          <div className="stat-progress-line">
+   690→            <div className="stat-progress-fill" style={{ width: `${progress.viewers}%` }}></div>
+   691→          </div>
+   692→        </motion.div>
+   693→      </div>
+   694→    </section>
+   695→  )
+   696→}
+   697→
+   698→// =============================================
+   699→// SCROLL PROGRESS INDICATOR
+   700→// =============================================
+   701→function ScrollProgressIndicator() {
+   702→  const [scrollProgress, setScrollProgress] = useState(0)
+   703→
+   704→  useEffect(() => {
+   705→    const handleScroll = () => {
+   706→      const totalHeight = document.documentElement.scrollHeight - window.innerHeight
+   707→      const scrollPosition = window.scrollY
+   708→      const progress = totalHeight > 0 ? (scrollPosition / totalHeight) * 100 : 0
+   709→      setScrollProgress(progress)
+   710→    }
+   711→
+   712→    window.addEventListener('scroll', handleScroll, { passive: true })
+   713→    return () => window.removeEventListener('scroll', handleScroll)
+   714→  }, [])
+   715→
+   716→  return (
+   717→    <div className="scroll-progress-container">
+   718→      <div className="scroll-progress-bar" style={{ height: `${scrollProgress}%` }}>
+   719→        <div className="scroll-progress-glow"></div>
+   720→      </div>
+   721→    </div>
+   722→  )
+   723→}
+   724→
+   725→// =============================================
+   726→// TIMELINE PROGRESS DOTS
+   727→// =============================================
+   728→function TimelineProgressDots({ totalDots = 10 }: { totalDots?: number }) {
+   729→  const [activeDot, setActiveDot] = useState(0)
+   730→  const sectionRef = useRef<HTMLElement>(null)
+   731→
+   732→  useEffect(() => {
+   733→    const observer = new IntersectionObserver(
+   734→      (entries) => {
+   735→        entries.forEach(entry => {
+   736→          if (entry.isIntersecting && sectionRef.current) {
+   737→            const rect = sectionRef.current.getBoundingClientRect()
+   738→            const containerTop = rect.top
+   739→            const scrollY = window.scrollY
+   740→            const relativeScroll = scrollY - containerTop + window.innerHeight
+   741→            const containerHeight = rect.height
+   742→            const dotIndex = Math.min(
+   743→              Math.floor((relativeScroll / containerHeight) * totalDots),
+   744→              totalDots - 1
+   745→            )
+   746→            setActiveDot(Math.max(0, dotIndex))
+   747→          }
+   748→        })
+   749→      },
+   750→      { threshold: Array.from({ length: totalDots }, (_, i) => i / totalDots) }
+   751→    )
+   752→
+   753→    if (sectionRef.current) {
+   754→      observer.observe(sectionRef.current)
+   755→    }
+   756→
+   757→    return () => observer.disconnect()
+   758→  }, [totalDots])
+   759→
+   760→  return (
+   761→    <div className="timeline-progress-dots" ref={sectionRef as any}>
+   762→      {Array.from({ length: totalDots }).map((_, index) => (
+   763→        <button
+   764→          key={index}
+   765→          className={`timeline-dot ${index === activeDot ? 'active' : ''}`}
+   766→          aria-label={`Axis ${index + 1}`}
+   767→          onClick={() => {
+   768→            const item = document.querySelector(`.timeline-item:nth-child(${index + 1})`)
+   769→            item?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+   770→          }}
+   771→        >
+   772→          <span>{index + 1}</span>
+   773→        </button>
+   774→      ))}
+   775→    </div>
+   776→  )
+   777→}
+   778→
+   779→// =============================================
+   780→// MAIN PAGE COMPONENT
+   781→// =============================================
+   782→export default function Home() {
+   783→  const [lang, setLang] = useState<'ar' | 'en'>('ar')
+   784→  const [isScrolled, setIsScrolled] = useState(false)
+   785→  const [isLoading, setIsLoading] = useState(true)
+   786→  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+   787→  const t = translations[lang]
+   788→
+   789→  // Preloader Effect
+   790→  useEffect(() => {
+   791→    const timer = setTimeout(() => setIsLoading(false), 2800)
+   792→    return () => clearTimeout(timer)
+   793→  }, [])
+   794→
+   795→  // Scroll Effect for Navbar
+   796→  useEffect(() => {
+   797→    const handleScroll = () => {
+   798→      setIsScrolled(window.scrollY > 60)
+   799→    }
+   800→    window.addEventListener('scroll', handleScroll)
+   801→    return () => window.removeEventListener('scroll', handleScroll)
+   802→  }, [])
+   803→
+   804→  // Smooth Scroll Function
+   805→  const scrollToSection = (id: string) => {
+   806→    const element = document.getElementById(id)
+   807→    if (element) {
+   808→      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+   809→      setMobileMenuOpen(false)
+   810→    }
+   811→  }
+   812→
+   813→  // Toggle Language
+   814→  const toggleLanguage = () => {
+   815→    setLang(prev => prev === 'ar' ? 'en' : 'ar')
+   816→  }
+   817→
+   818→  // Animation Variants
+   819→  const fadeInUp = {
+   820→    hidden: { opacity: 0, y: 50 },
+   821→    visible: { opacity: 1, y: 0, transition: { duration: 0.75, ease: "easeOut" } }
+   822→  }
+   823→
+   824→  const staggerContainer = {
+   825→    hidden: {},
+   826→    visible: { transition: { staggerChildren: 0.14 } }
+   827→  }
+   828→
+   829→  const scaleIn = {
+   830→    hidden: { opacity: 0, scale: 0.88 },
+   831→    visible: { opacity: 1, scale: 1, transition: { duration: 0.6 } }
+   832→  }
+   833→
+   834→  return (
+   835→    <div dir={lang === 'ar' ? 'rtl' : 'ltr'} className="main-wrapper">
+   836→      {/* Noise Texture Overlay */}
+   837→      <div className="noise-overlay" aria-hidden="true"></div>
+   838→      
+   839→      {/* Scroll Progress Indicator */}
+   840→      <ScrollProgressIndicator />
+   841→      
+   842→      {/* ===== PRELOADER ===== */}
+   843→      <AnimatePresence>
+   844→        {isLoading && (
+   845→          <motion.div
+   846→            initial={{ opacity: 1 }}
+   847→            exit={{ opacity: 0 }}
+   848→            transition={{ duration: 0.55 }}
+   849→            className="preloader"
+   850→          >
+   851→            <div className="preloader-content">
+   852→              <div className="preloader-logo">
+   853→                <i className="fi fi-rr-building-columns preloader-icon"></i>
+   854→                {lang === 'ar' ? 'قادة الاقتصاد' : 'Economy Leaders'}
+   855→              </div>
+   856→              <div className="preloader-spinner"></div>
+   857→            </div>
+   858→          </motion.div>
+   859→        )}
+   860→      </AnimatePresence>
+   861→
+   862→      {/* ===== NAVBAR ===== */}
+   863→      <motion.nav
+   864→        initial={{ y: -100 }}
+   865→        animate={{ y: 0 }}
+   866→        transition={{ duration: 0.65, delay: 0.35, ease: "easeOut" }}
+   867→        className={`navbar ${isScrolled ? 'scrolled' : ''}`}
+   868→      >
+   869→        <div className="navbar-container">
+   870→          <a href="#" className="navbar-logo" onClick={(e) => { e.preventDefault(); scrollToSection('hero') }}>
+   871→            <i className={`${iconMap.logo} logo-icon-flaticon`}></i>
+   872→            <span>{lang === 'ar' ? 'قادة الاقتصاد' : 'Economy Leaders'}<span className="logo-text-highlight"> | </span></span>
+   873→          </a>
+   874→
+   875→          <ul className="navbar-links">
+   876→            <li><a href="#hero" onClick={(e) => { e.preventDefault(); scrollToSection('hero') }}>{t.nav.home}</a></li>
+   877→            <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about') }}>{t.nav.about}</a></li>
+   878→            <li><a href="#vision" onClick={(e) => { e.preventDefault(); scrollToSection('vision') }}>{t.nav.vision}</a></li>
+   879→            <li><a href="#objectives" onClick={(e) => { e.preventDefault(); scrollToSection('objectives') }}>{t.nav.objectives}</a></li>
+   880→            <li><a href="#episodes" onClick={(e) => { e.preventDefault(); scrollToSection('episodes') }}>{t.nav.episodes}</a></li>
+   881→            <li><a href="#sponsorship" onClick={(e) => { e.preventDefault(); scrollToSection('sponsorship') }}>{t.nav.sponsorship}</a></li>
+   882→            <li><a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact') }}>{t.nav.contact}</a></li>
+   883→          </ul>
+   884→
+   885→          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+   886→            <button className="lang-toggle" onClick={toggleLanguage}>
+   887→              {lang === 'ar' ? 'EN' : 'عربي'}
+   888→            </button>
+   889→            <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(true)} aria-label="Open menu">
+   890→              <i className="fi fi-rr-menu-burger"></i>
+   891→            </button>
+   892→          </div>
+   893→        </div>
+   894→      </motion.nav>
+   895→
+   896→      {/* ===== MOBILE MENU ===== */}
+   897→      <div className={`mobile-menu-overlay ${mobileMenuOpen ? 'active' : ''}`} onClick={() => setMobileMenuOpen(false)} />
+   898→      <div className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`}>
+   899→        <div className="mobile-menu-header">
+   900→          <span style={{ color: '#C9A227', fontWeight: 800, fontSize: '1.2rem' }}>
+   901→            <i className={`${iconMap.logo}`} style={{ marginLeft: '0.5rem' }}></i>
+   902→            {lang === 'ar' ? 'قادة الاقتصاد' : 'Economy Leaders'}
+   903→          </span>
+   904→          <button className="mobile-menu-close" onClick={() => setMobileMenuOpen(false)} aria-label="Close menu">
+   905→            <i className="fi fi-rr-cross-small"></i>
+   906→          </button>
+   907→        </div>
+   908→        <ul className="mobile-menu-links">
+   909→          <li><a href="#hero" onClick={(e) => { e.preventDefault(); scrollToSection('hero') }}>{t.nav.home}</a></li>
+   910→          <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about') }}>{t.nav.about}</a></li>
+   911→          <li><a href="#vision" onClick={(e) => { e.preventDefault(); scrollToSection('vision') }}>{t.nav.vision}</a></li>
+   912→          <li><a href="#objectives" onClick={(e) => { e.preventDefault(); scrollToSection('objectives') }}>{t.nav.objectives}</a></li>
+   913→          <li><a href="#episodes" onClick={(e) => { e.preventDefault(); scrollToSection('episodes') }}>{t.nav.episodes}</a></li>
+   914→          <li><a href="#sponsorship" onClick={(e) => { e.preventDefault(); scrollToSection('sponsorship') }}>{t.nav.sponsorship}</a></li>
+   915→          <li><a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact') }}>{t.nav.contact}</a></li>
+   916→        </ul>
+   917→      </div>
+   918→
+   919→      {/* ===== HERO SECTION ===== */}
+   920→      <section id="hero" className="hero-section">
+   921→        {/* Three.js Canvas Background */}
+   922→        <div className="hero-canvas-container">
+   923→          <Canvas camera={{ position: [0, 0, 5.5], fov: 58 }} dpr={[1, 1.5]} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+   924→            <Suspense fallback={null}>
+   925→              <HeroScene />
+   926→            </Suspense>
+   927→          </Canvas>
+   928→        </div>
+   929→
+   930→        {/* Hero Content */}
+   931→        <motion.div 
+   932→          className="hero-content"
+   933→          initial={{ opacity: 0 }}
+   934→          animate={{ opacity: isLoading ? 0 : 1 }}
+   935→          transition={{ duration: 0.85, delay: 0.45 }}
+   936→        >
+   937→          <motion.div 
+   938→            className="hero-badge animate__animated animate__fadeInDown"
+   939→            initial={{ opacity: 0, y: -30 }}
+   940→            animate={{ opacity: 1, y: 0 }}
+   941→            transition={{ duration: 0.6, delay: 0.75 }}
+   942→          >
+   943→            <i className="fi fi-rr-flag hero-badge-icon"></i>
+   944→            {t.hero.badge}
+   945→          </motion.div>
+   946→
+   947→          <motion.h1 
+   948→            className="hero-title"
+   949→            initial={{ opacity: 0, y: 40 }}
+   950→            animate={{ opacity: 1, y: 0 }}
+   951→            transition={{ duration: 0.8, delay: 0.95 }}
+   952→          >
+   953→            {t.hero.title} <span className="highlight">{t.hero.titleHighlight}</span>
+   954→          </motion.h1>
+   955→
+   956→          <motion.p 
+   957→            className="hero-subtitle"
+   958→            initial={{ opacity: 0, y: 30 }}
+   959→            animate={{ opacity: 1, y: 0 }}
+   960→            transition={{ duration: 0.8, delay: 1.15 }}
+   961→          >
+   962→            {t.hero.subtitle}
+   963→          </motion.p>
+   964→
+   965→          <motion.div 
+   966→            className="hero-buttons"
+   967→            initial={{ opacity: 0, y: 30 }}
+   968→            animate={{ opacity: 1, y: 0 }}
+   969→            transition={{ duration: 0.8, delay: 1.4 }}
+   970→          >
+   971→            <button className="btn-primary animate__animated animate__pulse" onClick={() => scrollToSection('episodes')}>
+   972→              <i className="fi fi-rr-play"></i> {t.hero.cta1}
+   973→            </button>
+   974→            <button className="btn-secondary" onClick={() => scrollToSection('contact')}>
+   975→              <i className="fi fi-rr-envelope"></i> {t.hero.cta2}
+   976→            </button>
+   977→          </motion.div>
+   978→        </motion.div>
+   979→
+   980→        {/* Scroll Indicator */}
+   981→        <div className="scroll-indicator">
+   982→          <a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about') }}>
+   983→            <div className="scroll-mouse">
+   984→              <div className="scroll-wheel"></div>
+   985→            </div>
+   986→            <span>{t.hero.scroll}</span>
+   987→          </a>
+   988→        </div>
+   989→      </section>
+   990→
+   991→      {/* ===== ABOUT SECTION ===== */}
+   992→      <section id="about" className="section section-light">
+   993→        <div className="container">
+   994→          <motion.div 
+   995→            className="about-grid"
+   996→            initial="hidden"
+   997→            whileInView="visible"
+   998→            viewport={{ once: true, margin: "-120px" }}
+   999→            variants={staggerContainer}
+  1000→          >
+  1001→            <motion.div variants={fadeInUp} className="about-image-wrapper">
+  1002→              <img 
+  1003→                src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=850&q=85" 
+  1004→                alt="Saudi Economy Skyline" 
+  1005→                className="about-image"
+  1006→                loading="lazy"
+  1007→              />
+  1008→              <div className="about-image-overlay">
+  1009→                <div className="about-stats-mini">
+  1010→                  <div className="stat-mini">
+  1011→                    <div className="stat-mini-number">20+</div>
+  1012→                    <div className="stat-mini-label">{t.about.statEpisodes}</div>
+  1013→                  </div>
+  1014→                  <div className="stat-mini">
+  1015→                    <div className="stat-mini-number">16</div>
+  1016→                    <div className="stat-mini-label">{t.about.statSectors}</div>
+  1017→                  </div>
+  1018→                  <div className="stat-mini">
+  1019→                    <div className="stat-mini-number">50+</div>
+  1020→                    <div className="stat-mini-label">{t.about.statGuests}</div>
+  1021→                  </div>
+  1022→                </div>
+  1023→              </div>
+  1024→            </motion.div>
+  1025→
+  1026→            <motion.div variants={fadeInUp} className="about-text">
+  1027→              <div className="section-badge">{t.about.badge}</div>
+  1028→              <h2>{t.about.title}</h2>
+  1029→              <p>{t.about.p1}</p>
+  1030→              <p>{t.about.p2}</p>
+  1031→              
+  1032→              <div className="about-features">
+  1033→                <div className="about-feature-item">
+  1034→                  <div className="about-feature-icon"><i className={iconMap.comment}></i></div>
+  1035→                  <span className="about-feature-text">{t.about.feature1}</span>
+  1036→                </div>
+  1037→                <div className="about-feature-item">
+  1038→                  <div className="about-feature-icon"><i className={iconMap.star}></i></div>
+  1039→                  <span className="about-feature-text">{t.about.feature2}</span>
+  1040→                </div>
+  1041→                <div className="about-feature-item">
+  1042→                  <div className="about-feature-icon"><i className={iconMap.stats}></i></div>
+  1043→                  <span className="about-feature-text">{t.about.feature3}</span>
+  1044→                </div>
+  1045→                <div className="about-feature-item">
+  1046→                  <div className="about-feature-icon"><i className={iconMap.trophy}></i></div>
+  1047→                  <span className="about-feature-text">{t.about.feature4}</span>
+  1048→                </div>
+  1049→              </div>
+  1050→            </motion.div>
+  1051→          </motion.div>
+  1052→        </div>
+  1053→      </section>
+  1054→
+  1055→      {/* ===== STATS COUNTER SECTION ===== */}
+  1056→      <StatsCounter lang={lang} />
+  1057→
+  1058→      {/* ===== VISION & MISSION SECTION ===== */}
+  1059→      <section id="vision" className="section section-dark">
+  1060→        <div className="container">
+  1061→          <motion.div 
+  1062→            className="section-header"
+  1063→            initial="hidden"
+  1064→            whileInView="visible"
+  1065→            viewport={{ once: true }}
+  1066→            variants={fadeInUp}
+  1067→          >
+  1068→            <div className="section-badge">{t.vm.badge}</div>
+  1069→            <h2 className="section-title">{t.vm.badge}</h2>
+  1070→          </motion.div>
+  1071→
+  1072→          <motion.div 
+  1073→            className="vision-mission-grid"
+  1074→            initial="hidden"
+  1075→            whileInView="visible"
+  1076→            viewport={{ once: true, margin: "-120px" }}
+  1077→            variants={staggerContainer}
+  1078→          >
+  1079→            <SpotlightCard className="vm-card-wrapper">
+  1080→              <motion.div variants={scaleIn} className="vm-card">
+  1081→                <div className="vm-card-icon"><i className={iconMap.vision}></i></div>
+  1082→                <h3>{t.vm.visionTitle}</h3>
+  1083→                <p>{t.vm.visionText}</p>
+  1084→                <div className="vm-card-decoration"></div>
+  1085→              </motion.div>
+  1086→            </SpotlightCard>
+  1087→
+  1088→            <SpotlightCard className="vm-card-wrapper">
+  1089→              <motion.div variants={scaleIn} className="vm-card">
+  1090→                <div className="vm-card-icon"><i className={iconMap.mission}></i></div>
+  1091→                <h3>{t.vm.missionTitle}</h3>
+  1092→                <p>{t.vm.missionText}</p>
+  1093→                <div className="vm-card-decoration"></div>
+  1094→              </motion.div>
+  1095→            </SpotlightCard>
+  1096→          </motion.div>
+  1097→        </div>
+  1098→      </section>
+  1099→
+  1100→      {/* ===== OBJECTIVES SECTION (9 Objectives) ===== */}
+  1101→      <section id="objectives" className="section section-light">
+  1102→        <div className="container">
+  1103→          <motion.div 
+  1104→            className="section-header"
+  1105→            initial="hidden"
+  1106→            whileInView="visible"
+  1107→            viewport={{ once: true }}
+  1108→            variants={fadeInUp}
+  1109→          >
+  1110→            <div className="section-badge">{t.objectives.badge}</div>
+  1111→            <h2 className="section-title">{t.objectives.title}</h2>
+  1112→          </motion.div>
+  1113→
+  1114→          <motion.div 
+  1115→            className="objectives-grid"
+  1116→            initial="hidden"
+  1117→            whileInView="visible"
+  1118→            viewport={{ once: true, margin: "-80px" }}
+  1119→            variants={staggerContainer}
+  1120→          >
+  1121→            {t.objectives.items.map((item, index) => (
+  1122→              <SpotlightCard key={index} className="objective-card-wrapper">
+  1123→                <motion.div 
+  1124→                  variants={scaleIn}
+  1125→                  className="objective-card"
+  1126→                  whileHover={{ scale: 1.04, y: -8 }}
+  1127→                >
+  1128→                  <div className="objective-card-number">{String(index + 1).padStart(2, '0')}</div>
+  1129→                  <div className="objective-card-icon">
+  1130→                    <i className={iconMap[item.icon as keyof typeof iconMap] || 'fi fi-rr-star'}></i>
+  1131→                  </div>
+  1132→                  <h4>{item.title}</h4>
+  1133→                  <p>{item.desc}</p>
+  1134→                </motion.div>
+  1135→              </SpotlightCard>
+  1136→            ))}
+  1137→          </motion.div>
+  1138→        </div>
+  1139→      </section>
+  1140→
+  1141→      {/* ===== TIMELINE / EPISODES SECTION (10 Axes) ===== */}
+  1142→      <section id="episodes" className="section timeline-section">
+  1143→        <div className="container">
+  1144→          <motion.div 
+  1145→            className="section-header"
+  1146→            initial="hidden"
+  1147→            whileInView="visible"
+  1148→            viewport={{ once: true }}
+  1149→            variants={fadeInUp}
+  1150→          >
+  1151→            <div className="section-badge">{t.timeline.badge}</div>
+  1152→            <h2 className="section-title">{t.timeline.title}</h2>
+  1153→            <p className="section-subtitle">{t.timeline.subtitle}</p>
+  1154→          </motion.div>
+  1155→
+  1156→          <motion.div 
+  1157→            className="timeline-container"
+  1158→            initial="hidden"
+  1159→            whileInView="visible"
+  1160→            viewport={{ once: true, margin: "-80px" }}
+  1161→            variants={staggerContainer}
+  1162→          >
+  1163→            <div className="timeline-line"></div>
+  1164→            <div className="timeline-grid">
+  1165→              {t.timeline.items.map((item, index) => (
+  1166→                <motion.div 
+  1167→                  key={index} 
+  1168→                  variants={fadeInUp}
+  1169→                  className="timeline-item"
+  1170→                >
+  1171→                  <div className="timeline-item-dot">{String(index + 1).padStart(2, '0')}</div>
+  1172→                  <div className="timeline-item-content">
+  1173→                    <span className="timeline-item-title">{item}</span>
+  1174→                  </div>
+  1175→                </motion.div>
+  1176→              ))}
+  1177→            </div>
+  1178→          </motion.div>
+  1179→
+  1180→          {/* Timeline Progress Dots */}
+  1181→          <TimelineProgressDots totalDots={10} />
+  1182→        </div>
+  1183→      </section>
+  1184→
+  1185→      {/* ===== TARGET AUDIENCES & SECTORS SECTION ===== */}
+  1186→      <section id="targets" className="section section-light">
+  1187→        <div className="container">
+  1188→          <motion.div 
+  1189→            className="section-header"
+  1190→            initial="hidden"
+  1191→            whileInView="visible"
+  1192→            viewport={{ once: true }}
+  1193→            variants={fadeInUp}
+  1194→          >
+  1195→            <div className="section-badge">{t.targets.badge}</div>
+  1196→            <h2 className="section-title">{t.targets.badge}</h2>
+  1197→          </motion.div>
+  1198→
+  1199→          <motion.div 
+  1200→            className="targets-grid"
+  1201→            initial="hidden"
+  1202→            whileInView="visible"
+  1203→            viewport={{ once: true, margin: "-120px" }}
+  1204→            variants={staggerContainer}
+  1205→          >
+  1206→            <motion.div variants={fadeInUp} className="target-category">
+  1207→              <h3 className="category-title">
+  1208→                <i className="fi fi-rr-users category-icon"></i>
+  1209→                {t.targets.audiencesTitle}
+  1210→              </h3>
+  1211→              <div className="audience-cards">
+  1212→                {t.targets.audiences.map((audience, index) => (
+  1213→                  <motion.div 
+  1214→                    key={index}
+  1215→                    variants={scaleIn}
+  1216→                    className="audience-card"
+  1217→                    whileHover={{ scale: 1.05, y: -6 }}
+  1218→                  >
+  1219→                    <i className={`audience-card-icon ${iconMap[audience.icon as keyof typeof iconMap] || 'fi fi-rr-user'}`}></i>
+  1220→                    <span>{audience.text}</span>
+  1221→                  </motion.div>
+  1222→                ))}
+  1223→              </div>
+  1224→            </motion.div>
+  1225→
+  1226→            <motion.div variants={fadeInUp} className="target-category">
+  1227→              <h3 className="category-title">
+  1228→                <i className="fi fi-rr-grid category-icon"></i>
+  1229→                {t.targets.sectorsTitle}
+  1230→              </h3>
+  1231→              <div className="tag-cloud">
+  1232→                {t.targets.sectors.map((sector, index) => (
+  1233→                  <motion.span 
+  1234→                    key={index}
+  1235→                    variants={scaleIn}
+  1236→                    className={`tag ${sector.size}`}
+  1237→                    whileHover={{ scale: 1.1 }}
+  1238→                  >
+  1239→                    <i className={`tag-icon ${iconMap[sector.icon as keyof typeof iconMap] || 'fi fi-rr-folder'}`}></i>
+  1240→                    {sector.text}
+  1241→                  </motion.span>
+  1242→                ))}
+  1243→              </div>
+  1244→            </motion.div>
+  1245→          </motion.div>
+  1246→        </div>
+  1247→      </section>
+  1248→
+  1249→      {/* ===== NATIONAL VALUE SECTION ===== */}
+  1250→      <section id="national-value" className="national-value-section">
+  1251→        <img 
+  1252→          src="https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?w=1500&q=85" 
+  1253→          alt="Saudi Arabia Kingdom Tower" 
+  1254→          className="national-value-bg"
+  1255→          loading="lazy"
+  1256→        />
+  1257→        <div className="national-value-overlay"></div>
+  1258→        
+  1259→        <motion.div 
+  1260→          className="national-value-content"
+  1261→          initial="hidden"
+  1262→          whileInView="visible"
+  1263→          viewport={{ once: true }}
+  1264→          variants={staggerContainer}
+  1265→        >
+  1266→          <motion.h2 variants={fadeInUp}>{t.nationalValue.title}</motion.h2>
+  1267→          <motion.p variants={fadeInUp}>
+  1268→            {t.nationalValue.p1} <span className="national-value-highlight">{t.nationalValue.highlight}</span> {t.nationalValue.p2}
+  1269→          </motion.p>
+  1270→        </motion.div>
+  1271→      </section>
+  1272→
+  1273→      {/* ===== PRODUCTION ELEMENTS SECTION ===== */}
+  1274→      <section id="production" className="section section-gray">
+  1275→        <div className="container">
+  1276→          <motion.div 
+  1277→            className="section-header"
+  1278→            initial="hidden"
+  1279→            whileInView="visible"
+  1280→            viewport={{ once: true }}
+  1281→            variants={fadeInUp}
+  1282→          >
+  1283→            <div className="section-badge">{t.production.badge}</div>
+  1284→            <h2 className="section-title">{t.production.badge}</h2>
+  1285→          </motion.div>
+  1286→
+  1287→          <motion.div 
+  1288→            className="production-grid"
+  1289→            initial="hidden"
+  1290→            whileInView="visible"
+  1291→            viewport={{ once: true, margin: "-120px" }}
+  1292→            variants={staggerContainer}
+  1293→          >
+  1294→            <motion.div variants={fadeInUp} className="production-column">
+  1295→              <h3 className="column-title">
+  1296→                <i className="fi fi-rr-clapperboard column-icon"></i>
+  1297→                {t.production.productionTitle}
+  1298→              </h3>
+  1299→              <ul className="production-list">
+  1300→                {t.production.productionItems.map((item, index) => (
+  1301→                  <motion.li 
+  1302→                    key={index}
+  1303→                    variants={fadeInUp}
+  1304→                    whileHover={{ x: lang === 'ar' ? 10 : -10 }}
+  1305→                    className="production-list-item"
+  1306→                  >
+  1307→                    <div className="check-icon"><i className={iconMap[item.icon as keyof typeof iconMap] || 'fi fi-rr-check'}></i></div>
+  1308→                    <span>{item.text}</span>
+  1309→                  </motion.li>
+  1310→                ))}
+  1311→              </ul>
+  1312→            </motion.div>
+  1313→
+  1314→            <motion.div variants={fadeInUp} className="production-column">
+  1315→              <h3 className="column-title">
+  1316→                <i className="fi fi-rr-broadcast-tower column-icon"></i>
+  1317→                {t.production.publishingTitle}
+  1318→              </h3>
+  1319→              <ul className="production-list">
+  1320→                {t.production.publishingItems.map((item, index) => (
+  1321→                  <motion.li 
+  1322→                    key={index}
+  1323→                    variants={fadeInUp}
+  1324→                    whileHover={{ x: lang === 'ar' ? 10 : -10 }}
+  1325→                    className="production-list-item"
+  1326→                  >
+  1327→                    <div className="check-icon"><i className={iconMap[item.icon as keyof typeof iconMap] || 'fi fi-rr-check'}></i></div>
+  1328→                    <span>{item.text}</span>
+  1329→                  </motion.li>
+  1330→                ))}
+  1331→              </ul>
+  1332→            </motion.div>
+  1333→          </motion.div>
+  1334→        </div>
+  1335→      </section>
+  1336→
+  1337→      {/* ===== SPONSORSHIP OPPORTUNITIES SECTION (6 Cards) ===== */}
+  1338→      <section id="sponsorship" className="section sponsorship-section">
+  1339→        <div className="container">
+  1340→          <motion.div 
+  1341→            className="section-header"
+  1342→            initial="hidden"
+  1343→            whileInView="visible"
+  1344→            viewport={{ once: true }}
+  1345→            variants={fadeInUp}
+  1346→          >
+  1347→            <div className="section-badge">{t.sponsorship.badge}</div>
+  1348→            <h2 className="section-title">{t.sponsorship.title}</h2>
+  1349→          </motion.div>
+  1350→
+  1351→          <motion.div 
+  1352→            className="sponsorship-grid"
+  1353→            initial="hidden"
+  1354→            whileInView="visible"
+  1355→            viewport={{ once: true, margin: "-120px" }}
+  1356→            variants={staggerContainer}
+  1357→          >
+  1358→            {t.sponsorship.items.map((item, index) => (
+  1359→              <SpotlightCard key={index} popular={item.popular} className="sponsorship-card-wrapper">
+  1360→                <motion.div 
+  1361→                  variants={scaleIn}
+  1362→                  className="sponsorship-card"
+  1363→                  whileHover={{ 
+  1364→                    y: -12,
+  1365→                    rotateX: 3,
+  1366→                  }}
+  1367→                  style={{ transformStyle: 'preserve-3d' }}
+  1368→                >
+  1369→                  <div className="sponsorship-card-icon">
+  1370→                    <i className={iconMap[item.icon as keyof typeof iconMap] || 'fi fi-rr-star'}></i>
+  1371→                  </div>
+  1372→                  <h4>{item.title}</h4>
+  1373→                  <p>{item.desc}</p>
+  1374→                  <div className="sponsorship-card-decoration"></div>
+  1375→                </motion.div>
+  1376→              </SpotlightCard>
+  1377→            ))}
+  1378→          </motion.div>
+  1379→        </div>
+  1380→      </section>
+  1381→
+  1382→      {/* ===== WHY US QUOTE SECTION ===== */}
+  1383→      <section id="why-us" className="quote-section">
+  1384→        <div className="quote-decoration quote-left">&ldquo;</div>
+  1385→        <div className="quote-decoration quote-right">&rdquo;</div>
+  1386→        
+  1387→        <motion.div 
+  1388→          className="quote-content"
+  1389→          initial="hidden"
+  1390→          whileInView="visible"
+  1391→          viewport={{ once: true }}
+  1392→          variants={staggerContainer}
+  1393→        >
+  1394→          <div className="section-badge">{t.whyUs.badge}</div>
+  1395→          <motion.blockquote variants={fadeInUp}>
+  1396→            {t.whyUs.quotePart1}{' '}
+  1397→            <span className="highlight">{t.whyUs.quoteHighlight}</span>{' '}
+  1398→            {t.whyUs.quotePart2}
+  1399→          </motion.blockquote>
+  1400→        </motion.div>
+  1401→      </section>
+  1402→
+  1403→      {/* ===== CONTACT & FOOTER SECTION ===== */}
+  1404→      <section id="contact" className="contact-footer-section">
+  1405→        <div className="container">
+  1406→          <motion.div 
+  1407→            className="contact-footer-grid"
+  1408→            initial="hidden"
+  1409→            whileInView="visible"
+  1410→            viewport={{ once: true, margin: "-120px" }}
+  1411→            variants={staggerContainer}
+  1412→          >
+  1413→            {/* Contact Form */}
+  1414→            <motion.div variants={fadeInUp} className="contact-form-wrapper">
+  1415→              <h3 className="form-title">
+  1416→                <i className={iconMap.email}></i>
+  1417→                {t.contact.title}
+  1418→              </h3>
+  1419→              <p className="form-subtitle">{t.contact.subtitle}</p>
+  1420→              
+  1421→              <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+  1422→                <div className="form-group">
+  1423→                  <label>{t.contact.name}</label>
+  1424→                  <input type="text" placeholder={t.contact.name} required />
+  1425→                </div>
+  1426→                <div className="form-group">
+  1427→                  <label>{t.contact.organization}</label>
+  1428→                  <input type="text" placeholder={t.contact.organization} />
+  1429→                </div>
+  1430→                <div className="form-group">
+  1431→                  <label>{t.contact.email}</label>
+  1432→                  <input type="email" placeholder={t.contact.email} required />
+  1433→                </div>
+  1434→                <div className="form-group">
+  1435→                  <label>{t.contact.message}</label>
+  1436→                  <textarea placeholder={t.contact.message} required></textarea>
+  1437→                </div>
+  1438→                <button type="submit" className="btn-submit">
+  1439→                  {t.contact.submit} <i className="fi fi-rr-arrow-left"></i>
+  1440→                </button>
+  1441→              </form>
+  1442→            </motion.div>
+  1443→
+  1444→            {/* Footer Info */}
+  1445→            <motion.div variants={fadeInUp} className="footer-info">
+  1446→              <h3 className="company-title">
+  1447→                <i className={iconMap.building}></i>
+  1448→                {t.contact.companyTitle} <br/>
+  1449→                <span className="company-subtitle">{t.contact.companySubtitle}</span>
+  1450→              </h3>
+  1451→
+  1452→              <div className="company-info">
+  1453→                <div className="company-name">شركة رام الجزيرة للإنتاج الإعلامي</div>
+  1454→                
+  1455→                <div className="contact-details">
+  1456→                  <div className="contact-detail-item">
+  1457→                    <div className="contact-detail-icon"><i className={iconMap.location}></i></div>
+  1458→                    <span>{t.contact.address}</span>
+  1459→                  </div>
+  1460→                  <div className="contact-detail-item">
+  1461→                    <div className="contact-detail-icon"><i className={iconMap.phone}></i></div>
+  1462→                    <span>{t.contact.phone}</span>
+  1463→                  </div>
+  1464→                  <div className="contact-detail-item">
+  1465→                    <div className="contact-detail-icon"><i className={iconMap.email}></i></div>
+  1466→                    <span>{t.contact.email}</span>
+  1467→                  </div>
+  1468→                </div>
+  1469→              </div>
+  1470→
+  1471→              <div className="social-links">
+  1472→                <a href="#" className="social-link" aria-label="Twitter/X">
+  1473→                  <span className="social-text">{iconMap.twitter}</span>
+  1474→                </a>
+  1475→                <a href="#" className="social-link" aria-label="LinkedIn">
+  1476→                  <span className="social-text">{iconMap.linkedin}</span>
+  1477→                </a>
+  1478→                <a href="#" className="social-link" aria-label="Instagram">
+  1479→                  <i className="fi fi-rr-camera"></i>
+  1480→                </a>
+  1481→                <a href="#" className="social-link" aria-label="YouTube">
+  1482→                  <i className="fi fi-rr-youtube"></i>
+  1483→                </a>
+  1484→              </div>
+  1485→            </motion.div>
+  1486→          </motion.div>
+  1487→
+  1488→          <motion.div 
+  1489→            className="footer-bottom"
+  1490→            initial={{ opacity: 0 }}
+  1491→            whileInView={{ opacity: 1 }}
+  1492→            viewport={{ once: true }}
+  1493→            transition={{ delay: 0.3 }}
+  1494→          >
+  1495→            {t.contact.copyright}
+  1496→          </motion.div>
+  1497→        </div>
+  1498→      </section>
+  1499→    </div>
+  1500→  )
+  1501→}
+  1502→

@@ -27,12 +27,17 @@
   --bg-gray: #EEF2F7;
   --bg-dark: #071627;
   
-  /* Text Colors - ألوان النصوص */
+  /* Text Colors - ألوان النصوص (WCAG AA Compliant) */
   --text-primary: #1A2332;
-  --text-secondary: #4A5568;
-  --text-muted: #718096;
+  --text-secondary: #3D4F5F;  /* Darker for better contrast on light bg - was #4A5568 */
+  --text-muted: #5A6B7A;      /* Darker for better contrast - was #718096 */
   --text-light: #A0AEC0;
   --text-white: #FFFFFF;
+  
+  /* High Contrast Subtitle Colors */
+  --subtitle-light-bg: #3D4F5F;    /* For subtitles on light backgrounds */
+  --subtitle-dark-bg: #C7D5E0;     /* For subtitles on dark backgrounds - WCAG AA */
+  --subtitle-dark-muted: #AEC0D0;  /* For less prominent text on dark backgrounds */
   
   /* Glassmorphism */
   --glass-bg: rgba(255, 255, 255, 0.06);
@@ -255,6 +260,36 @@ body {
   color: var(--accent-gold);
 }
 
+/* Logo Placeholder Styling */
+.logo-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-text {
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+/* Footer Logo Placeholder */
+.footer-logo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  width: fit-content;
+}
+
+.footer-logo-placeholder i {
+  font-size: 2.5rem;
+  color: var(--accent-gold);
+}
+
 .logo-text-highlight {
   color: var(--accent-gold);
 }
@@ -446,18 +481,69 @@ body {
   overflow: hidden;
 }
 
+/* Hero Background Image - Professional Economic Scene */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=85');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  /* Gradient Mask: Transparent at top -> Visible at bottom (only lower 35% shows) */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 55%,
+    rgba(0, 0, 0, 0.3) 75%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 55%,
+    rgba(0, 0, 0, 0.3) 75%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  z-index: 0;
+}
+
+/* Darkening overlay on the visible part of the image */
+.hero-section::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Gradient overlay: darker at top (hides image) -> lighter at bottom (shows dimmed image) */
+  background: linear-gradient(
+    to bottom,
+    rgba(7, 22, 39, 1) 0%,
+    rgba(7, 22, 39, 0.95) 50%,
+    rgba(7, 22, 39, 0.7) 75%,
+    rgba(7, 22, 39, 0.45) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
 .hero-canvas-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 2;  /* Above background image, below content */
+  opacity: 0.5;  /* Reduced opacity for subtle integration with new bg */
 }
 
 .hero-content {
   position: relative;
-  z-index: 2;
+  z-index: 3;  /* Above all layers including canvas and overlays */
   text-align: center;
   max-width: 900px;
   padding: 0 2rem;
@@ -501,7 +587,7 @@ body {
 
 .hero-subtitle {
   font-size: clamp(1rem, 2vw, 1.25rem);
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.88);  /* Increased from 0.78 for better contrast */
   max-width: 700px;
   margin: 0 auto 2.5rem;
   line-height: 1.8;
@@ -569,13 +655,13 @@ body {
   outline-offset: 4px;
 }
 
-/* Scroll Indicator */
+/* Scroll Indicator - increased z-index */
 .scroll-indicator {
   position: absolute;
   bottom: 2.5rem;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 2;
+  z-index: 3;  /* Above all layers */
   text-align: center;
 }
 
@@ -688,14 +774,14 @@ body {
 
 .section-subtitle {
   font-size: 1.1rem;
-  color: var(--text-secondary);
+  color: var(--subtitle-light-bg);  /* WCAG AA compliant - darker text */
   max-width: 720px;
   margin: 0 auto;
   line-height: 1.7;
 }
 
 .section-dark .section-subtitle {
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--subtitle-dark-bg);  /* Light blue-gray for dark backgrounds - WCAG AA */
 }
 
 /* ===== ABOUT SECTION ===== */
@@ -751,7 +837,7 @@ body {
 
 .stat-mini-label {
   font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--subtitle-dark-muted);  /* Better contrast */
 }
 
 .about-text {
@@ -770,7 +856,7 @@ body {
 }
 
 .about-text p {
-  color: var(--text-secondary);
+  color: var(--subtitle-light-bg);  /* Better contrast */
   line-height: 1.8;
   margin: 0;
 }
@@ -886,7 +972,7 @@ body {
 
 .stat-label {
   font-size: 0.92rem;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--subtitle-dark-muted);  /* Better contrast */
   font-weight: 500;
 }
 
@@ -969,7 +1055,7 @@ body {
 }
 
 .vm-card p {
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--subtitle-dark-bg);  /* WCAG AA compliant */
   line-height: 1.75;
   font-size: 0.95rem;
 }
@@ -1078,7 +1164,7 @@ body {
 
 .objective-card p {
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: var(--subtitle-light-bg);  /* Better contrast */
   line-height: 1.6;
 }
 
@@ -1096,7 +1182,7 @@ body {
   bottom: 0;
   pointer-events: none;
   z-index: 1;
-  transition: opacity 200ms;
+  transition: opacity 400ms ease-out;  /* Slower, smoother transition */
 }
 
 .popular-badge {
@@ -1198,8 +1284,22 @@ body {
   transition: all var(--transition-base);
   min-height: 80px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
+}
+
+.timeline-item-icon {
+  font-size: 1.1rem;
+  color: var(--accent-gold);
+  opacity: 0.9;
+  transition: all var(--transition-base);
+}
+
+.timeline-item:hover .timeline-item-icon {
+  color: var(--accent-gold-light);
+  transform: scale(1.15);
 }
 
 .timeline-item:hover .timeline-item-content {
@@ -1211,7 +1311,7 @@ body {
 .timeline-item-title {
   font-size: 0.88rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--subtitle-dark-bg);  /* Better contrast on dark bg */
   line-height: 1.5;
 }
 
@@ -1332,7 +1432,7 @@ body {
 .audience-card span {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--subtitle-light-bg);  /* Better contrast */
 }
 
 /* Tag Cloud / Sectors */
@@ -1351,7 +1451,7 @@ body {
   border-radius: var(--radius-full);
   font-size: 0.88rem;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: var(--subtitle-light-bg);  /* Better contrast */
   border: 1px solid rgba(0, 0, 0, 0.06);
   transition: all var(--transition-base);
 }
@@ -1429,7 +1529,7 @@ body {
 .national-value-content p {
   font-size: 1.2rem;
   line-height: 1.9;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--subtitle-dark-bg);  /* Better contrast */
 }
 
 .national-value-highlight {
@@ -1624,7 +1724,7 @@ body {
 
 .sponsorship-card p {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.68);
+  color: var(--subtitle-dark-muted);  /* Better contrast - was 0.68 opacity white */
   line-height: 1.65;
   position: relative;
   z-index: 2;
@@ -1727,7 +1827,7 @@ body {
 }
 
 .form-subtitle {
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--subtitle-dark-muted);  /* Better contrast - was 0.65 */
   margin-bottom: 2rem;
   font-size: 0.95rem;
 }
@@ -1882,7 +1982,7 @@ body {
 
 .contact-detail-item span {
   font-size: 0.92rem;
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--subtitle-dark-muted);  /* Better contrast */
   line-height: 1.6;
 }
 

@@ -1,0 +1,2002 @@
+     1→@import "tailwindcss";
+     2→@import "tw-animate-css";
+     3→
+     4→/* ===================================
+     5→   قادة الاقتصاد - Economy Leaders
+     6→   Luxury Corporate Landing Page Styles
+     7→   Modern 2026 Design System
+     8→   =================================== */
+     9→
+    10→/* ===== CSS Variables (Design Tokens) ===== */
+    11→:root {
+    12→  /* Primary Colors - الألوان الأساسية */
+    13→  --primary-dark: #071627;
+    14→  --primary-navy: #0B2C48;
+    15→  --primary-blue: #1E9BD7;
+    16→  --primary-light: #3DB9E8;
+    17→  
+    18→  /* Accent Colors - ألوان التمييز */
+    19→  --accent-gold: #C9A227;
+    20→  --accent-gold-light: #D4AF37;
+    21→  --accent-gold-dark: #A88620;
+    22→  --accent-silver: #C0C0C0;
+    23→  
+    24→  /* Background Colors - ألوان الخلفيات */
+    25→  --bg-white: #FFFFFF;
+    26→  --bg-light: #F6F8FA;
+    27→  --bg-gray: #EEF2F7;
+    28→  --bg-dark: #071627;
+    29→  
+    30→  /* Text Colors - ألوان النصوص */
+    31→  --text-primary: #1A2332;
+    32→  --text-secondary: #4A5568;
+    33→  --text-muted: #718096;
+    34→  --text-light: #A0AEC0;
+    35→  --text-white: #FFFFFF;
+    36→  
+    37→  /* Glassmorphism */
+    38→  --glass-bg: rgba(255, 255, 255, 0.06);
+    39→  --glass-bg-light: rgba(255, 255, 255, 0.08);
+    40→  --glass-border: rgba(255, 255, 255, 0.12);
+    41→  --glass-border-light: rgba(255, 255, 255, 0.08);
+    42→  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    43→  --glass-blur: blur(20px);
+    44→  
+    45→  /* Shadows */
+    46→  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+    47→  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+    48→  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
+    49→  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+    50→  --shadow-gold: 0 8px 32px rgba(201, 162, 39, 0.25);
+    51→  --shadow-card-hover: 0 20px 50px rgba(0, 0, 0, 0.2);
+    52→  
+    53→  /* Border Radius */
+    54→  --radius-sm: 8px;
+    55→  --radius-md: 12px;
+    56→  --radius-lg: 16px;
+    57→  --radius-xl: 20px;
+    58→  --radius-2xl: 28px;
+    59→  --radius-full: 9999px;
+    60→  
+    61→  /* Spacing Scale (8px base) */
+    62→  --space-1: 8px;
+    63→  --space-2: 16px;
+    64→  --space-3: 24px;
+    65→  --space-4: 32px;
+    66→  --space-5: 48px;
+    67→  --space-6: 64px;
+    68→  --space-7: 96px;
+    69→  --space-8: 120px;
+    70→  
+    71→  /* Transitions */
+    72→  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    73→  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    74→  --transition-smooth: 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    75→  --transition-slow: 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    76→}
+    77→
+    78→/* ===== Font Families ===== */
+    79→html {
+    80→  scroll-behavior: smooth;
+    81→  overflow-x: hidden;
+    82→}
+    83→
+    84→body {
+    85→  font-family: 'IBM Plex Sans Arabic', 'Almarai', sans-serif;
+    86→  color: var(--text-primary);
+    87→  background-color: var(--bg-white);
+    88→  line-height: 1.7;
+    89→  -webkit-font-smoothing: antialiased;
+    90→  -moz-osx-font-smoothing: grayscale;
+    91→}
+    92→
+    93→[dir="ltr"] body {
+    94→  font-family: 'Space Grotesk', 'Inter', sans-serif;
+    95→}
+    96→
+    97→/* ===== Main Wrapper ===== */
+    98→.main-wrapper {
+    99→  position: relative;
+   100→  min-height: 100vh;
+   101→  overflow-x: hidden;
+   102→}
+   103→
+   104→/* ===== Noise Texture Overlay ===== */
+   105→.noise-overlay {
+   106→  position: fixed;
+   107→  top: 0;
+   108→  left: 0;
+   109→  width: 100%;
+   110→  height: 100%;
+   111→  pointer-events: none;
+   112→  z-index: 9999;
+   113→  opacity: 0.03;
+   114→  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+   115→  background-repeat: repeat;
+   116→  background-size: 256px 256px;
+   117→}
+   118→
+   119→/* ===== Scroll Progress Indicator ===== */
+   120→.scroll-progress-container {
+   121→  position: fixed;
+   122→  left: 24px;
+   123→  top: 50%;
+   124→  transform: translateY(-50%);
+   125→  width: 3px;
+   126→  height: 120px;
+   127→  background: rgba(255, 255, 255, 0.1);
+   128→  border-radius: var(--radius-full);
+   129→  z-index: 900;
+   130→  overflow: hidden;
+   131→}
+   132→
+   133→.scroll-progress-bar {
+   134→  position: absolute;
+   135→  bottom: 0;
+   136→  left: 0;
+   137→  width: 100%;
+   138→  background: linear-gradient(to top, var(--accent-gold), var(--accent-gold-light));
+   139→  border-radius: var(--radius-full);
+   140→  transition: height 100ms linear;
+   141→}
+   142→
+   143→.scroll-progress-glow {
+   144→  position: absolute;
+   145→  top: 0;
+   146→  left: 50%;
+   147→  transform: translateX(-50%);
+   148→  width: 8px;
+   149→  height: 8px;
+   150→  background: var(--accent-gold);
+   151→  border-radius: 50%;
+   152→  box-shadow: 0 0 12px var(--accent-gold), 0 0 24px rgba(201, 162, 39, 0.5);
+   153→}
+   154→
+   155→[dir="ltr"] .scroll-progress-container {
+   156→  left: auto;
+   157→  right: 24px;
+   158→}
+   159→
+   160→/* ===== PRELOADER ===== */
+   161→.preloader {
+   162→  position: fixed;
+   163→  top: 0;
+   164→  left: 0;
+   165→  width: 100%;
+   166→  height: 100%;
+   167→  background: linear-gradient(160deg, var(--primary-dark) 0%, var(--primary-navy) 50%, #0d2840 100%);
+   168→  display: flex;
+   169→  align-items: center;
+   170→  justify-content: center;
+   171→  z-index: 10000;
+   172→}
+   173→
+   174→.preloader-content {
+   175→  text-align: center;
+   176→}
+   177→
+   178→.preloader-logo {
+   179→  font-size: 2.5rem;
+   180→  font-weight: 800;
+   181→  color: var(--accent-gold);
+   182→  margin-bottom: 2rem;
+   183→  letter-spacing: 2px;
+   184→  display: flex;
+   185→  align-items: center;
+   186→  justify-content: center;
+   187→  gap: 1rem;
+   188→}
+   189→
+   190→.preloader-icon {
+   191→  font-size: 2rem;
+   192→}
+   193→
+   194→.preloader-spinner {
+   195→  width: 50px;
+   196→  height: 50px;
+   197→  margin: 0 auto;
+   198→  border: 3px solid rgba(201, 162, 39, 0.2);
+   199→  border-top-color: var(--accent-gold);
+   200→  border-radius: 50%;
+   201→  animation: spin 0.8s linear infinite;
+   202→}
+   203→
+   204→@keyframes spin {
+   205→  to { transform: rotate(360deg); }
+   206→}
+   207→
+   208→/* ===== NAVBAR ===== */
+   209→.navbar {
+   210→  position: fixed;
+   211→  top: 0;
+   212→  left: 0;
+   213→  right: 0;
+   214→  z-index: 1000;
+   215→  padding: 1.25rem 0;
+   216→  transition: all var(--transition-base);
+   217→  background: transparent;
+   218→}
+   219→
+   220→.navbar.scrolled {
+   221→  background: rgba(7, 22, 39, 0.92);
+   222→  backdrop-filter: var(--glass-blur);
+   223→  -webkit-backdrop-filter: var(--glass-blur);
+   224→  border-bottom: 1px solid var(--glass-border);
+   225→  padding: 0.75rem 0;
+   226→  box-shadow: var(--shadow-lg);
+   227→}
+   228→
+   229→.navbar-container {
+   230→  max-width: 1320px;
+   231→  margin: 0 auto;
+   232→  padding: 0 2rem;
+   233→  display: flex;
+   234→  align-items: center;
+   235→  justify-content: space-between;
+   236→}
+   237→
+   238→.navbar-logo {
+   239→  display: flex;
+   240→  align-items: center;
+   241→  gap: 0.75rem;
+   242→  text-decoration: none;
+   243→  color: var(--text-white);
+   244→  font-weight: 700;
+   245→  font-size: 1.15rem;
+   246→  transition: all var(--transition-base);
+   247→}
+   248→
+   249→.navbar-logo:hover {
+   250→  color: var(--accent-gold);
+   251→}
+   252→
+   253→.logo-icon-flaticon {
+   254→  font-size: 1.5rem;
+   255→  color: var(--accent-gold);
+   256→}
+   257→
+   258→.logo-text-highlight {
+   259→  color: var(--accent-gold);
+   260→}
+   261→
+   262→.navbar-links {
+   263→  display: flex;
+   264→  list-style: none;
+   265→  gap: 2rem;
+   266→  margin: 0;
+   267→  padding: 0;
+   268→}
+   269→
+   270→.navbar-links a {
+   271→  color: rgba(255, 255, 255, 0.85);
+   272→  text-decoration: none;
+   273→  font-size: 0.92rem;
+   274→  font-weight: 500;
+   275→  position: relative;
+   276→  padding: 0.5rem 0;
+   277→  transition: all var(--transition-base);
+   278→}
+   279→
+   280→.navbar-links a::after {
+   281→  content: '';
+   282→  position: absolute;
+   283→  bottom: 0;
+   284→  left: 0;
+   285→  width: 0;
+   286→  height: 2px;
+   287→  background: var(--accent-gold);
+   288→  transition: width var(--transition-base);
+   289→}
+   290→
+   291→.navbar-links a:hover {
+   292→  color: var(--accent-gold);
+   293→}
+   294→
+   295→.navbar-links a:hover::after {
+   296→  width: 100%;
+   297→}
+   298→
+   299→.navbar-links a:focus-visible {
+   300→  outline: 2px solid var(--accent-gold);
+   301→  outline-offset: 4px;
+   302→  border-radius: 2px;
+   303→}
+   304→
+   305→.lang-toggle {
+   306→  background: transparent;
+   307→  border: 1px solid var(--accent-gold);
+   308→  color: var(--accent-gold);
+   309→  padding: 0.5rem 1.25rem;
+   310→  border-radius: var(--radius-full);
+   311→  cursor: pointer;
+   312→  font-weight: 600;
+   313→  font-size: 0.85rem;
+   314→  transition: all var(--transition-base);
+   315→}
+   316→
+   317→.lang-toggle:hover {
+   318→  background: var(--accent-gold);
+   319→  color: var(--primary-dark);
+   320→}
+   321→
+   322→.lang-toggle:focus-visible {
+   323→  outline: 2px solid var(--accent-gold);
+   324→  outline-offset: 3px;
+   325→}
+   326→
+   327→.mobile-menu-btn {
+   328→  display: none;
+   329→  background: transparent;
+   330→  border: none;
+   331→  color: var(--text-white);
+   332→  font-size: 1.5rem;
+   333→  cursor: pointer;
+   334→  padding: 0.5rem;
+   335→  transition: all var(--transition-base);
+   336→}
+   337→
+   338→.mobile-menu-btn:hover {
+   339→  color: var(--accent-gold);
+   340→}
+   341→
+   342→/* ===== MOBILE MENU ===== */
+   343→.mobile-menu-overlay {
+   344→  position: fixed;
+   345→  top: 0;
+   346→  left: 0;
+   347→  width: 100%;
+   348→  height: 100%;
+   349→  background: rgba(0, 0, 0, 0.6);
+   350→  backdrop-filter: blur(4px);
+   351→  z-index: 1999;
+   352→  opacity: 0;
+   353→  visibility: hidden;
+   354→  transition: all var(--transition-base);
+   355→}
+   356→
+   357→.mobile-menu-overlay.active {
+   358→  opacity: 1;
+   359→  visibility: visible;
+   360→}
+   361→
+   362→.mobile-menu {
+   363→  position: fixed;
+   364→  top: 0;
+   365→  right: -320px;
+   366→  width: 300px;
+   367→  height: 100%;
+   368→  background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary-navy) 100%);
+   369→  z-index: 2000;
+   370→  transition: right var(--transition-smooth);
+   371→  padding: 2rem;
+   372→  overflow-y: auto;
+   373→}
+   374→
+   375→[dir="ltr"] .mobile-menu {
+   376→  right: auto;
+   377→  left: -320px;
+   378→}
+   379→
+   380→[dir="ltr"] .mobile-menu.active {
+   381→  left: 0;
+   382→}
+   383→
+   384→.mobile-menu.active {
+   385→  right: 0;
+   386→}
+   387→
+   388→.mobile-menu-header {
+   389→  display: flex;
+   390→  align-items: center;
+   391→  justify-content: space-between;
+   392→  margin-bottom: 2.5rem;
+   393→  padding-bottom: 1.5rem;
+   394→  border-bottom: 1px solid var(--glass-border);
+   395→}
+   396→
+   397→.mobile-menu-close {
+   398→  background: transparent;
+   399→  border: none;
+   400→  color: var(--text-white);
+   401→  font-size: 1.5rem;
+   402→  cursor: pointer;
+   403→  padding: 0.25rem;
+   404→  transition: all var(--transition-base);
+   405→}
+   406→
+   407→.mobile-menu-close:hover {
+   408→  color: var(--accent-gold);
+   409→  transform: rotate(90deg);
+   410→}
+   411→
+   412→.mobile-menu-links {
+   413→  list-style: none;
+   414→  padding: 0;
+   415→  margin: 0;
+   416→}
+   417→
+   418→.mobile-menu-links li {
+   419→  margin-bottom: 0.5rem;
+   420→}
+   421→
+   422→.mobile-menu-links a {
+   423→  display: block;
+   424→  color: rgba(255, 255, 255, 0.85);
+   425→  text-decoration: none;
+   426→  padding: 1rem 1.25rem;
+   427→  border-radius: var(--radius-md);
+   428→  font-weight: 500;
+   429→  transition: all var(--transition-base);
+   430→}
+   431→
+   432→.mobile-menu-links a:hover {
+   433→  background: var(--glass-bg);
+   434→  color: var(--accent-gold);
+   435→  padding-right: 1.75rem;
+   436→}
+   437→
+   438→/* ===== HERO SECTION ===== */
+   439→.hero-section {
+   440→  position: relative;
+   441→  min-height: 100vh;
+   442→  display: flex;
+   443→  align-items: center;
+   444→  justify-content: center;
+   445→  background: linear-gradient(160deg, var(--primary-dark) 0%, var(--primary-navy) 40%, #0a1f36 70%, #0d2840 100%);
+   446→  overflow: hidden;
+   447→}
+   448→
+   449→.hero-canvas-container {
+   450→  position: absolute;
+   451→  top: 0;
+   452→  left: 0;
+   453→  width: 100%;
+   454→  height: 100%;
+   455→  z-index: 1;
+   456→}
+   457→
+   458→.hero-content {
+   459→  position: relative;
+   460→  z-index: 2;
+   461→  text-align: center;
+   462→  max-width: 900px;
+   463→  padding: 0 2rem;
+   464→  color: var(--text-white);
+   465→}
+   466→
+   467→.hero-badge {
+   468→  display: inline-flex;
+   469→  align-items: center;
+   470→  gap: 0.65rem;
+   471→  background: var(--glass-bg);
+   472→  backdrop-filter: var(--glass-blur);
+   473→  -webkit-backdrop-filter: var(--glass-blur);
+   474→  border: 1px solid var(--glass-border);
+   475→  padding: 0.65rem 1.5rem;
+   476→  border-radius: var(--radius-full);
+   477→  font-size: 0.88rem;
+   478→  color: var(--accent-gold-light);
+   479→  margin-bottom: 2rem;
+   480→  font-weight: 500;
+   481→}
+   482→
+   483→.hero-badge-icon {
+   484→  font-size: 1rem;
+   485→}
+   486→
+   487→.hero-title {
+   488→  font-size: clamp(2.8rem, 6vw, 5rem);
+   489→  font-weight: 800;
+   490→  line-height: 1.15;
+   491→  margin-bottom: 1.5rem;
+   492→  letter-spacing: -0.02em;
+   493→}
+   494→
+   495→.hero-title .highlight {
+   496→  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-light) 50%, #e8c84a 100%);
+   497→  -webkit-background-clip: text;
+   498→  -webkit-text-fill-color: transparent;
+   499→  background-clip: text;
+   500→}
+   501→
+   502→.hero-subtitle {
+   503→  font-size: clamp(1rem, 2vw, 1.25rem);
+   504→  color: rgba(255, 255, 255, 0.78);
+   505→  max-width: 700px;
+   506→  margin: 0 auto 2.5rem;
+   507→  line-height: 1.8;
+   508→  font-weight: 400;
+   509→}
+   510→
+   511→.hero-buttons {
+   512→  display: flex;
+   513→  gap: 1.25rem;
+   514→  justify-content: center;
+   515→  flex-wrap: wrap;
+   516→}
+   517→
+   518→.btn-primary {
+   519→  display: inline-flex;
+   520→  align-items: center;
+   521→  gap: 0.65rem;
+   522→  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-light) 100%);
+   523→  color: var(--primary-dark);
+   524→  border: none;
+   525→  padding: 1rem 2.25rem;
+   526→  border-radius: var(--radius-full);
+   527→  font-weight: 700;
+   528→  font-size: 1rem;
+   529→  cursor: pointer;
+   530→  transition: all var(--transition-base);
+   531→  box-shadow: var(--shadow-gold);
+   532→}
+   533→
+   534→.btn-primary:hover {
+   535→  transform: translateY(-3px);
+   536→  box-shadow: 0 12px 35px rgba(201, 162, 39, 0.4);
+   537→}
+   538→
+   539→.btn-primary:focus-visible {
+   540→  outline: 2px solid var(--text-white);
+   541→  outline-offset: 4px;
+   542→}
+   543→
+   544→.btn-secondary {
+   545→  display: inline-flex;
+   546→  align-items: center;
+   547→  gap: 0.65rem;
+   548→  background: transparent;
+   549→  color: var(--text-white);
+   550→  border: 1px solid rgba(255, 255, 255, 0.35);
+   551→  padding: 1rem 2.25rem;
+   552→  border-radius: var(--radius-full);
+   553→  font-weight: 600;
+   554→  font-size: 1rem;
+   555→  cursor: pointer;
+   556→  transition: all var(--transition-base);
+   557→  backdrop-filter: var(--glass-blur);
+   558→}
+   559→
+   560→.btn-secondary:hover {
+   561→  background: rgba(255, 255, 255, 0.1);
+   562→  border-color: var(--accent-gold);
+   563→  color: var(--accent-gold);
+   564→  transform: translateY(-3px);
+   565→}
+   566→
+   567→.btn-secondary:focus-visible {
+   568→  outline: 2px solid var(--accent-gold);
+   569→  outline-offset: 4px;
+   570→}
+   571→
+   572→/* Scroll Indicator */
+   573→.scroll-indicator {
+   574→  position: absolute;
+   575→  bottom: 2.5rem;
+   576→  left: 50%;
+   577→  transform: translateX(-50%);
+   578→  z-index: 2;
+   579→  text-align: center;
+   580→}
+   581→
+   582→.scroll-indicator a {
+   583→  text-decoration: none;
+   584→  color: rgba(255, 255, 255, 0.6);
+   585→  display: flex;
+   586→  flex-direction: column;
+   587→  align-items: center;
+   588→  gap: 0.75rem;
+   589→  transition: all var(--transition-base);
+   590→}
+   591→
+   592→.scroll-indicator a:hover {
+   593→  color: var(--accent-gold);
+   594→}
+   595→
+   596→.scroll-mouse {
+   597→  width: 26px;
+   598→  height: 42px;
+   599→  border: 2px solid currentColor;
+   600→  border-radius: 14px;
+   601→  position: relative;
+   602→}
+   603→
+   604→.scroll-wheel {
+   605→  width: 4px;
+   606→  height: 10px;
+   607→  background: currentColor;
+   608→  border-radius: 2px;
+   609→  position: absolute;
+   610→  top: 8px;
+   611→  left: 50%;
+   612→  transform: translateX(-50%);
+   613→  animation: scrollWheel 2s infinite;
+   614→}
+   615→
+   616→@keyframes scrollWheel {
+   617→  0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+   618→  100% { opacity: 0; transform: translateX(-50%) translateY(14px); }
+   619→}
+   620→
+   621→.scroll-indicator span {
+   622→  font-size: 0.78rem;
+   623→  letter-spacing: 1px;
+   624→  text-transform: uppercase;
+   625→}
+   626→
+   627→/* ===== SECTIONS COMMON ===== */
+   628→.section {
+   629→  padding: var(--space-7) 0;
+   630→  position: relative;
+   631→}
+   632→
+   633→.section-light {
+   634→  background: var(--bg-light);
+   635→}
+   636→
+   637→.section-dark {
+   638→  background: linear-gradient(165deg, var(--primary-dark) 0%, var(--primary-navy) 50%, #0c2238 100%);
+   639→  color: var(--text-white);
+   640→}
+   641→
+   642→.section-gray {
+   643→  background: var(--bg-gray);
+   644→}
+   645→
+   646→.container {
+   647→  max-width: 1280px;
+   648→  margin: 0 auto;
+   649→  padding: 0 2rem;
+   650→}
+   651→
+   652→.section-header {
+   653→  text-align: center;
+   654→  margin-bottom: var(--space-6);
+   655→}
+   656→
+   657→.section-badge {
+   658→  display: inline-flex;
+   659→  align-items: center;
+   660→  gap: 0.5rem;
+   661→  background: linear-gradient(135deg, rgba(30, 155, 215, 0.12) 0%, rgba(201, 162, 39, 0.12) 100%);
+   662→  color: var(--primary-blue);
+   663→  padding: 0.55rem 1.35rem;
+   664→  border-radius: var(--radius-full);
+   665→  font-size: 0.85rem;
+   666→  font-weight: 600;
+   667→  margin-bottom: 1.25rem;
+   668→  letter-spacing: 0.02em;
+   669→}
+   670→
+   671→.section-dark .section-badge {
+   672→  background: var(--glass-bg);
+   673→  border: 1px solid var(--glass-border);
+   674→  color: var(--accent-gold-light);
+   675→}
+   676→
+   677→.section-title {
+   678→  font-size: clamp(1.75rem, 4vw, 2.75rem);
+   679→  font-weight: 800;
+   680→  line-height: 1.25;
+   681→  margin-bottom: 1rem;
+   682→  color: var(--text-primary);
+   683→}
+   684→
+   685→.section-dark .section-title {
+   686→  color: var(--text-white);
+   687→}
+   688→
+   689→.section-subtitle {
+   690→  font-size: 1.1rem;
+   691→  color: var(--text-secondary);
+   692→  max-width: 720px;
+   693→  margin: 0 auto;
+   694→  line-height: 1.7;
+   695→}
+   696→
+   697→.section-dark .section-subtitle {
+   698→  color: rgba(255, 255, 255, 0.72);
+   699→}
+   700→
+   701→/* ===== ABOUT SECTION ===== */
+   702→.about-grid {
+   703→  display: grid;
+   704→  grid-template-columns: 1fr 1fr;
+   705→  gap: var(--space-6);
+   706→  align-items: stretch;
+   707→}
+   708→
+   709→.about-image-wrapper {
+   710→  position: relative;
+   711→  border-radius: var(--radius-xl);
+   712→  overflow: hidden;
+   713→  aspect-ratio: 4/3;
+   714→  min-height: 380px;
+   715→}
+   716→
+   717→.about-image {
+   718→  width: 100%;
+   719→  height: 100%;
+   720→  object-fit: cover;
+   721→  transition: transform var(--transition-slow);
+   722→}
+   723→
+   724→.about-image-wrapper:hover .about-image {
+   725→  transform: scale(1.05);
+   726→}
+   727→
+   728→.about-image-overlay {
+   729→  position: absolute;
+   730→  bottom: 0;
+   731→  left: 0;
+   732→  right: 0;
+   733→  background: linear-gradient(to top, rgba(7, 22, 39, 0.95) 0%, transparent 100%);
+   734→  padding: 2rem;
+   735→}
+   736→
+   737→.about-stats-mini {
+   738→  display: flex;
+   739→  gap: 2rem;
+   740→}
+   741→
+   742→.stat-mini {
+   743→  text-align: center;
+   744→}
+   745→
+   746→.stat-mini-number {
+   747→  font-size: 1.75rem;
+   748→  font-weight: 800;
+   749→  color: var(--accent-gold);
+   750→}
+   751→
+   752→.stat-mini-label {
+   753→  font-size: 0.82rem;
+   754→  color: rgba(255, 255, 255, 0.78);
+   755→}
+   756→
+   757→.about-text {
+   758→  display: flex;
+   759→  flex-direction: column;
+   760→  justify-content: center;
+   761→  gap: 1.25rem;
+   762→}
+   763→
+   764→.about-text h2 {
+   765→  font-size: 2.25rem;
+   766→  font-weight: 800;
+   767→  line-height: 1.3;
+   768→  color: var(--text-primary);
+   769→  margin: 0;
+   770→}
+   771→
+   772→.about-text p {
+   773→  color: var(--text-secondary);
+   774→  line-height: 1.8;
+   775→  margin: 0;
+   776→}
+   777→
+   778→.about-features {
+   779→  display: grid;
+   780→  grid-template-columns: 1fr 1fr;
+   781→  gap: 1rem;
+   782→  margin-top: 1rem;
+   783→}
+   784→
+   785→.about-feature-item {
+   786→  display: flex;
+   787→  align-items: center;
+   788→  gap: 0.85rem;
+   789→  padding: 0.85rem 1.1rem;
+   790→  background: white;
+   791→  border-radius: var(--radius-md);
+   792→  box-shadow: var(--shadow-sm);
+   793→  transition: all var(--transition-base);
+   794→}
+   795→
+   796→.about-feature-item:hover {
+   797→  transform: translateY(-3px);
+   798→  box-shadow: var(--shadow-md);
+   799→}
+   800→
+   801→.about-feature-icon {
+   802→  width: 44px;
+   803→  height: 44px;
+   804→  display: flex;
+   805→  align-items: center;
+   806→  justify-content: center;
+   807→  background: linear-gradient(135deg, rgba(30, 155, 215, 0.12) 0%, rgba(201, 162, 39, 0.12) 100%);
+   808→  border-radius: var(--radius-md);
+   809→  color: var(--primary-blue);
+   810→  font-size: 1.15rem;
+   811→  flex-shrink: 0;
+   812→  transition: all var(--transition-base);
+   813→}
+   814→
+   815→.about-feature-item:hover .about-feature-icon {
+   816→  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-light) 100%);
+   817→  color: var(--primary-dark);
+   818→  transform: scale(1.08);
+   819→}
+   820→
+   821→.about-feature-text {
+   822→  font-weight: 600;
+   823→  font-size: 0.92rem;
+   824→  color: var(--text-primary);
+   825→}
+   826→
+   827→/* ===== STATS SECTION ===== */
+   828→.stats-section {
+   829→  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-dark) 50%, #0a1e33 100%);
+   830→  padding: var(--space-5) 0;
+   831→  position: relative;
+   832→}
+   833→
+   834→.stats-section::before {
+   835→  content: '';
+   836→  position: absolute;
+   837→  top: 0;
+   838→  left: 0;
+   839→  right: 0;
+   840→  height: 1px;
+   841→  background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+   842→}
+   843→
+   844→.stats-grid {
+   845→  max-width: 1100px;
+   846→  margin: 0 auto;
+   847→  padding: 0 2rem;
+   848→  display: grid;
+   849→  grid-template-columns: repeat(4, 1fr);
+   850→  gap: 2rem;
+   851→}
+   852→
+   853→.stat-item {
+   854→  text-align: center;
+   855→  padding: 1.5rem;
+   856→  position: relative;
+   857→}
+   858→
+   859→.stat-number {
+   860→  font-size: clamp(2rem, 4vw, 3rem);
+   861→  font-weight: 800;
+   862→  color: var(--accent-gold);
+   863→  margin-bottom: 0.5rem;
+   864→  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-light) 100%);
+   865→  -webkit-background-clip: text;
+   866→  -webkit-text-fill-color: transparent;
+   867→  background-clip: text;
+   868→}
+   869→
+   870→.stat-progress-line {
+   871→  width: 80px;
+   872→  height: 3px;
+   873→  background: rgba(255, 255, 255, 0.1);
+   874→  border-radius: var(--radius-full);
+   875→  margin: 0.75rem auto;
+   876→  overflow: hidden;
+   877→}
+   878→
+   879→.stat-progress-fill {
+   880→  height: 100%;
+   881→  background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-light));
+   882→  border-radius: var(--radius-full);
+   883→  transition: width 80ms linear;
+   884→  box-shadow: 0 0 8px rgba(201, 162, 39, 0.4);
+   885→}
+   886→
+   887→.stat-label {
+   888→  font-size: 0.92rem;
+   889→  color: rgba(255, 255, 255, 0.72);
+   890→  font-weight: 500;
+   891→}
+   892→
+   893→/* ===== VISION & MISSION SECTION ===== */
+   894→.vision-mission-grid {
+   895→  display: grid;
+   896→  grid-template-columns: repeat(2, 1fr);
+   897→  gap: 2.5rem;
+   898→}
+   899→
+   900→.vm-card-wrapper {
+   901→  border-radius: var(--radius-xl);
+   902→  overflow: hidden;
+   903→}
+   904→
+   905→.vm-card {
+   906→  background: var(--glass-bg);
+   907→  backdrop-filter: var(--glass-blur);
+   908→  -webkit-backdrop-filter: var(--glass-blur);
+   909→  border: 1px solid var(--glass-border);
+   910→  border-radius: var(--radius-xl);
+   911→  padding: 2.5rem 2rem;
+   912→  text-align: center;
+   913→  position: relative;
+   914→  overflow: hidden;
+   915→  min-height: 280px;
+   916→  display: flex;
+   917→  flex-direction: column;
+   918→  align-items: center;
+   919→  justify-content: center;
+   920→  transition: all var(--transition-base);
+   921→}
+   922→
+   923→.vm-card::before {
+   924→  content: '';
+   925→  position: absolute;
+   926→  top: 0;
+   927→  left: 0;
+   928→  right: 0;
+   929→  height: 3px;
+   930→  background: linear-gradient(90deg, var(--accent-gold), var(--primary-blue), var(--accent-gold));
+   931→  opacity: 0;
+   932→  transition: opacity var(--transition-base);
+   933→}
+   934→
+   935→.vm-card:hover::before {
+   936→  opacity: 1;
+   937→}
+   938→
+   939→.vm-card:hover {
+   940→  border-color: rgba(201, 162, 39, 0.25);
+   941→  transform: translateY(-5px);
+   942→}
+   943→
+   944→.vm-card-icon {
+   945→  width: 80px;
+   946→  height: 80px;
+   947→  display: flex;
+   948→  align-items: center;
+   949→  justify-content: center;
+   950→  background: linear-gradient(135deg, rgba(201, 162, 39, 0.15) 0%, rgba(30, 155, 215, 0.1) 100%);
+   951→  border-radius: 50%;
+   952→  font-size: 2rem;
+   953→  color: var(--accent-gold);
+   954→  margin-bottom: 1.5rem;
+   955→  transition: all var(--transition-base);
+   956→}
+   957→
+   958→.vm-card:hover .vm-card-icon {
+   959→  transform: scale(1.08);
+   960→  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-light) 100%);
+   961→  color: var(--primary-dark);
+   962→}
+   963→
+   964→.vm-card h3 {
+   965→  font-size: 1.5rem;
+   966→  font-weight: 700;
+   967→  margin-bottom: 1rem;
+   968→  color: var(--text-white);
+   969→}
+   970→
+   971→.vm-card p {
+   972→  color: rgba(255, 255, 255, 0.72);
+   973→  line-height: 1.75;
+   974→  font-size: 0.95rem;
+   975→}
+   976→
+   977→.vm-card-decoration {
+   978→  position: absolute;
+   979→  bottom: -20px;
+   980→  right: -20px;
+   981→  width: 100px;
+   982→  height: 100px;
+   983→  border: 2px solid var(--glass-border);
+   984→  border-radius: 50%;
+   985→  opacity: 0.3;
+   986→}
+   987→
+   988→/* ===== OBJECTIVES SECTION ===== */
+   989→.objectives-grid {
+   990→  display: grid;
+   991→  grid-template-columns: repeat(3, 1fr);
+   992→  gap: 1.5rem;
+   993→}
+   994→
+   995→.objective-card-wrapper {
+   996→  border-radius: var(--radius-lg);
+   997→  overflow: hidden;
+   998→}
+   999→
+  1000→.objective-card {
+  1001→  background: white;
+  1002→  border-radius: var(--radius-lg);
+  1003→  padding: 2rem 1.5rem;
+  1004→  text-align: center;
+  1005→  position: relative;
+  1006→  overflow: hidden;
+  1007→  border: 1px solid rgba(0, 0, 0, 0.05);
+  1008→  min-height: 240px;
+  1009→  display: flex;
+  1010→  flex-direction: column;
+  1011→  align-items: center;
+  1012→  justify-content: flex-start;
+  1013→  transition: all var(--transition-base);
+  1014→  box-shadow: var(--shadow-sm);
+  1015→}
+  1016→
+  1017→.objective-card::before {
+  1018→  content: '';
+  1019→  position: absolute;
+  1020→  top: 0;
+  1021→  left: 0;
+  1022→  right: 0;
+  1023→  height: 4px;
+  1024→  background: linear-gradient(90deg, var(--primary-blue), var(--accent-gold));
+  1025→  transform: scaleX(0);
+  1026→  transition: transform var(--transition-base);
+  1027→}
+  1028→
+  1029→.objective-card:hover::before {
+  1030→  transform: scaleX(1);
+  1031→}
+  1032→
+  1033→.objective-card:hover {
+  1034→  box-shadow: var(--shadow-lg);
+  1035→  border-color: rgba(30, 155, 215, 0.15);
+  1036→}
+  1037→
+  1038→.objective-card-number {
+  1039→  font-size: 2.5rem;
+  1040→  font-weight: 800;
+  1041→  color: rgba(30, 155, 215, 0.12);
+  1042→  line-height: 1;
+  1043→  margin-bottom: 0.75rem;
+  1044→  transition: all var(--transition-base);
+  1045→}
+  1046→
+  1047→.objective-card:hover .objective-card-number {
+  1048→  color: rgba(30, 155, 215, 0.25);
+  1049→  transform: scale(1.05);
+  1050→}
+  1051→
+  1052→.objective-card-icon {
+  1053→  width: 64px;
+  1054→  height: 64px;
+  1055→  display: flex;
+  1056→  align-items: center;
+  1057→  justify-content: center;
+  1058→  background: linear-gradient(135deg, rgba(30, 155, 215, 0.1) 0%, rgba(201, 162, 39, 0.08) 100%);
+  1059→  border-radius: var(--radius-md);
+  1060→  font-size: 1.5rem;
+  1061→  color: var(--primary-blue);
+  1062→  margin-bottom: 1.25rem;
+  1063→  transition: all var(--transition-base);
+  1064→}
+  1065→
+  1066→.objective-card:hover .objective-card-icon {
+  1067→  transform: scale(1.08);
+  1068→  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-gold) 100%);
+  1069→  color: white;
+  1070→}
+  1071→
+  1072→.objective-card h4 {
+  1073→  font-size: 1.1rem;
+  1074→  font-weight: 700;
+  1075→  color: var(--text-primary);
+  1076→  margin-bottom: 0.5rem;
+  1077→}
+  1078→
+  1079→.objective-card p {
+  1080→  font-size: 0.9rem;
+  1081→  color: var(--text-secondary);
+  1082→  line-height: 1.6;
+  1083→}
+  1084→
+  1085→/* ===== SPOTLIGHT CARD COMPONENT ===== */
+  1086→.spotlight-card {
+  1087→  position: relative;
+  1088→  overflow: hidden;
+  1089→}
+  1090→
+  1091→.spotlight-effect {
+  1092→  position: absolute;
+  1093→  top: 0;
+  1094→  left: 0;
+  1095→  right: 0;
+  1096→  bottom: 0;
+  1097→  pointer-events: none;
+  1098→  z-index: 1;
+  1099→  transition: opacity 200ms;
+  1100→}
+  1101→
+  1102→.popular-badge {
+  1103→  position: absolute;
+  1104→  top: 12px;
+  1105→  left: 12px;
+  1106→  z-index: 5;
+  1107→  display: inline-flex;
+  1108→  align-items: center;
+  1109→  gap: 0.4rem;
+  1110→  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-light) 100%);
+  1111→  color: var(--primary-dark);
+  1112→  padding: 0.35rem 0.85rem;
+  1113→  border-radius: var(--radius-full);
+  1114→  font-size: 0.72rem;
+  1115→  font-weight: 700;
+  1116→  box-shadow: var(--shadow-gold);
+  1117→  animation: pulse-badge 2s infinite;
+  1118→}
+  1119→
+  1120→[dir="ltr"] .popular-badge {
+  1121→  left: auto;
+  1122→  right: 12px;
+  1123→}
+  1124→
+  1125→.popular-badge i {
+  1126→  font-size: 0.7rem;
+  1127→}
+  1128→
+  1129→@keyframes pulse-badge {
+  1130→  0%, 100% { transform: scale(1); }
+  1131→  50% { transform: scale(1.05); }
+  1132→}
+  1133→
+  1134→/* ===== TIMELINE SECTION ===== */
+  1135→.timeline-section {
+  1136→  background: linear-gradient(170deg, var(--primary-dark) 0%, #0c2338 50%, var(--primary-navy) 100%);
+  1137→  color: var(--text-white);
+  1138→}
+  1139→
+  1140→.timeline-container {
+  1141→  position: relative;
+  1142→  padding: 2rem 0;
+  1143→}
+  1144→
+  1145→.timeline-line {
+  1146→  position: absolute;
+  1147→  top: 45px;
+  1148→  left: 5%;
+  1149→  right: 5%;
+  1150→  height: 2px;
+  1151→  background: linear-gradient(90deg, var(--accent-gold), var(--primary-blue), var(--accent-gold));
+  1152→  opacity: 0.25;
+  1153→}
+  1154→
+  1155→.timeline-grid {
+  1156→  display: grid;
+  1157→  grid-template-columns: repeat(5, 1fr);
+  1158→  gap: 1.25rem;
+  1159→  position: relative;
+  1160→}
+  1161→
+  1162→.timeline-item {
+  1163→  text-align: center;
+  1164→  position: relative;
+  1165→  padding-top: 1rem;
+  1166→}
+  1167→
+  1168→.timeline-item-dot {
+  1169→  width: 48px;
+  1170→  height: 48px;
+  1171→  display: inline-flex;
+  1172→  align-items: center;
+  1173→  justify-content: center;
+  1174→  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-light) 100%);
+  1175→  color: var(--primary-dark);
+  1176→  border-radius: 50%;
+  1177→  font-weight: 800;
+  1178→  font-size: 0.85rem;
+  1179→  margin-bottom: 1rem;
+  1180→  box-shadow: 0 4px 15px rgba(201, 162, 39, 0.3);
+  1181→  transition: all var(--transition-base);
+  1182→  position: relative;
+  1183→  z-index: 2;
+  1184→}
+  1185→
+  1186→.timeline-item:hover .timeline-item-dot {
+  1187→  transform: scale(1.12);
+  1188→  box-shadow: 0 6px 25px rgba(201, 162, 39, 0.45);
+  1189→}
+  1190→
+  1191→.timeline-item-content {
+  1192→  background: var(--glass-bg);
+  1193→  backdrop-filter: var(--glass-blur);
+  1194→  -webkit-backdrop-filter: var(--glass-blur);
+  1195→  border: 1px solid var(--glass-border);
+  1196→  border-radius: var(--radius-md);
+  1197→  padding: 1.25rem 0.85rem;
+  1198→  transition: all var(--transition-base);
+  1199→  min-height: 80px;
+  1200→  display: flex;
+  1201→  align-items: center;
+  1202→  justify-content: center;
+  1203→}
+  1204→
+  1205→.timeline-item:hover .timeline-item-content {
+  1206→  background: rgba(201, 162, 39, 0.1);
+  1207→  border-color: rgba(201, 162, 39, 0.25);
+  1208→  transform: translateY(-4px);
+  1209→}
+  1210→
+  1211→.timeline-item-title {
+  1212→  font-size: 0.88rem;
+  1213→  font-weight: 600;
+  1214→  color: rgba(255, 255, 255, 0.9);
+  1215→  line-height: 1.5;
+  1216→}
+  1217→
+  1218→/* ===== Timeline Progress Dots ===== */
+  1219→.timeline-progress-dots {
+  1220→  display: flex;
+  1221→  justify-content: center;
+  1222→  gap: 0.65rem;
+  1223→  margin-top: 3rem;
+  1224→  flex-wrap: wrap;
+  1225→}
+  1226→
+  1227→.timeline-dot {
+  1228→  width: 36px;
+  1229→  height: 36px;
+  1230→  border-radius: 50%;
+  1231→  background: var(--glass-bg);
+  1232→  border: 1px solid var(--glass-border);
+  1233→  color: rgba(255, 255, 255, 0.6);
+  1234→  font-size: 0.75rem;
+  1235→  font-weight: 600;
+  1236→  cursor: pointer;
+  1237→  transition: all var(--transition-base);
+  1238→  display: flex;
+  1239→  align-items: center;
+  1240→  justify-content: center;
+  1241→}
+  1242→
+  1243→.timeline-dot:hover {
+  1244→  background: rgba(201, 162, 39, 0.15);
+  1245→  border-color: var(--accent-gold);
+  1246→  color: var(--accent-gold);
+  1247→}
+  1248→
+  1249→.timeline-dot.active {
+  1250→  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-light) 100%);
+  1251→  border-color: var(--accent-gold);
+  1252→  color: var(--primary-dark);
+  1253→  box-shadow: var(--shadow-gold);
+  1254→  transform: scale(1.1);
+  1255→}
+  1256→
+  1257→.timeline-dot:focus-visible {
+  1258→  outline: 2px solid var(--accent-gold);
+  1259→  outline-offset: 3px;
+  1260→}
+  1261→
+  1262→/* ===== TARGETS SECTION ===== */
+  1263→.targets-grid {
+  1264→  display: grid;
+  1265→  grid-template-columns: 1fr 1fr;
+  1266→  gap: 3rem;
+  1267→}
+  1268→
+  1269→.target-category {
+  1270→  background: white;
+  1271→  border-radius: var(--radius-xl);
+  1272→  padding: 2.5rem;
+  1273→  box-shadow: var(--shadow-md);
+  1274→}
+  1275→
+  1276→.category-title {
+  1277→  display: flex;
+  1278→  align-items: center;
+  1279→  gap: 0.75rem;
+  1280→  font-size: 1.35rem;
+  1281→  font-weight: 700;
+  1282→  color: var(--text-primary);
+  1283→  margin-bottom: 1.75rem;
+  1284→  padding-bottom: 1rem;
+  1285→  border-bottom: 2px solid var(--bg-gray);
+  1286→}
+  1287→
+  1288→.category-icon {
+  1289→  font-size: 1.35rem;
+  1290→  color: var(--primary-blue);
+  1291→}
+  1292→
+  1293→.audience-cards {
+  1294→  display: grid;
+  1295→  grid-template-columns: repeat(3, 1fr);
+  1296→  gap: 1rem;
+  1297→}
+  1298→
+  1299→.audience-card {
+  1300→  display: flex;
+  1301→  flex-direction: column;
+  1302→  align-items: center;
+  1303→  gap: 0.65rem;
+  1304→  padding: 1.25rem 1rem;
+  1305→  background: var(--bg-light);
+  1306→  border-radius: var(--radius-md);
+  1307→  text-align: center;
+  1308→  transition: all var(--transition-base);
+  1309→  border: 1px solid transparent;
+  1310→  min-height: 95px;
+  1311→  justify-content: center;
+  1312→}
+  1313→
+  1314→.audience-card:hover {
+  1315→  background: linear-gradient(135deg, rgba(30, 155, 215, 0.06) 0%, rgba(201, 162, 39, 0.06) 100%);
+  1316→  border-color: rgba(30, 155, 215, 0.15);
+  1317→  transform: translateY(-4px);
+  1318→  box-shadow: var(--shadow-md);
+  1319→}
+  1320→
+  1321→.audience-card-icon {
+  1322→  font-size: 1.5rem;
+  1323→  color: var(--primary-blue);
+  1324→  transition: all var(--transition-base);
+  1325→}
+  1326→
+  1327→.audience-card:hover .audience-card-icon {
+  1328→  color: var(--accent-gold);
+  1329→  transform: scale(1.08);
+  1330→}
+  1331→
+  1332→.audience-card span {
+  1333→  font-size: 0.85rem;
+  1334→  font-weight: 600;
+  1335→  color: var(--text-secondary);
+  1336→}
+  1337→
+  1338→/* Tag Cloud / Sectors */
+  1339→.tag-cloud {
+  1340→  display: flex;
+  1341→  flex-wrap: wrap;
+  1342→  gap: 0.75rem;
+  1343→}
+  1344→
+  1345→.tag {
+  1346→  display: inline-flex;
+  1347→  align-items: center;
+  1348→  gap: 0.5rem;
+  1349→  padding: 0.65rem 1.15rem;
+  1350→  background: var(--bg-light);
+  1351→  border-radius: var(--radius-full);
+  1352→  font-size: 0.88rem;
+  1353→  font-weight: 500;
+  1354→  color: var(--text-secondary);
+  1355→  border: 1px solid rgba(0, 0, 0, 0.06);
+  1356→  transition: all var(--transition-base);
+  1357→}
+  1358→
+  1359→.tag:hover {
+  1360→  background: linear-gradient(135deg, var(--primary-blue) 0%, #2ab0e5 100%);
+  1361→  color: white;
+  1362→  border-color: transparent;
+  1363→  transform: translateY(-2px);
+  1364→  box-shadow: 0 4px 15px rgba(30, 155, 215, 0.3);
+  1365→}
+  1366→
+  1367→.tag.large {
+  1368→  font-size: 1rem;
+  1369→  font-weight: 600;
+  1370→  padding: 0.8rem 1.4rem;
+  1371→}
+  1372→
+  1373→.tag.small {
+  1374→  font-size: 0.8rem;
+  1375→  padding: 0.5rem 0.9rem;
+  1376→}
+  1377→
+  1378→.tag-icon {
+  1379→  font-size: 1rem;
+  1380→}
+  1381→
+  1382→.tag:hover .tag-icon {
+  1383→  color: white;
+  1384→}
+  1385→
+  1386→/* ===== NATIONAL VALUE SECTION ===== */
+  1387→.national-value-section {
+  1388→  position: relative;
+  1389→  min-height: 450px;
+  1390→  display: flex;
+  1391→  align-items: center;
+  1392→  justify-content: center;
+  1393→  overflow: hidden;
+  1394→}
+  1395→
+  1396→.national-value-bg {
+  1397→  position: absolute;
+  1398→  top: 0;
+  1399→  left: 0;
+  1400→  width: 100%;
+  1401→  height: 100%;
+  1402→  object-fit: cover;
+  1403→}
+  1404→
+  1405→.national-value-overlay {
+  1406→  position: absolute;
+  1407→  top: 0;
+  1408→  left: 0;
+  1409→  width: 100%;
+  1410→  height: 100%;
+  1411→  background: linear-gradient(135deg, rgba(11, 44, 72, 0.92) 0%, rgba(7, 22, 39, 0.88) 100%);
+  1412→}
+  1413→
+  1414→.national-value-content {
+  1415→  position: relative;
+  1416→  z-index: 2;
+  1417→  text-align: center;
+  1418→  max-width: 850px;
+  1419→  padding: 0 2rem;
+  1420→  color: var(--text-white);
+  1421→}
+  1422→
+  1423→.national-value-content h2 {
+  1424→  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  1425→  font-weight: 800;
+  1426→  margin-bottom: 1.5rem;
+  1427→}
+  1428→
+  1429→.national-value-content p {
+  1430→  font-size: 1.2rem;
+  1431→  line-height: 1.9;
+  1432→  color: rgba(255, 255, 255, 0.85);
+  1433→}
+  1434→
+  1435→.national-value-highlight {
+  1436→  color: var(--accent-gold);
+  1437→  font-weight: 700;
+  1438→  position: relative;
+  1439→}
+  1440→
+  1441→.national-value-highlight::after {
+  1442→  content: '';
+  1443→  position: absolute;
+  1444→  bottom: -4px;
+  1445→  left: 0;
+  1446→  right: 0;
+  1447→  height: 2px;
+  1448→  background: var(--accent-gold);
+  1449→  opacity: 0.5;
+  1450→}
+  1451→
+  1452→/* ===== PRODUCTION SECTION ===== */
+  1453→.production-grid {
+  1454→  display: grid;
+  1455→  grid-template-columns: 1fr 1fr;
+  1456→  gap: 3rem;
+  1457→}
+  1458→
+  1459→.production-column {
+  1460→  background: white;
+  1461→  border-radius: var(--radius-xl);
+  1462→  padding: 2.5rem;
+  1463→  box-shadow: var(--shadow-md);
+  1464→}
+  1465→
+  1466→.column-title {
+  1467→  display: flex;
+  1468→  align-items: center;
+  1469→  gap: 0.75rem;
+  1470→  font-size: 1.35rem;
+  1471→  font-weight: 700;
+  1472→  color: var(--text-primary);
+  1473→  margin-bottom: 1.75rem;
+  1474→  padding-bottom: 1rem;
+  1475→  border-bottom: 2px solid var(--bg-gray);
+  1476→}
+  1477→
+  1478→.column-icon {
+  1479→  font-size: 1.35rem;
+  1480→  color: var(--accent-gold);
+  1481→}
+  1482→
+  1483→.production-list {
+  1484→  list-style: none;
+  1485→  padding: 0;
+  1486→  margin: 0;
+  1487→  display: flex;
+  1488→  flex-direction: column;
+  1489→  gap: 1rem;
+  1490→}
+  1491→
+  1492→.production-list-item {
+  1493→  display: flex;
+  1494→  align-items: center;
+  1495→  gap: 1rem;
+  1496→  padding: 1rem 1.25rem;
+  1497→  background: var(--bg-light);
+  1498→  border-radius: var(--radius-md);
+  1499→  transition: all var(--transition-base);
+  1500→  border: 1px solid transparent;
+  1501→}
+  1502→
+  1503→.production-list-item:hover {
+  1504→  background: linear-gradient(135deg, rgba(30, 155, 215, 0.06) 0%, rgba(201, 162, 39, 0.06) 100%);
+  1505→  border-color: rgba(30, 155, 215, 0.12);
+  1506→  transform: translateX(5px);
+  1507→}
+  1508→
+  1509→[dir="ltr"] .production-list-item:hover {
+  1510→  transform: translateX(-5px);
+  1511→}
+  1512→
+  1513→.check-icon {
+  1514→  width: 40px;
+  1515→  height: 40px;
+  1516→  display: flex;
+  1517→  align-items: center;
+  1518→  justify-content: center;
+  1519→  background: linear-gradient(135deg, var(--primary-blue) 0%, #3db9e8 100%);
+  1520→  border-radius: 50%;
+  1521→  color: white;
+  1522→  font-size: 0.9rem;
+  1523→  flex-shrink: 0;
+  1524→  transition: all var(--transition-base);
+  1525→}
+  1526→
+  1527→.production-list-item:hover .check-icon {
+  1528→  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-light) 100%);
+  1529→  transform: scale(1.08);
+  1530→}
+  1531→
+  1532→.production-list-item span {
+  1533→  font-weight: 500;
+  1534→  color: var(--text-primary);
+  1535→  font-size: 0.95rem;
+  1536→}
+  1537→
+  1538→/* ===== SPONSORSHIP SECTION ===== */
+  1539→.sponsorship-section {
+  1540→  background: linear-gradient(170deg, var(--primary-dark) 0%, #0b1f33 50%, var(--primary-navy) 100%);
+  1541→  color: var(--text-white);
+  1542→}
+  1543→
+  1544→.sponsorship-grid {
+  1545→  display: grid;
+  1546→  grid-template-columns: repeat(3, 1fr);
+  1547→  gap: 2rem;
+  1548→}
+  1549→
+  1550→.sponsorship-card-wrapper {
+  1551→  border-radius: var(--radius-xl);
+  1552→  overflow: hidden;
+  1553→}
+  1554→
+  1555→.sponsorship-card {
+  1556→  background: var(--glass-bg);
+  1557→  backdrop-filter: var(--glass-blur);
+  1558→  -webkit-backdrop-filter: var(--glass-blur);
+  1559→  border: 1px solid var(--glass-border);
+  1560→  border-radius: var(--radius-xl);
+  1561→  padding: 2.25rem 1.75rem;
+  1562→  text-align: center;
+  1563→  position: relative;
+  1564→  overflow: hidden;
+  1565→  min-height: 270px;
+  1566→  display: flex;
+  1567→  flex-direction: column;
+  1568→  align-items: center;
+  1569→  justify-content: center;
+  1570→  transition: all var(--transition-base);
+  1571→}
+  1572→
+  1573→.sponsorship-card::before {
+  1574→  content: '';
+  1575→  position: absolute;
+  1576→  top: 0;
+  1577→  left: 0;
+  1578→  right: 0;
+  1579→  bottom: 0;
+  1580→  background: radial-gradient(circle at 50% 0%, rgba(201, 162, 39, 0.08) 0%, transparent 60%);
+  1581→  opacity: 0;
+  1582→  transition: opacity var(--transition-base);
+  1583→}
+  1584→
+  1585→.sponsorship-card:hover::before {
+  1586→  opacity: 1;
+  1587→}
+  1588→
+  1589→.sponsorship-card:hover {
+  1590→  border-color: rgba(201, 162, 39, 0.3);
+  1591→  box-shadow: var(--shadow-card-hover), var(--shadow-gold);
+  1592→}
+  1593→
+  1594→.sponsorship-card-icon {
+  1595→  width: 76px;
+  1596→  height: 76px;
+  1597→  display: flex;
+  1598→  align-items: center;
+  1599→  justify-content: center;
+  1600→  background: linear-gradient(135deg, rgba(201, 162, 39, 0.15) 0%, rgba(30, 155, 215, 0.1) 100%);
+  1601→  border-radius: 50%;
+  1602→  font-size: 1.85rem;
+  1603→  color: var(--accent-gold);
+  1604→  margin-bottom: 1.5rem;
+  1605→  transition: all var(--transition-base);
+  1606→  position: relative;
+  1607→  z-index: 2;
+  1608→}
+  1609→
+  1610→.sponsorship-card:hover .sponsorship-card-icon {
+  1611→  transform: scale(1.08);
+  1612→  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-light) 100%);
+  1613→  color: var(--primary-dark);
+  1614→}
+  1615→
+  1616→.sponsorship-card h4 {
+  1617→  font-size: 1.2rem;
+  1618→  font-weight: 700;
+  1619→  margin-bottom: 0.85rem;
+  1620→  color: var(--text-white);
+  1621→  position: relative;
+  1622→  z-index: 2;
+  1623→}
+  1624→
+  1625→.sponsorship-card p {
+  1626→  font-size: 0.9rem;
+  1627→  color: rgba(255, 255, 255, 0.68);
+  1628→  line-height: 1.65;
+  1629→  position: relative;
+  1630→  z-index: 2;
+  1631→}
+  1632→
+  1633→.sponsorship-card-decoration {
+  1634→  position: absolute;
+  1635→  bottom: -15px;
+  1636→  left: -15px;
+  1637→  width: 80px;
+  1638→  height: 80px;
+  1639→  border: 2px solid var(--glass-border);
+  1640→  border-radius: 50%;
+  1641→  opacity: 0.2;
+  1642→}
+  1643→
+  1644→/* ===== QUOTE SECTION ===== */
+  1645→.quote-section {
+  1646→  background: linear-gradient(135deg, var(--bg-light) 0%, white 50%, var(--bg-light) 100%);
+  1647→  padding: var(--space-7) 2rem;
+  1648→  text-align: center;
+  1649→  position: relative;
+  1650→  overflow: hidden;
+  1651→}
+  1652→
+  1653→.quote-decoration {
+  1654→  position: absolute;
+  1655→  font-size: 12rem;
+  1656→  font-family: Georgia, serif;
+  1657→  color: rgba(30, 155, 215, 0.06);
+  1658→  line-height: 1;
+  1659→  user-select: none;
+  1660→}
+  1661→
+  1662→.quote-left {
+  1663→  top: -20px;
+  1664→  left: 5%;
+  1665→}
+  1666→
+  1667→.quote-right {
+  1668→  bottom: -60px;
+  1669→  right: 5%;
+  1670→}
+  1671→
+  1672→.quote-content {
+  1673→  max-width: 850px;
+  1674→  margin: 0 auto;
+  1675→  position: relative;
+  1676→  z-index: 2;
+  1677→}
+  1678→
+  1679→.quote-content blockquote {
+  1680→  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  1681→  font-weight: 600;
+  1682→  line-height: 1.8;
+  1683→  color: var(--text-primary);
+  1684→  font-style: italic;
+  1685→}
+  1686→
+  1687→.quote-content .highlight {
+  1688→  color: var(--primary-blue);
+  1689→  position: relative;
+  1690→}
+  1691→
+  1692→/* ===== CONTACT & FOOTER SECTION ===== */
+  1693→.contact-footer-section {
+  1694→  background: linear-gradient(165deg, var(--primary-dark) 0%, var(--primary-navy) 60%, #0a1e33 100%);
+  1695→  color: var(--text-white);
+  1696→  padding: var(--space-7) 0 0;
+  1697→}
+  1698→
+  1699→.contact-footer-grid {
+  1700→  display: grid;
+  1701→  grid-template-columns: 1.2fr 1fr;
+  1702→  gap: 4rem;
+  1703→  margin-bottom: var(--space-6);
+  1704→}
+  1705→
+  1706→.contact-form-wrapper {
+  1707→  background: var(--glass-bg);
+  1708→  backdrop-filter: var(--glass-blur);
+  1709→  -webkit-backdrop-filter: var(--glass-blur);
+  1710→  border: 1px solid var(--glass-border);
+  1711→  border-radius: var(--radius-xl);
+  1712→  padding: 2.5rem;
+  1713→}
+  1714→
+  1715→.form-title {
+  1716→  display: flex;
+  1717→  align-items: center;
+  1718→  gap: 0.75rem;
+  1719→  font-size: 1.5rem;
+  1720→  font-weight: 700;
+  1721→  margin-bottom: 0.5rem;
+  1722→  color: var(--text-white);
+  1723→}
+  1724→
+  1725→.form-title i {
+  1726→  color: var(--accent-gold);
+  1727→}
+  1728→
+  1729→.form-subtitle {
+  1730→  color: rgba(255, 255, 255, 0.65);
+  1731→  margin-bottom: 2rem;
+  1732→  font-size: 0.95rem;
+  1733→}
+  1734→
+  1735→.contact-form {
+  1736→  display: flex;
+  1737→  flex-direction: column;
+  1738→  gap: 1.25rem;
+  1739→}
+  1740→
+  1741→.form-group {
+  1742→  display: flex;
+  1743→  flex-direction: column;
+  1744→  gap: 0.5rem;
+  1745→}
+  1746→
+  1747→.form-group label {
+  1748→  font-size: 0.9rem;
+  1749→  font-weight: 600;
+  1750→  color: rgba(255, 255, 255, 0.85);
+  1751→}
+  1752→
+  1753→.form-group input,
+  1754→.form-group textarea {
+  1755→  padding: 1rem 1.25rem;
+  1756→  background: rgba(255, 255, 255, 0.06);
+  1757→  border: 1px solid var(--glass-border);
+  1758→  border-radius: var(--radius-md);
+  1759→  color: var(--text-white);
+  1760→  font-size: 0.95rem;
+  1761→  font-family: inherit;
+  1762→  transition: all var(--transition-base);
+  1763→}
+  1764→
+  1765→.form-group input::placeholder,
+  1766→.form-group textarea::placeholder {
+  1767→  color: rgba(255, 255, 255, 0.4);
+  1768→}
+  1769→
+  1770→.form-group input:focus,
+  1771→.form-group textarea:focus {
+  1772→  outline: none;
+  1773→  border-color: var(--accent-gold);
+  1774→  background: rgba(201, 162, 39, 0.06);
+  1775→  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.12);
+  1776→}
+  1777→
+  1778→.form-group textarea {
+  1779→  min-height: 130px;
+  1780→  resize: vertical;
+  1781→}
+  1782→
+  1783→.btn-submit {
+  1784→  display: inline-flex;
+  1785→  align-items: center;
+  1786→  justify-content: center;
+  1787→  gap: 0.65rem;
+  1788→  padding: 1rem 2rem;
+  1789→  background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-light) 100%);
+  1790→  color: var(--primary-dark);
+  1791→  border: none;
+  1792→  border-radius: var(--radius-full);
+  1793→  font-weight: 700;
+  1794→  font-size: 1rem;
+  1795→  cursor: pointer;
+  1796→  transition: all var(--transition-base);
+  1797→  box-shadow: var(--shadow-gold);
+  1798→  align-self: flex-start;
+  1799→}
+  1800→
+  1801→.btn-submit:hover {
+  1802→  transform: translateY(-3px);
+  1803→  box-shadow: 0 12px 35px rgba(201, 162, 39, 0.4);
+  1804→}
+  1805→
+  1806→.btn-submit:focus-visible {
+  1807→  outline: 2px solid var(--text-white);
+  1808→  outline-offset: 4px;
+  1809→}
+  1810→
+  1811→/* Footer Info */
+  1812→.footer-info {
+  1813→  display: flex;
+  1814→  flex-direction: column;
+  1815→  gap: 2rem;
+  1816→}
+  1817→
+  1818→.company-title {
+  1819→  font-size: 1.5rem;
+  1820→  font-weight: 800;
+  1821→  color: var(--text-white);
+  1822→  display: flex;
+  1823→  flex-direction: column;
+  1824→  gap: 0.25rem;
+  1825→}
+  1826→
+  1827→.company-title > i {
+  1828→  color: var(--accent-gold);
+  1829→  font-size: 1.75rem;
+  1830→}
+  1831→
+  1832→.company-subtitle {
+  1833→  font-size: 1rem;
+  1834→  font-weight: 500;
+  1835→  color: var(--accent-gold);
+  1836→}
+  1837→
+  1838→.company-info {
+  1839→  background: var(--glass-bg);
+  1840→  border: 1px solid var(--glass-border);
+  1841→  border-radius: var(--radius-lg);
+  1842→  padding: 1.75rem;
+  1843→}
+  1844→
+  1845→.company-name {
+  1846→  font-weight: 700;
+  1847→  color: var(--accent-gold-light);
+  1848→  margin-bottom: 1.25rem;
+  1849→  font-size: 1.05rem;
+  1850→}
+  1851→
+  1852→.contact-details {
+  1853→  display: flex;
+  1854→  flex-direction: column;
+  1855→  gap: 1rem;
+  1856→}
+  1857→
+  1858→.contact-detail-item {
+  1859→  display: flex;
+  1860→  align-items: flex-start;
+  1861→  gap: 1rem;
+  1862→}
+  1863→
+  1864→.contact-detail-icon {
+  1865→  width: 40px;
+  1866→  height: 40px;
+  1867→  display: flex;
+  1868→  align-items: center;
+  1869→  justify-content: center;
+  1870→  background: rgba(201, 162, 39, 0.12);
+  1871→  border-radius: var(--radius-md);
+  1872→  color: var(--accent-gold);
+  1873→  font-size: 1rem;
+  1874→  flex-shrink: 0;
+  1875→  transition: all var(--transition-base);
+  1876→}
+  1877→
+  1878→.contact-detail-item:hover .contact-detail-icon {
+  1879→  background: var(--accent-gold);
+  1880→  color: var(--primary-dark);
+  1881→}
+  1882→
+  1883→.contact-detail-item span {
+  1884→  font-size: 0.92rem;
+  1885→  color: rgba(255, 255, 255, 0.78);
+  1886→  line-height: 1.6;
+  1887→}
+  1888→
+  1889→.social-links {
+  1890→  display: flex;
+  1891→  gap: 0.85rem;
+  1892→}
+  1893→
+  1894→.social-link {
+  1895→  width: 46px;
+  1896→  height: 46px;
+  1897→  display: flex;
+  1898→  align-items: center;
+  1899→  justify-content: center;
+  1900→  background: var(--glass-bg);
+  1901→  border: 1px solid var(--glass-border);
+  1902→  border-radius: var(--radius-md);
+  1903→  color: var(--text-white);
+  1904→  text-decoration: none;
+  1905→  font-size: 1.1rem;
+  1906→  font-weight: 600;
+  1907→  transition: all var(--transition-base);
+  1908→}
+  1909→
+  1910→.social-link:hover {
+  1911→  background: var(--accent-gold);
+  1912→  border-color: var(--accent-gold);
+  1913→  color: var(--primary-dark);
+  1914→  transform: translateY(-4px);
+  1915→}
+  1916→
+  1917→.social-link:focus-visible {
+  1918→  outline: 2px solid var(--accent-gold);
+  1919→  outline-offset: 3px;
+  1920→}
+  1921→
+  1922→.social-text {
+  1923→  font-family: 'Space Grotesk', monospace;
+  1924→}
+  1925→
+  1926→.footer-bottom {
+  1927→  text-align: center;
+  1928→  padding: 1.75rem 0;
+  1929→  border-top: 1px solid var(--glass-border);
+  1930→  color: rgba(255, 255, 255, 0.5);
+  1931→  font-size: 0.88rem;
+  1932→}
+  1933→
+  1934→/* ===== RESPONSIVE DESIGN ===== */
+  1935→
+  1936→/* Tablet & Below */
+  1937→@media (max-width: 1024px) {
+  1938→  .navbar-links {
+  1939→    display: none;
+  1940→  }
+  1941→  
+  1942→  .mobile-menu-btn {
+  1943→    display: block;
+  1944→  }
+  1945→  
+  1946→  .about-grid {
+  1947→    grid-template-columns: 1fr;
+  1948→    gap: 2.5rem;
+  1949→  }
+  1950→  
+  1951→  .about-image-wrapper {
+  1952→    min-height: 320px;
+  1953→  }
+  1954→  
+  1955→  .vision-mission-grid {
+  1956→    grid-template-columns: 1fr;
+  1957→    gap: 1.5rem;
+  1958→  }
+  1959→  
+  1960→  .objectives-grid {
+  1961→    grid-template-columns: repeat(2, 1fr);
+  1962→  }
+  1963→  
+  1964→  .timeline-grid {
+  1965→    grid-template-columns: repeat(3, 1fr);
+  1966→  }
+  1967→  
+  1968→  .targets-grid {
+  1969→    grid-template-columns: 1fr;
+  1970→    gap: 2rem;
+  1971→  }
+  1972→  
+  1973→  .production-grid {
+  1974→    grid-template-columns: 1fr;
+  1975→    gap: 2rem;
+  1976→  }
+  1977→  
+  1978→  .sponsorship-grid {
+  1979→    grid-template-columns: repeat(2, 1fr);
+  1980→  }
+  1981→  
+  1982→  .contact-footer-grid {
+  1983→    grid-template-columns: 1fr;
+  1984→    gap: 2.5rem;
+  1985→  }
+  1986→  
+  1987→  .stats-grid {
+  1988→    grid-template-columns: repeat(2, 1fr);
+  1989→    gap: 1.5rem;
+  1990→  }
+  1991→  
+  1992→  .audience-cards {
+  1993→    grid-template-columns: repeat(3, 1fr);
+  1994→  }
+  1995→  
+  1996→  .scroll-progress-container {
+  1997→    display: none;
+  1998→  }
+  1999→}
+  2000→
+
+[showing lines 1-2000 of 2252; use offset=2001 with limit to continue reading]

@@ -21,7 +21,8 @@ function ParticleField({ count = 2500 }: { count?: number }) {
       ref.current.rotation.x -= delta / 18
       ref.current.rotation.y -= delta / 22
       const time = state.clock.elapsedTime
-      ref.current.position.y = Math.sin(time * 0.3) * 0.15
+      // Very subtle vertical movement - reduced from 0.15 to 0.04
+      ref.current.position.y = Math.sin(time * 0.3) * 0.04
     }
   })
 
@@ -175,10 +176,22 @@ const iconMap = {
   saudiBadge: 'fi rr-flag',
   
   // Social Media
-  twitter: '𝕏',
-  linkedin: 'in',
-  instagram: 'fi fi-rr-camera',
+  twitter: 'fi fi-rr-twitter',
+  linkedin: 'fi fi-rr-linkedin',
+  instagram: 'fi fi-rr-instagram',
   youtube: 'fi fi-rr-youtube',
+  
+  // Timeline Icons (10 axes)
+  timelineFounding: 'fi fi-rr-rocket',
+  timelineChallenges: 'fi fi-rr-shield-alt',
+  timelineSuccess: 'fi fi-rr-trophy',
+  timelineLeadership: 'fi fi-rr-user-tie',
+  timelineInvestment: 'fi fi-rr-chart-pie',
+  timelineTalent: 'fi fi-rr-graduation-cap',
+  timelineInnovation: 'fi fi-rr-lightbulb',
+  timelineSocial: 'fi fi-rr-heart-handshake',
+  timelineFuture: 'fi fi-rr-compass',
+  timelineVision2030: 'fi fi-rr-flag',
 }
 
 // =============================================
@@ -245,16 +258,16 @@ const translations = {
       title: 'رحلة شاملة في 10 محاور رئيسية',
       subtitle: 'يتناول البرنامج في كل حلقة جوانب متعددة من حياة الضيف، من رحلة التأسيس إلى المساهمة في رؤية 2030.',
       items: [
-        'رحلة التأسيس',
-        'أبرز التحديات',
-        'عوامل النجاح',
-        'القيادة والإدارة',
-        'الاستثمار والتوسع',
-        'تنمية الكفاءات',
-        'الابتكار والتحول',
-        'المسؤولية الاجتماعية',
-        'الخطط المستقبلية',
-        'المساهمة في رؤية 2030',
+        { text: 'رحلة التأسيس', icon: 'timelineFounding' },
+        { text: 'أبرز التحديات', icon: 'timelineChallenges' },
+        { text: 'عوامل النجاح', icon: 'timelineSuccess' },
+        { text: 'القيادة والإدارة', icon: 'timelineLeadership' },
+        { text: 'الاستثمار والتوسع', icon: 'timelineInvestment' },
+        { text: 'تنمية الكفاءات', icon: 'timelineTalent' },
+        { text: 'الابتكار والتحول', icon: 'timelineInnovation' },
+        { text: 'المسؤولية الاجتماعية', icon: 'timelineSocial' },
+        { text: 'الخطط المستقبلية', icon: 'timelineFuture' },
+        { text: 'المساهمة في رؤية 2030', icon: 'timelineVision2030' },
       ],
     },
     targets: {
@@ -412,16 +425,16 @@ const translations = {
       title: 'A Comprehensive Journey in 10 Main Themes',
       subtitle: 'Each episode covers multiple aspects of the guest\'s journey, from founding to Vision 2030 contribution.',
       items: [
-        'Founding Journey',
-        'Key Challenges',
-        'Success Factors',
-        'Leadership & Management',
-        'Investment & Expansion',
-        'Talent Development',
-        'Innovation & Transformation',
-        'Social Responsibility',
-        'Future Plans',
-        'Contribution to Vision 2030',
+        { text: 'Founding Journey', icon: 'timelineFounding' },
+        { text: 'Key Challenges', icon: 'timelineChallenges' },
+        { text: 'Success Factors', icon: 'timelineSuccess' },
+        { text: 'Leadership & Management', icon: 'timelineLeadership' },
+        { text: 'Investment & Expansion', icon: 'timelineInvestment' },
+        { text: 'Talent Development', icon: 'timelineTalent' },
+        { text: 'Innovation & Transformation', icon: 'timelineInnovation' },
+        { text: 'Social Responsibility', icon: 'timelineSocial' },
+        { text: 'Future Plans', icon: 'timelineFuture' },
+        { text: 'Contribution to Vision 2030', icon: 'timelineVision2030' },
       ],
     },
     targets: {
@@ -537,7 +550,11 @@ function SpotlightCard({ children, className = '', popular = false }: {
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!divRef.current) return
     const rect = divRef.current.getBoundingClientRect()
-    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top })
+    // Smooth position tracking with subtle movement
+    setPosition({ 
+      x: e.clientX - rect.left, 
+      y: e.clientY - rect.top 
+    })
   }
 
   const handleFocus = () => {
@@ -576,12 +593,13 @@ function SpotlightCard({ children, className = '', popular = false }: {
         </div>
       )}
       
-      {/* Spotlight Effect */}
+      {/* Spotlight Effect - Subtle glow */}
       <div
         className="spotlight-effect"
         style={{
           opacity,
-          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(201, 162, 39, 0.12), transparent 40%)`,
+          // Reduced opacity from 0.12 to 0.06 for subtlety
+          background: `radial-gradient(500px circle at ${position.x}px ${position.y}px, rgba(201, 162, 39, 0.06), transparent 50%)`,
         }}
       />
       {children}
@@ -868,8 +886,11 @@ export default function Home() {
       >
         <div className="navbar-container">
           <a href="#" className="navbar-logo" onClick={(e) => { e.preventDefault(); scrollToSection('hero') }}>
-            <i className={`${iconMap.logo} logo-icon-flaticon`}></i>
-            <span>{lang === 'ar' ? 'قادة الاقتصاد' : 'Economy Leaders'}<span className="logo-text-highlight"> | </span></span>
+            {/* Logo Placeholder - استبدل هذا بشعار قادة الاقتصاد الرسمي */}
+            <div className="logo-placeholder" aria-label="قادة الاقتصاد">
+              <i className={`${iconMap.logo} logo-icon-flaticon`}></i>
+              <span className="logo-text">{lang === 'ar' ? 'قادة الاقتصاد' : 'Economy Leaders'}<span className="logo-text-highlight"> | </span></span>
+            </div>
           </a>
 
           <ul className="navbar-links">
@@ -969,7 +990,7 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 1.4 }}
           >
             <button className="btn-primary animate__animated animate__pulse" onClick={() => scrollToSection('episodes')}>
-              <i className="fi fi-rr-play"></i> {t.hero.cta1}
+              <i className="fi fi-rr-play"></i> {lang === 'ar' ? 'محاور الحلقة' : 'Episode Themes'}
             </button>
             <button className="btn-secondary" onClick={() => scrollToSection('contact')}>
               <i className="fi fi-rr-envelope"></i> {t.hero.cta2}
@@ -1170,7 +1191,8 @@ export default function Home() {
                 >
                   <div className="timeline-item-dot">{String(index + 1).padStart(2, '0')}</div>
                   <div className="timeline-item-content">
-                    <span className="timeline-item-title">{item}</span>
+                    <i className={`timeline-item-icon ${iconMap[item.icon as keyof typeof iconMap] || 'fi fi-rr-star'}`}></i>
+                    <span className="timeline-item-title">{item.text}</span>
                   </div>
                 </motion.div>
               ))}
@@ -1443,6 +1465,11 @@ export default function Home() {
 
             {/* Footer Info */}
             <motion.div variants={fadeInUp} className="footer-info">
+              {/* Logo Placeholder in Footer - استبدل هذا بشعار قادة الاقتصاد الرسمي */}
+              <div className="footer-logo-placeholder" aria-label="شعار قادة الاقتصاد">
+                <i className="fi fi-rr-building-columns"></i>
+              </div>
+              
               <h3 className="company-title">
                 <i className={iconMap.building}></i>
                 {t.contact.companyTitle} <br/>
@@ -1470,16 +1497,16 @@ export default function Home() {
 
               <div className="social-links">
                 <a href="#" className="social-link" aria-label="Twitter/X">
-                  <span className="social-text">{iconMap.twitter}</span>
+                  <i className={iconMap.twitter}></i>
                 </a>
                 <a href="#" className="social-link" aria-label="LinkedIn">
-                  <span className="social-text">{iconMap.linkedin}</span>
+                  <i className={iconMap.linkedin}></i>
                 </a>
                 <a href="#" className="social-link" aria-label="Instagram">
-                  <i className="fi fi-rr-camera"></i>
+                  <i className={iconMap.instagram}></i>
                 </a>
                 <a href="#" className="social-link" aria-label="YouTube">
-                  <i className="fi fi-rr-youtube"></i>
+                  <i className={iconMap.youtube}></i>
                 </a>
               </div>
             </motion.div>
