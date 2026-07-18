@@ -16,11 +16,11 @@ const iconMap = {
   bulb: 'fi fi-rr-lightbulb',
   chart: 'fi fi-rr-chart-line-up',
   handshake: 'fi fi-rr-handshake',
-  book: 'fi fi-rr-book-open',
+  book: 'fi fi-rr-book-alt',
   rocket: 'fi fi-rr-rocket',
   bolt: 'fi fi-rr-bolt',
   leaf: 'fi fi-rr-leaf',
-  target: 'fi fi-rr-crosshairs',
+  target: 'fi fi-rr-target',
   
   // About Features (4 items)
   comment: 'fi fi-rr-comment-quote',
@@ -86,6 +86,7 @@ const iconMap = {
   phone: 'fi fi-rr-phone-call',
   email: 'fi fi-rr-envelope',
   building: 'fi fi-rr-building-columns',
+  logo: 'fi fi-rr-building-columns',
   
   // Social Media (4 items) - All MUST have icons
   twitter: 'fi fi-rr-twitter',
@@ -787,7 +788,7 @@ export default function Home() {
           <a href="#" className="navbar-logo" onClick={(e) => { e.preventDefault(); scrollToSection('hero') }}>
             <div className="logo-placeholder" aria-label="قادة الاقتصاد">
               <img 
-                src="/logo-economy-leaders.svg" 
+                src="/logo.svg" 
                 alt="قادة الاقتصاد - Economy Leaders" 
                 className="logo-img-navbar"
                 onError={(e) => {
@@ -1187,6 +1188,9 @@ export default function Home() {
           viewport={{ once: true }}
           variants={staggerContainer}
         >
+          <motion.div variants={fadeInUp} className="national-value-icon-wrapper">
+            <i className="fi fi-rr-globe national-value-icon"></i>
+          </motion.div>
           <motion.h2 variants={fadeInUp}>{t.nationalValue.title}</motion.h2>
           <motion.p variants={fadeInUp}>
             {t.nationalValue.p1} <span className="national-value-highlight">{t.nationalValue.highlight}</span> {t.nationalValue.p2}
@@ -1370,7 +1374,7 @@ export default function Home() {
               {/* Official Logo Placeholder - Footer */}
               <div className="footer-logo-placeholder" aria-label="شعار قادة الاقتصاد">
                 <img 
-                  src="/logo-economy-leaders.svg" 
+                  src="/logo.svg" 
                   alt="شعار قادة الاقتصاد" 
                   className="logo-img-footer"
                   onError={(e) => {

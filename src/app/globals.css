@@ -1264,6 +1264,16 @@ body {
   overflow-x: hidden;
 }
 
+/* Fix: Timeline section subtitle needs light color for dark background */
+.timeline-section .section-subtitle {
+  color: var(--subtitle-dark-bg);  /* #C7D5E0 - WCAG AA compliant on dark bg */
+}
+
+/* Fix: Timeline section title should be white */
+.timeline-section .section-title {
+  color: var(--text-white);
+}
+
 .timeline-container {
   position: relative;
   padding: 2.5rem 0 3rem;
@@ -1572,6 +1582,25 @@ body {
   color: var(--text-white);
 }
 
+.national-value-icon-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.national-value-icon {
+  font-size: 2.5rem;
+  color: var(--accent-gold);
+  background: rgba(201, 162, 39, 0.15);
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid rgba(201, 162, 39, 0.3);
+}
+
 .national-value-content h2 {
   font-size: clamp(1.75rem, 4vw, 2.75rem);
   font-weight: 800;
@@ -1690,6 +1719,11 @@ body {
 /* ===== SPONSORSHIP SECTION ===== */
 .sponsorship-section {
   background: linear-gradient(170deg, var(--primary-dark) 0%, #0b1f33 50%, var(--primary-navy) 100%);
+  color: var(--text-white);
+}
+
+/* Fix: Sponsorship section title should be white */
+.sponsorship-section .section-title {
   color: var(--text-white);
 }
 
