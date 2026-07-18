@@ -22,18 +22,24 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <head>
-        {/* Google Fonts - Arabic */}
+        {/* Google Fonts - Arabic & English */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link 
           href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700;800&family=Almarai:wght@300;400;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" 
           rel="stylesheet" 
         />
-        {/* Flaticon UIcons */}
+        {/* Flaticon UIcons - Regular Rounded */}
         <link 
           rel="stylesheet" 
           href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css"
         />
+        {/* Flaticon UIcons - Bold Rounded */}
+        <link 
+          rel="stylesheet" 
+          href="https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css"
+        />
+        {/* Flaticon UIcons - Solid Rounded */}
         <link 
           rel="stylesheet" 
           href="https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css"

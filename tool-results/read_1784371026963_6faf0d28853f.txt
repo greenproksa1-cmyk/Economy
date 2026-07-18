@@ -1,0 +1,1804 @@
+     1→@import "tailwindcss";
+     2→@import "tw-animate-css";
+     3→
+     4→/* ===================================
+     5→   قادة الاقتصاد - Economy Leaders
+     6→   Luxury Corporate Landing Page Styles
+     7→   =================================== */
+     8→
+     9→/* ===== CSS Variables (Design Tokens) ===== */
+    10→:root {
+    11→  /* Primary Colors - الألوان الأساسية */
+    12→  --primary-dark: #071627;
+    13→  --primary-navy: #0B2C48;
+    14→  --primary-blue: #1E9BD7;
+    15→  --primary-light: #3DB9E8;
+    16→  
+    17→  /* Accent Colors - ألوان التمييز */
+    18→  --accent-gold: #C9A227;
+    19→  --accent-gold-light: #D4AF37;
+    20→  --accent-silver: #C0C0C0;
+    21→  
+    22→  /* Background Colors - ألوان الخلفيات */
+    23→  --bg-white: #FFFFFF;
+    24→  --bg-light: #F6F8FA;
+    25→  --bg-gray: #EEF2F7;
+    26→  --bg-dark: #071627;
+    27→  
+    28→  /* Text Colors - ألوان النصوص */
+    29→  --text-primary: #1A2332;
+    30→  --text-secondary: #4A5568;
+    31→  --text-muted: #718096;
+    32→  --text-light: #A0AEC0;
+    33→  --text-white: #FFFFFF;
+    34→  
+    35→  /* Glassmorphism */
+    36→  --glass-bg: rgba(255, 255, 255, 0.08);
+    37→  --glass-border: rgba(255, 255, 255, 0.15);
+    38→  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    39→  
+    40→  /* Shadows */
+    41→  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    42→  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    43→  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+    44→  --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.15);
+    45→  --shadow-gold: 0 8px 25px rgba(201, 162, 39, 0.35);
+    46→  
+    47→  /* Border Radius */
+    48→  --radius-sm: 8px;
+    49→  --radius-md: 12px;
+    50→  --radius-lg: 16px;
+    51→  --radius-xl: 24px;
+    52→  --radius-2xl: 32px;
+    53→  --radius-full: 9999px;
+    54→}
+    55→
+    56→/* ===== Font Families ===== */
+    57→html {
+    58→  scroll-behavior: smooth;
+    59→  overflow-x: hidden;
+    60→}
+    61→
+    62→body {
+    63→  font-family: 'IBM Plex Sans Arabic', 'Almarai', sans-serif;
+    64→  background-color: var(--bg-white);
+    65→  color: var(--text-primary);
+    66→  line-height: 1.8;
+    67→  overflow-x: hidden;
+    68→  margin: 0;
+    69→  padding: 0;
+    70→}
+    71→
+    72→[dir="ltr"] body {
+    73→  font-family: 'Inter', 'Space Grotesk', sans-serif;
+    74→}
+    75→
+    76→/* ===== Base Reset ===== */
+    77→*, *::before, *::after {
+    78→  margin: 0;
+    79→  padding: 0;
+    80→  box-sizing: border-box;
+    81→}
+    82→
+    83→h1, h2, h3, h4, h5, h6 {
+    84→  font-weight: 700;
+    85→  line-height: 1.3;
+    86→  color: var(--text-primary);
+    87→}
+    88→
+    89→p {
+    90→  margin-bottom: 1rem;
+    91→}
+    92→
+    93→a {
+    94→  text-decoration: none;
+    95→  color: inherit;
+    96→}
+    97→
+    98→img {
+    99→  max-width: 100%;
+   100→  height: auto;
+   101→}
+   102→
+   103→/* ===== Custom Scrollbar ===== */
+   104→::-webkit-scrollbar {
+   105→  width: 10px;
+   106→}
+   107→
+   108→::-webkit-scrollbar-track {
+   109→  background: var(--bg-light);
+   110→}
+   111→
+   112→::-webkit-scrollbar-thumb {
+   113→  background: linear-gradient(180deg, var(--primary-navy), var(--primary-blue));
+   114→  border-radius: var(--radius-full);
+   115→}
+   116→
+   117→::-webkit-scrollbar-thumb:hover {
+   118→  background: var(--primary-dark);
+   119→}
+   120→
+   121→/* ===== Selection Color ===== */
+   122→::selection {
+   123→  background: var(--accent-gold);
+   124→  color: var(--text-white);
+   125→}
+   126→
+   127→/* ===== PRELOADER ===== */
+   128→.preloader {
+   129→  position: fixed;
+   130→  top: 0;
+   131→  left: 0;
+   132→  width: 100vw;
+   133→  height: 100vh;
+   134→  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-navy) 50%, var(--primary-blue) 100%);
+   135→  display: flex;
+   136→  align-items: center;
+   137→  justify-content: center;
+   138→  z-index: 99999;
+   139→  transition: opacity 0.6s ease-out, visibility 0.6s ease-out;
+   140→}
+   141→
+   142→.preloader.hidden {
+   143→  opacity: 0;
+   144→  visibility: hidden;
+   145→  pointer-events: none;
+   146→}
+   147→
+   148→.preloader-content {
+   149→  text-align: center;
+   150→  color: white;
+   151→}
+   152→
+   153→.preloader-logo {
+   154→  font-size: clamp(2rem, 5vw, 3.5rem);
+   155→  font-weight: 800;
+   156→  margin-bottom: 2rem;
+   157→  background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
+   158→  -webkit-background-clip: text;
+   159→  -webkit-text-fill-color: transparent;
+   160→  background-clip: text;
+   161→  animation: pulseGlow 2s ease-in-out infinite;
+   162→}
+   163→
+   164→.preloader-spinner {
+   165→  width: 60px;
+   166→  height: 60px;
+   167→  border: 4px solid rgba(255, 255, 255, 0.15);
+   168→  border-top-color: var(--accent-gold);
+   169→  border-radius: 50%;
+   170→  animation: spin 1s linear infinite;
+   171→  margin: 0 auto;
+   172→}
+   173→
+   174→@keyframes spin {
+   175→  to { transform: rotate(360deg); }
+   176→}
+   177→
+   178→@keyframes pulseGlow {
+   179→  0%, 100% { 
+   180→    filter: drop-shadow(0 0 15px rgba(201, 162, 39, 0.5));
+   181→    transform: scale(1);
+   182→  }
+   183→  50% { 
+   184→    filter: drop-shadow(0 0 30px rgba(201, 162, 39, 0.8));
+   185→    transform: scale(1.03);
+   186→  }
+   187→}
+   188→
+   189→/* ===== NAVBAR ===== */
+   190→.navbar {
+   191→  position: fixed;
+   192→  top: 0;
+   193→  left: 0;
+   194→  right: 0;
+   195→  z-index: 1000;
+   196→  padding: 1.25rem 2rem;
+   197→  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+   198→  background: transparent;
+   199→}
+   200→
+   201→.navbar.scrolled {
+   202→  background: rgba(7, 22, 39, 0.97);
+   203→  backdrop-filter: blur(20px);
+   204→  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
+   205→  padding: 0.85rem 2rem;
+   206→}
+   207→
+   208→.navbar-container {
+   209→  max-width: 1400px;
+   210→  margin: 0 auto;
+   211→  display: flex;
+   212→  justify-content: space-between;
+   213→  align-items: center;
+   214→}
+   215→
+   216→.navbar-logo {
+   217→  font-size: 1.5rem;
+   218→  font-weight: 800;
+   219→  color: white;
+   220→  text-decoration: none;
+   221→  display: flex;
+   222→  align-items: center;
+   223→  gap: 0.65rem;
+   224→  letter-spacing: -0.02em;
+   225→}
+   226→
+   227→.navbar-logo .logo-icon {
+   228→  font-size: 1.75rem;
+   229→}
+   230→
+   231→.navbar-logo .logo-text-highlight {
+   232→  color: var(--accent-gold);
+   233→}
+   234→
+   235→.navbar-links {
+   236→  display: flex;
+   237→  align-items: center;
+   238→  gap: 2rem;
+   239→  list-style: none;
+   240→}
+   241→
+   242→.navbar-links a {
+   243→  color: rgba(255, 255, 255, 0.88);
+   244→  text-decoration: none;
+   245→  font-weight: 500;
+   246→  font-size: 0.95rem;
+   247→  transition: all 0.3s ease;
+   248→  position: relative;
+   249→  padding: 0.5rem 0;
+   250→}
+   251→
+   252→.navbar-links a::after {
+   253→  content: '';
+   254→  position: absolute;
+   255→  bottom: 0;
+   256→  left: 0;
+   257→  width: 0;
+   258→  height: 2px;
+   259→  background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-light));
+   260→  transition: width 0.3s ease;
+   261→  border-radius: 2px;
+   262→}
+   263→
+   264→.navbar-links a:hover::after,
+   265→.navbar-links a.active::after {
+   266→  width: 100%;
+   267→}
+   268→
+   269→.navbar-links a:hover {
+   270→  color: var(--accent-gold);
+   271→}
+   272→
+   273→.lang-toggle {
+   274→  background: rgba(255, 255, 255, 0.08);
+   275→  border: 1.5px solid rgba(255, 255, 255, 0.2);
+   276→  color: white;
+   277→  padding: 0.55rem 1.35rem;
+   278→  border-radius: var(--radius-full);
+   279→  cursor: pointer;
+   280→  font-weight: 700;
+   281→  font-size: 0.88rem;
+   282→  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+   283→  letter-spacing: 0.05em;
+   284→}
+   285→
+   286→.lang-toggle:hover {
+   287→  background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
+   288→  border-color: var(--accent-gold);
+   289→  color: var(--primary-dark);
+   290→  transform: translateY(-2px);
+   291→  box-shadow: var(--shadow-gold);
+   292→}
+   293→
+   294→.mobile-menu-btn {
+   295→  display: none;
+   296→  background: none;
+   297→  border: none;
+   298→  color: white;
+   299→  font-size: 1.75rem;
+   300→  cursor: pointer;
+   301→  padding: 0.5rem;
+   302→  line-height: 1;
+   303→}
+   304→
+   305→/* ===== HERO SECTION ===== */
+   306→.hero-section {
+   307→  position: relative;
+   308→  min-height: 100vh;
+   309→  display: flex;
+   310→  align-items: center;
+   311→  justify-content: center;
+   312→  overflow: hidden;
+   313→  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-navy) 40%, #0d2847 70%, var(--primary-dark) 100%);
+   314→}
+   315→
+   316→.hero-canvas-container {
+   317→  position: absolute;
+   318→  top: 0;
+   319→  left: 0;
+   320→  width: 100%;
+   321→  height: 100%;
+   322→  z-index: 1;
+   323→}
+   324→
+   325→.hero-canvas-container canvas {
+   326→  display: block !important;
+   327→  width: 100% !important;
+   328→  height: 100% !important;
+   329→}
+   330→
+   331→.hero-content {
+   332→  position: relative;
+   333→  z-index: 10;
+   334→  text-align: center;
+   335→  padding: 2rem;
+   336→  max-width: 1050px;
+   337→}
+   338→
+   339→.hero-badge {
+   340→  display: inline-flex;
+   341→  align-items: center;
+   342→  gap: 0.6rem;
+   343→  background: rgba(201, 162, 39, 0.12);
+   344→  border: 1.5px solid rgba(201, 162, 39, 0.35);
+   345→  padding: 0.6rem 1.6rem;
+   346→  border-radius: var(--radius-full);
+   347→  color: var(--accent-gold);
+   348→  font-size: 0.92rem;
+   349→  font-weight: 600;
+   350→  margin-bottom: 1.75rem;
+   351→  backdrop-filter: blur(10px);
+   352→}
+   353→
+   354→.hero-title {
+   355→  font-size: clamp(2.75rem, 6.5vw, 5.5rem);
+   356→  font-weight: 800;
+   357→  color: white;
+   358→  line-height: 1.15;
+   359→  margin-bottom: 1.75rem;
+   360→  letter-spacing: -0.02em;
+   361→}
+   362→
+   363→.hero-title .highlight {
+   364→  background: linear-gradient(135deg, var(--accent-gold) 0%, #E8C547 50%, var(--accent-gold-light) 100%);
+   365→  -webkit-background-clip: text;
+   366→  -webkit-text-fill-color: transparent;
+   367→  background-clip: text;
+   368→}
+   369→
+   370→.hero-subtitle {
+   371→  font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+   372→  color: rgba(255, 255, 255, 0.82);
+   373→  max-width: 750px;
+   374→  margin: 0 auto 2.75rem;
+   375→  line-height: 1.9;
+   376→  font-weight: 400;
+   377→}
+   378→
+   379→.hero-buttons {
+   380→  display: flex;
+   381→  gap: 1.15rem;
+   382→  justify-content: center;
+   383→  flex-wrap: wrap;
+   384→}
+   385→
+   386→.btn-primary {
+   387→  display: inline-flex;
+   388→  align-items: center;
+   389→  gap: 0.65rem;
+   390→  background: linear-gradient(135deg, var(--accent-gold) 0%, #E8C547 50%, var(--accent-gold-light) 100%);
+   391→  color: var(--primary-dark);
+   392→  padding: 1.1rem 2.75rem;
+   393→  border-radius: var(--radius-full);
+   394→  font-weight: 700;
+   395→  font-size: 1.02rem;
+   396→  text-decoration: none;
+   397→  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+   398→  border: none;
+   399→  cursor: pointer;
+   400→  box-shadow: 0 6px 25px rgba(201, 162, 39, 0.45);
+   401→  letter-spacing: 0.01em;
+   402→}
+   403→
+   404→.btn-primary:hover {
+   405→  transform: translateY(-4px) scale(1.02);
+   406→  box-shadow: 0 12px 40px rgba(201, 162, 39, 0.6);
+   407→}
+   408→
+   409→.btn-secondary {
+   410→  display: inline-flex;
+   411→  align-items: center;
+   412→  gap: 0.65rem;
+   413→  background: transparent;
+   414→  color: white;
+   415→  padding: 1.1rem 2.75rem;
+   416→  border-radius: var(--radius-full);
+   417→  font-weight: 600;
+   418→  font-size: 1.02rem;
+   419→  text-decoration: none;
+   420→  transition: all 0.4s ease;
+   421→  border: 2px solid rgba(255, 255, 255, 0.35);
+   422→  cursor: pointer;
+   423→}
+   424→
+   425→.btn-secondary:hover {
+   426→  background: rgba(255, 255, 255, 0.1);
+   427→  border-color: white;
+   428→  transform: translateY(-4px);
+   429→  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.15);
+   430→}
+   431→
+   432→.scroll-indicator {
+   433→  position: absolute;
+   434→  bottom: 2.5rem;
+   435→  left: 50%;
+   436→  transform: translateX(-50%);
+   437→  z-index: 10;
+   438→  animation: bounceDown 2.5s ease-in-out infinite;
+   439→}
+   440→
+   441→.scroll-indicator a {
+   442→  color: rgba(255, 255, 255, 0.65);
+   443→  text-decoration: none;
+   444→  display: flex;
+   445→  flex-direction: column;
+   446→  align-items: center;
+   447→  gap: 0.6rem;
+   448→  font-size: 0.84rem;
+   449→  font-weight: 500;
+   450→  transition: color 0.3s ease;
+   451→}
+   452→
+   453→.scroll-indicator a:hover {
+   454→  color: var(--accent-gold);
+   455→}
+   456→
+   457→.scroll-mouse {
+   458→  width: 28px;
+   459→  height: 44px;
+   460→  border: 2.5px solid rgba(255, 255, 255, 0.4);
+   461→  border-radius: 14px;
+   462→  position: relative;
+   463→}
+   464→
+   465→.scroll-wheel {
+   466→  width: 4px;
+   467→  height: 9px;
+   468→  background: var(--accent-gold);
+   469→  border-radius: 2px;
+   470→  position: absolute;
+   471→  top: 7px;
+   472→  left: 50%;
+   473→  transform: translateX(-50%);
+   474→  animation: scrollWheelAnim 2s ease-in-out infinite;
+   475→}
+   476→
+   477→@keyframes scrollWheelAnim {
+   478→  0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+   479→  50% { opacity: 0; transform: translateX(-50%) translateY(14px); }
+   480→}
+   481→
+   482→@keyframes bounceDown {
+   483→  0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+   484→  40% { transform: translateX(-50%) translateY(-12px); }
+   485→  60% { transform: translateX(-50%) translateY(-6px); }
+   486→}
+   487→
+   488→/* ===== SECTIONS COMMON ===== */
+   489→.section {
+   490→  padding: 7rem 2rem;
+   491→  position: relative;
+   492→}
+   493→
+   494→.section-dark {
+   495→  background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary-navy) 100%);
+   496→  color: white;
+   497→}
+   498→
+   499→.section-light {
+   500→  background: var(--bg-white);
+   501→  color: var(--text-primary);
+   502→}
+   503→
+   504→.section-gray {
+   505→  background: var(--bg-light);
+   506→  color: var(--text-primary);
+   507→}
+   508→
+   509→.container {
+   510→  max-width: 1320px;
+   511→  margin: 0 auto;
+   512→}
+   513→
+   514→.section-header {
+   515→  text-align: center;
+   516→  margin-bottom: 4.5rem;
+   517→}
+   518→
+   519→.section-badge {
+   520→  display: inline-flex;
+   521→  align-items: center;
+   522→  gap: 0.55rem;
+   523→  background: linear-gradient(135deg, rgba(30, 155, 215, 0.1), rgba(30, 155, 215, 0.18));
+   524→  color: var(--primary-blue);
+   525→  padding: 0.55rem 1.4rem;
+   526→  border-radius: var(--radius-full);
+   527→  font-size: 0.88rem;
+   528→  font-weight: 600;
+   529→  margin-bottom: 1.15rem;
+   530→  border: 1px solid rgba(30, 155, 215, 0.2);
+   531→}
+   532→
+   533→.section-dark .section-badge {
+   534→  background: linear-gradient(135deg, rgba(201, 162, 39, 0.12), rgba(201, 162, 39, 0.22));
+   535→  color: var(--accent-gold);
+   536→  border-color: rgba(201, 162, 39, 0.3);
+   537→}
+   538→
+   539→.section-title {
+   540→  font-size: clamp(2rem, 4.2vw, 3.25rem);
+   541→  font-weight: 800;
+   542→  margin-bottom: 1.15rem;
+   543→  line-height: 1.25;
+   544→  letter-spacing: -0.02em;
+   545→}
+   546→
+   547→.section-dark .section-title {
+   548→  color: white;
+   549→}
+   550→
+   551→.section-subtitle {
+   552→  font-size: 1.12rem;
+   553→  color: var(--text-secondary);
+   554→  max-width: 720px;
+   555→  margin: 0 auto;
+   556→  line-height: 1.85;
+   557→}
+   558→
+   559→.section-dark .section-subtitle {
+   560→  color: rgba(255, 255, 255, 0.72);
+   561→}
+   562→
+   563→/* ===== ABOUT SECTION ===== */
+   564→.about-grid {
+   565→  display: grid;
+   566→  grid-template-columns: 1fr 1fr;
+   567→  gap: 4.5rem;
+   568→  align-items: center;
+   569→}
+   570→
+   571→.about-image-wrapper {
+   572→  position: relative;
+   573→  border-radius: var(--radius-xl);
+   574→  overflow: hidden;
+   575→  box-shadow: var(--shadow-xl);
+   576→}
+   577→
+   578→.about-image {
+   579→  width: 100%;
+   580→  height: 480px;
+   581→  object-fit: cover;
+   582→  display: block;
+   583→}
+   584→
+   585→.about-image-overlay {
+   586→  position: absolute;
+   587→  bottom: 0;
+   588→  left: 0;
+   589→  right: 0;
+   590→  background: linear-gradient(to top, rgba(7, 22, 39, 0.95), transparent 60%);
+   591→  padding: 2rem;
+   592→}
+   593→
+   594→.about-stats-mini {
+   595→  display: flex;
+   596→  gap: 2.5rem;
+   597→}
+   598→
+   599→.stat-mini {
+   600→  text-align: center;
+   601→}
+   602→
+   603→.stat-mini-number {
+   604→  font-size: 2rem;
+   605→  font-weight: 800;
+   606→  color: var(--accent-gold);
+   607→  line-height: 1;
+   608→  margin-bottom: 0.35rem;
+   609→}
+   610→
+   611→.stat-mini-label {
+   612→  font-size: 0.86rem;
+   613→  color: rgba(255, 255, 255, 0.85);
+   614→  font-weight: 500;
+   615→}
+   616→
+   617→.about-text h3 {
+   618→  font-size: 2.15rem;
+   619→  font-weight: 800;
+   620→  color: var(--primary-dark);
+   621→  margin-bottom: 1.5rem;
+   622→  line-height: 1.3;
+   623→}
+   624→
+   625→.about-text p {
+   626→  color: var(--text-secondary);
+   627→  font-size: 1.08rem;
+   628→  line-height: 1.95;
+   629→  margin-bottom: 1.35rem;
+   630→}
+   631→
+   632→.about-features {
+   633→  display: grid;
+   634→  grid-template-columns: 1fr 1fr;
+   635→  gap: 1rem;
+   636→  margin-top: 2rem;
+   637→}
+   638→
+   639→.about-feature-item {
+   640→  display: flex;
+   641→  align-items: center;
+   642→  gap: 0.85rem;
+   643→  padding: 0.95rem 1.15rem;
+   644→  background: var(--bg-light);
+   645→  border-radius: var(--radius-md);
+   646→  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+   647→  border: 1px solid transparent;
+   648→}
+   649→
+   650→.about-feature-item:hover {
+   651→  background: linear-gradient(135deg, rgba(30, 155, 215, 0.08), rgba(30, 155, 215, 0.15));
+   652→  transform: translateX(6px);
+   653→  border-color: rgba(30, 155, 215, 0.2);
+   654→}
+   655→
+   656→[dir="ltr"] .about-feature-item:hover {
+   657→  transform: translateX(-6px);
+   658→}
+   659→
+   660→.about-feature-icon {
+   661→  width: 42px;
+   662→  height: 42px;
+   663→  background: linear-gradient(135deg, var(--primary-navy), var(--primary-blue));
+   664→  border-radius: var(--radius-sm);
+   665→  display: flex;
+   666→  align-items: center;
+   667→  justify-content: center;
+   668→  color: white;
+   669→  font-size: 1.15rem;
+   670→  flex-shrink: 0;
+   671→}
+   672→
+   673→.about-feature-text {
+   674→  font-size: 0.93rem;
+   675→  font-weight: 600;
+   676→  color: var(--text-primary);
+   677→}
+   678→
+   679→/* ===== STATS COUNTER SECTION ===== */
+   680→.stats-section {
+   681→  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-blue) 100%);
+   682→  padding: 5rem 2rem;
+   683→  position: relative;
+   684→  overflow: hidden;
+   685→}
+   686→
+   687→.stats-section::before {
+   688→  content: '';
+   689→  position: absolute;
+   690→  top: 0;
+   691→  left: 0;
+   692→  right: 0;
+   693→  bottom: 0;
+   694→  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+   695→  opacity: 0.5;
+   696→}
+   697→
+   698→.stats-grid {
+   699→  display: grid;
+   700→  grid-template-columns: repeat(4, 1fr);
+   701→  gap: 2.5rem;
+   702→  max-width: 1150px;
+   703→  margin: 0 auto;
+   704→  position: relative;
+   705→  z-index: 2;
+   706→}
+   707→
+   708→.stat-item {
+   709→  text-align: center;
+   710→  padding: 2.5rem 1.5rem;
+   711→}
+   712→
+   713→.stat-number {
+   714→  font-size: 3.75rem;
+   715→  font-weight: 800;
+   716→  color: var(--accent-gold);
+   717→  line-height: 1;
+   718→  margin-bottom: 0.65rem;
+   719→  text-shadow: 0 4px 15px rgba(201, 162, 39, 0.3);
+   720→}
+   721→
+   722→.stat-label {
+   723→  font-size: 1.05rem;
+   724→  color: rgba(255, 255, 255, 0.88);
+   725→  font-weight: 500;
+   726→}
+   727→
+   728→/* ===== VISION & MISSION ===== */
+   729→.vision-mission-grid {
+   730→  display: grid;
+   731→  grid-template-columns: repeat(2, 1fr);
+   732→  gap: 2.75rem;
+   733→}
+   734→
+   735→.vm-card {
+   736→  background: var(--glass-bg);
+   737→  backdrop-filter: blur(25px);
+   738→  border: 1px solid var(--glass-border);
+   739→  border-radius: var(--radius-xl);
+   740→  padding: 3rem 2.75rem;
+   741→  position: relative;
+   742→  overflow: hidden;
+   743→  transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+   744→}
+   745→
+   746→.vm-card:hover {
+   747→  transform: translateY(-12px);
+   748→  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+   749→  border-color: var(--accent-gold);
+   750→  background: rgba(255, 255, 255, 0.12);
+   751→}
+   752→
+   753→.vm-card-icon {
+   754→  width: 85px;
+   755→  height: 85px;
+   756→  background: linear-gradient(135deg, var(--accent-gold), #E8C547);
+   757→  border-radius: var(--radius-lg);
+   758→  display: flex;
+   759→  align-items: center;
+   760→  justify-content: center;
+   761→  font-size: 2.5rem;
+   762→  margin-bottom: 1.75rem;
+   763→  box-shadow: 0 12px 35px rgba(201, 162, 39, 0.35);
+   764→  transition: transform 0.3s ease;
+   765→}
+   766→
+   767→.vm-card:hover .vm-card-icon {
+   768→  transform: scale(1.1) rotate(-5deg);
+   769→}
+   770→
+   771→.vm-card h3 {
+   772→  font-size: 1.85rem;
+   773→  font-weight: 800;
+   774→  margin-bottom: 1.15rem;
+   775→  color: white;
+   776→}
+   777→
+   778→.vm-card p {
+   779→  color: rgba(255, 255, 255, 0.78);
+   780→  font-size: 1.08rem;
+   781→  line-height: 1.85;
+   782→  margin: 0;
+   783→}
+   784→
+   785→.vm-card-decoration {
+   786→  position: absolute;
+   787→  top: -60px;
+   788→  right: -60px;
+   789→  width: 170px;
+   790→  height: 170px;
+   791→  background: radial-gradient(circle, rgba(201, 162, 39, 0.18), transparent 70%);
+   792→  border-radius: 50%;
+   793→  pointer-events: none;
+   794→}
+   795→
+   796→/* ===== OBJECTIVES GRID (9 Items) ===== */
+   797→.objectives-grid {
+   798→  display: grid;
+   799→  grid-template-columns: repeat(3, 1fr);
+   800→  gap: 1.75rem;
+   801→}
+   802→
+   803→.objective-card {
+   804→  background: white;
+   805→  border-radius: var(--radius-xl);
+   806→  padding: 2.25rem 1.75rem;
+   807→  text-align: center;
+   808→  position: relative;
+   809→  overflow: hidden;
+   810→  transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+   811→  border: 1.5px solid #E8ECF1;
+   812→  cursor: pointer;
+   813→  box-shadow: var(--shadow-sm);
+   814→}
+   815→
+   816→.objective-card:hover {
+   817→  transform: translateY(-10px) scale(1.03);
+   818→  box-shadow: 0 25px 55px rgba(11, 44, 72, 0.15);
+   819→  border-color: var(--primary-blue);
+   820→}
+   821→
+   822→.objective-card-number {
+   823→  position: absolute;
+   824→  top: 1.15rem;
+   825→  left: 1.15rem;
+   826→  width: 38px;
+   827→  height: 38px;
+   828→  background: linear-gradient(135deg, var(--primary-navy), var(--primary-blue));
+   829→  border-radius: var(--radius-sm);
+   830→  display: flex;
+   831→  align-items: center;
+   832→  justify-content: center;
+   833→  color: white;
+   834→  font-weight: 700;
+   835→  font-size: 0.92rem;
+   836→}
+   837→
+   838→.objective-card-icon {
+   839→  width: 75px;
+   840→  height: 75px;
+   841→  background: linear-gradient(135deg, rgba(30, 155, 215, 0.08), rgba(30, 155, 215, 0.18));
+   842→  border-radius: var(--radius-lg);
+   843→  display: flex;
+   844→  align-items: center;
+   845→  justify-content: center;
+   846→  margin: 0 auto 1.35rem;
+   847→  font-size: 2.25rem;
+   848→  color: var(--primary-blue);
+   849→  transition: all 0.4s ease;
+   850→}
+   851→
+   852→.objective-card:hover .objective-card-icon {
+   853→  background: linear-gradient(135deg, var(--primary-navy), var(--primary-blue));
+   854→  color: white;
+   855→  transform: scale(1.15) rotate(8deg);
+   856→}
+   857→
+   858→.objective-card h4 {
+   859→  font-size: 1.15rem;
+   860→  font-weight: 700;
+   861→  color: var(--primary-navy);
+   862→  margin-bottom: 0.55rem;
+   863→}
+   864→
+   865→.objective-card p {
+   866→  font-size: 0.92rem;
+   867→  color: var(--text-secondary);
+   868→  line-height: 1.65;
+   869→  margin: 0;
+   870→}
+   871→
+   872→/* ===== TIMELINE / EPISODES ===== */
+   873→.timeline-section {
+   874→  background: var(--bg-light);
+   875→}
+   876→
+   877→.timeline-container {
+   878→  position: relative;
+   879→  padding: 2.5rem 0;
+   880→}
+   881→
+   882→.timeline-line {
+   883→  position: absolute;
+   884→  top: 50%;
+   885→  left: 3%;
+   886→  right: 3%;
+   887→  height: 4px;
+   888→  background: linear-gradient(90deg, var(--primary-navy), var(--primary-blue), var(--accent-gold));
+   889→  border-radius: 2px;
+   890→  transform: translateY(-50%);
+   891→}
+   892→
+   893→.timeline-grid {
+   894→  display: grid;
+   895→  grid-template-columns: repeat(5, 1fr);
+   896→  gap: 1.15rem;
+   897→  position: relative;
+   898→}
+   899→
+   900→.timeline-item {
+   901→  text-align: center;
+   902→  position: relative;
+   903→  padding: 1.5rem 0.85rem;
+   904→}
+   905→
+   906→.timeline-item-dot {
+   907→  width: 54px;
+   908→  height: 54px;
+   909→  background: white;
+   910→  border: 4px solid var(--primary-blue);
+   911→  border-radius: 50%;
+   912→  display: flex;
+   913→  align-items: center;
+   914→  justify-content: center;
+   915→  margin: 0 auto 1.15rem;
+   916→  font-weight: 700;
+   917→  color: var(--primary-blue);
+   918→  font-size: 0.92rem;
+   919→  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+   920→  box-shadow: 0 6px 20px rgba(30, 155, 215, 0.3);
+   921→}
+   922→
+   923→.timeline-item:hover .timeline-item-dot {
+   924→  background: var(--primary-blue);
+   925→  color: white;
+   926→  transform: scale(1.18);
+   927→  box-shadow: 0 10px 30px rgba(30, 155, 215, 0.45);
+   928→}
+   929→
+   930→.timeline-item-content {
+   931→  background: white;
+   932→  border-radius: var(--radius-lg);
+   933→  padding: 1.35rem 1rem;
+   934→  min-height: 110px;
+   935→  display: flex;
+   936→  align-items: center;
+   937→  justify-content: center;
+   938→  transition: all 0.35s ease;
+   939→  border: 2px solid transparent;
+   940→  box-shadow: var(--shadow-sm);
+   941→}
+   942→
+   943→.timeline-item:hover .timeline-item-content {
+   944→  border-color: var(--primary-blue);
+   945→  transform: translateY(-6px);
+   946→  box-shadow: 0 12px 30px rgba(30, 155, 215, 0.18);
+   947→}
+   948→
+   949→.timeline-item-title {
+   950→  font-size: 0.91rem;
+   951→  font-weight: 650;
+   952→  color: var(--primary-navy);
+   953→  line-height: 1.5;
+   954→}
+   955→
+   956→/* ===== TARGETS SECTION ===== */
+   957→.targets-grid {
+   958→  display: grid;
+   959→  grid-template-columns: 1fr 1fr;
+   960→  gap: 3.5rem;
+   961→}
+   962→
+   963→.target-category h3 {
+   964→  font-size: 1.55rem;
+   965→  font-weight: 800;
+   966→  color: var(--primary-navy);
+   967→  margin-bottom: 1.75rem;
+   968→  display: flex;
+   969→  align-items: center;
+   970→  gap: 0.75rem;
+   971→}
+   972→
+   973→.section-dark .target-category h3 {
+   974→  color: white;
+   975→}
+   976→
+   977→.audience-cards {
+   978→  display: grid;
+   979→  grid-template-columns: repeat(3, 1fr);
+   980→  gap: 1.1rem;
+   981→}
+   982→
+   983→.audience-card {
+   984→  background: white;
+   985→  border-radius: var(--radius-lg);
+   986→  padding: 1.35rem 1.1rem;
+   987→  text-align: center;
+   988→  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+   989→  border: 1.5px solid #E8ECF1;
+   990→  cursor: pointer;
+   991→  box-shadow: var(--shadow-sm);
+   992→}
+   993→
+   994→.audience-card:hover {
+   995→  transform: translateY(-6px);
+   996→  box-shadow: 0 14px 35px rgba(11, 44, 72, 0.12);
+   997→  border-color: var(--primary-blue);
+   998→}
+   999→
+  1000→.audience-card-icon {
+  1001→  font-size: 2.25rem;
+  1002→  margin-bottom: 0.6rem;
+  1003→  display: block;
+  1004→}
+  1005→
+  1006→.audience-card span {
+  1007→  font-size: 0.87rem;
+  1008→  font-weight: 650;
+  1009→  color: var(--text-primary);
+  1010→}
+  1011→
+  1012→.tag-cloud {
+  1013→  display: flex;
+  1014→  flex-wrap: wrap;
+  1015→  gap: 0.85rem;
+  1016→  justify-content: center;
+  1017→  align-content: center;
+  1018→}
+  1019→
+  1020→.tag {
+  1021→  background: linear-gradient(135deg, rgba(30, 155, 215, 0.09), rgba(30, 155, 215, 0.18));
+  1022→  color: var(--primary-blue);
+  1023→  padding: 0.68rem 1.4rem;
+  1024→  border-radius: var(--radius-full);
+  1025→  font-size: 0.92rem;
+  1026→  font-weight: 600;
+  1027→  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  1028→  border: 1.5px solid transparent;
+  1029→  cursor: pointer;
+  1030→}
+  1031→
+  1032→.tag:hover {
+  1033→  background: linear-gradient(135deg, var(--primary-navy), var(--primary-blue));
+  1034→  color: white;
+  1035→  transform: scale(1.08);
+  1036→  box-shadow: 0 8px 22px rgba(30, 155, 215, 0.35);
+  1037→}
+  1038→
+  1039→.tag.large {
+  1040→  font-size: 1.12rem;
+  1041→  padding: 0.82rem 1.65rem;
+  1042→}
+  1043→
+  1044→.tag.medium {
+  1045→  font-size: 0.96rem;
+  1046→}
+  1047→
+  1048→.tag.small {
+  1049→  font-size: 0.83rem;
+  1050→  padding: 0.55rem 1.1rem;
+  1051→}
+  1052→
+  1053→/* ===== NATIONAL VALUE SECTION ===== */
+  1054→.national-value-section {
+  1055→  position: relative;
+  1056→  min-height: 72vh;
+  1057→  display: flex;
+  1058→  align-items: center;
+  1059→  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-navy) 100%);
+  1060→  overflow: hidden;
+  1061→}
+  1062→
+  1063→.national-value-bg {
+  1064→  position: absolute;
+  1065→  top: 0;
+  1066→  left: 0;
+  1067→  width: 100%;
+  1068→  height: 100%;
+  1069→  object-fit: cover;
+  1070→  opacity: 0.22;
+  1071→  pointer-events: none;
+  1072→}
+  1073→
+  1074→.national-value-overlay {
+  1075→  position: absolute;
+  1076→  top: 0;
+  1077→  left: 0;
+  1078→  width: 100%;
+  1079→  height: 100%;
+  1080→  background: linear-gradient(135deg, rgba(7, 22, 39, 0.94) 0%, rgba(11, 44, 72, 0.90) 100%);
+  1081→}
+  1082→
+  1083→.national-value-content {
+  1084→  position: relative;
+  1085→  z-index: 10;
+  1086→  max-width: 920px;
+  1087→  margin: 0 auto;
+  1088→  text-align: center;
+  1089→  padding: 4.5rem 2rem;
+  1090→}
+  1091→
+  1092→.national-value-content h2 {
+  1093→  font-size: clamp(2.1rem, 4.2vw, 3.6rem);
+  1094→  font-weight: 800;
+  1095→  color: white;
+  1096→  margin-bottom: 2.25rem;
+  1097→  line-height: 1.3;
+  1098→}
+  1099→
+  1100→.national-value-content p {
+  1101→  font-size: 1.22rem;
+  1102→  color: rgba(255, 255, 255, 0.9);
+  1103→  line-height: 2.1;
+  1104→  margin-bottom: 1.25rem;
+  1105→}
+  1106→
+  1107→.national-value-highlight {
+  1108→  display: inline-block;
+  1109→  background: rgba(201, 162, 39, 0.18);
+  1110→  border: 1.5px solid rgba(201, 162, 39, 0.4);
+  1111→  padding: 0.3rem 0.85rem;
+  1112→  border-radius: var(--radius-sm);
+  1113→  color: var(--accent-gold);
+  1114→  font-weight: 700;
+  1115→}
+  1116→
+  1117→/* ===== PRODUCTION ELEMENTS ===== */
+  1118→.production-grid {
+  1119→  display: grid;
+  1120→  grid-template-columns: 1fr 1fr;
+  1121→  gap: 3rem;
+  1122→}
+  1123→
+  1124→.production-column {
+  1125→  background: white;
+  1126→  border-radius: var(--radius-xl);
+  1127→  padding: 2.75rem;
+  1128→  box-shadow: var(--shadow-md);
+  1129→  border: 1px solid #E8ECF1;
+  1130→}
+  1131→
+  1132→.production-column h3 {
+  1133→  font-size: 1.55rem;
+  1134→  font-weight: 800;
+  1135→  color: var(--primary-navy);
+  1136→  margin-bottom: 1.75rem;
+  1137→  display: flex;
+  1138→  align-items: center;
+  1139→  gap: 0.75rem;
+  1140→  padding-bottom: 1.15rem;
+  1141→  border-bottom: 3.5px solid var(--primary-blue);
+  1142→}
+  1143→
+  1144→.production-list {
+  1145→  list-style: none;
+  1146→  padding: 0;
+  1147→  margin: 0;
+  1148→}
+  1149→
+  1150→.production-list li {
+  1151→  display: flex;
+  1152→  align-items: center;
+  1153→  gap: 1.1rem;
+  1154→  padding: 1.1rem 0.85rem;
+  1155→  border-radius: var(--radius-md);
+  1156→  transition: all 0.35s ease;
+  1157→  margin-bottom: 0.55rem;
+  1158→}
+  1159→
+  1160→.production-list li:hover {
+  1161→  background: linear-gradient(135deg, rgba(30, 155, 215, 0.06), rgba(30, 155, 215, 0.12));
+  1162→  transform: translateX(7px);
+  1163→}
+  1164→
+  1165→[dir="ltr"] .production-list li:hover {
+  1166→  transform: translateX(-7px);
+  1167→}
+  1168→
+  1169→.check-icon {
+  1170→  width: 32px;
+  1171→  height: 32px;
+  1172→  background: linear-gradient(135deg, var(--primary-blue), var(--primary-light));
+  1173→  border-radius: 50%;
+  1174→  display: flex;
+  1175→  align-items: center;
+  1176→  justify-content: center;
+  1177→  color: white;
+  1178→  font-size: 0.9rem;
+  1179→  font-weight: 700;
+  1180→  flex-shrink: 0;
+  1181→}
+  1182→
+  1183→.production-list li span {
+  1184→  font-weight: 550;
+  1185→  color: var(--text-primary);
+  1186→  font-size: 0.98rem;
+  1187→}
+  1188→
+  1189→/* ===== SPONSORSHIP OPPORTUNITIES ===== */
+  1190→.sponsorship-section {
+  1191→  background: linear-gradient(180deg, var(--bg-gray) 0%, var(--bg-white) 100%);
+  1192→}
+  1193→
+  1194→.sponsorship-grid {
+  1195→  display: grid;
+  1196→  grid-template-columns: repeat(3, 1fr);
+  1197→  gap: 2.25rem;
+  1198→}
+  1199→
+  1200→.sponsorship-card {
+  1201→  background: white;
+  1202→  border-radius: var(--radius-xl);
+  1203→  padding: 2.5rem 2rem;
+  1204→  position: relative;
+  1205→  overflow: hidden;
+  1206→  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  1207→  border: 1.5px solid #E8ECF1;
+  1208→  cursor: pointer;
+  1209→  transform-style: preserve-3d;
+  1210→  perspective: 1000px;
+  1211→  box-shadow: var(--shadow-sm);
+  1212→}
+  1213→
+  1214→.sponsorship-card:hover {
+  1215→  transform: translateY(-14px) rotateX(4deg);
+  1216→  box-shadow: 0 35px 70px rgba(11, 44, 72, 0.16);
+  1217→  border-color: var(--primary-blue);
+  1218→}
+  1219→
+  1220→.sponsorship-card-icon {
+  1221→  width: 76px;
+  1222→  height: 76px;
+  1223→  background: linear-gradient(135deg, var(--primary-navy), var(--primary-blue));
+  1224→  border-radius: var(--radius-lg);
+  1225→  display: flex;
+  1226→  align-items: center;
+  1227→  justify-content: center;
+  1228→  font-size: 2.25rem;
+  1229→  color: white;
+  1230→  margin-bottom: 1.65rem;
+  1231→  transition: all 0.4s ease;
+  1232→}
+  1233→
+  1234→.sponsorship-card:hover .sponsorship-card-icon {
+  1235→  background: linear-gradient(135deg, var(--accent-gold), #E8C547);
+  1236→  transform: scale(1.15) rotate(-6deg);
+  1237→  box-shadow: 0 10px 30px rgba(201, 162, 39, 0.4);
+  1238→}
+  1239→
+  1240→.sponsorship-card h4 {
+  1241→  font-size: 1.3rem;
+  1242→  font-weight: 750;
+  1243→  color: var(--primary-navy);
+  1244→  margin-bottom: 0.85rem;
+  1245→}
+  1246→
+  1247→.sponsorship-card p {
+  1248→  font-size: 0.96rem;
+  1249→  color: var(--text-secondary);
+  1250→  line-height: 1.78;
+  1251→  margin: 0;
+  1252→}
+  1253→
+  1254→.sponsorship-card-decoration {
+  1255→  position: absolute;
+  1256→  bottom: -35px;
+  1257→  right: -35px;
+  1258→  width: 130px;
+  1259→  height: 130px;
+  1260→  background: linear-gradient(135deg, rgba(30, 155, 215, 0.08), transparent);
+  1261→  border-radius: 50%;
+  1262→  pointer-events: none;
+  1263→}
+  1264→
+  1265→/* ===== QUOTE / WHY US SECTION ===== */
+  1266→.quote-section {
+  1267→  background: linear-gradient(135deg, var(--primary-navy) 0%, var(--primary-dark) 100%);
+  1268→  position: relative;
+  1269→  overflow: hidden;
+  1270→  padding: 7rem 2rem;
+  1271→}
+  1272→
+  1273→.quote-decoration {
+  1274→  position: absolute;
+  1275→  font-size: 22rem;
+  1276→  color: rgba(255, 255, 255, 0.025);
+  1277→  font-family: Georgia, serif;
+  1278→  line-height: 1;
+  1279→  user-select: none;
+  1280→  pointer-events: none;
+  1281→}
+  1282→
+  1283→.quote-left {
+  1284→  top: -4rem;
+  1285→  left: 2rem;
+  1286→}
+  1287→
+  1288→.quote-right {
+  1289→  bottom: -8rem;
+  1290→  right: 2rem;
+  1291→}
+  1292→
+  1293→.quote-content {
+  1294→  position: relative;
+  1295→  z-index: 10;
+  1296→  max-width: 950px;
+  1297→  margin: 0 auto;
+  1298→  text-align: center;
+  1299→  padding: 3rem 2rem;
+  1300→}
+  1301→
+  1302→.quote-content blockquote {
+  1303→  font-size: clamp(1.55rem, 3.2vw, 2.35rem);
+  1304→  font-weight: 700;
+  1305→  color: white;
+  1306→  line-height: 1.85;
+  1307→  margin-bottom: 1.75rem;
+  1308→}
+  1309→
+  1310→.quote-content blockquote .highlight {
+  1311→  color: var(--accent-gold);
+  1312→}
+  1313→
+  1314→.quote-author {
+  1315→  color: var(--accent-gold);
+  1316→  font-size: 1.15rem;
+  1317→  font-weight: 650;
+  1318→}
+  1319→
+  1320→/* ===== CONTACT & FOOTER ===== */
+  1321→.contact-footer-section {
+  1322→  background: linear-gradient(180deg, var(--primary-dark) 0%, #050f1a 100%);
+  1323→  color: white;
+  1324→  padding: 6rem 2rem 2rem;
+  1325→}
+  1326→
+  1327→.contact-footer-grid {
+  1328→  display: grid;
+  1329→  grid-template-columns: 1fr 1fr;
+  1330→  gap: 4.5rem;
+  1331→}
+  1332→
+  1333→.contact-form-wrapper h3 {
+  1334→  font-size: 1.85rem;
+  1335→  font-weight: 800;
+  1336→  margin-bottom: 0.5rem;
+  1337→  color: white;
+  1338→}
+  1339→
+  1340→.contact-form-wrapper > p {
+  1341→  color: rgba(255, 255, 255, 0.65);
+  1342→  margin-bottom: 2.25rem;
+  1343→  font-size: 1.05rem;
+  1344→}
+  1345→
+  1346→.contact-form {
+  1347→  display: flex;
+  1348→  flex-direction: column;
+  1349→  gap: 1.35rem;
+  1350→}
+  1351→
+  1352→.form-group {
+  1353→  display: flex;
+  1354→  flex-direction: column;
+  1355→  gap: 0.55rem;
+  1356→}
+  1357→
+  1358→.form-group label {
+  1359→  font-weight: 650;
+  1360→  font-size: 0.92rem;
+  1361→  color: rgba(255, 255, 255, 0.9);
+  1362→}
+  1363→
+  1364→.form-group input,
+  1365→.form-group textarea {
+  1366→  background: rgba(255, 255, 255, 0.07);
+  1367→  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  1368→  border-radius: var(--radius-md);
+  1369→  padding: 1.1rem 1.35rem;
+  1370→  color: white;
+  1371→  font-size: 1rem;
+  1372→  transition: all 0.35s ease;
+  1373→  font-family: inherit;
+  1374→}
+  1375→
+  1376→.form-group input:focus,
+  1377→.form-group textarea:focus {
+  1378→  outline: none;
+  1379→  border-color: var(--primary-blue);
+  1380→  background: rgba(255, 255, 255, 0.11);
+  1381→  box-shadow: 0 0 0 4px rgba(30, 155, 215, 0.12);
+  1382→}
+  1383→
+  1384→.form-group input::placeholder,
+  1385→.form-group textarea::placeholder {
+  1386→  color: rgba(255, 255, 255, 0.35);
+  1387→}
+  1388→
+  1389→.form-group textarea {
+  1390→  min-height: 130px;
+  1391→  resize: vertical;
+  1392→}
+  1393→
+  1394→.btn-submit {
+  1395→  background: linear-gradient(135deg, var(--accent-gold), #E8C547);
+  1396→  color: var(--primary-dark);
+  1397→  padding: 1.1rem 2.25rem;
+  1398→  border-radius: var(--radius-md);
+  1399→  font-weight: 750;
+  1400→  font-size: 1.03rem;
+  1401→  border: none;
+  1402→  cursor: pointer;
+  1403→  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  1404→  margin-top: 0.65rem;
+  1405→  letter-spacing: 0.02em;
+  1406→}
+  1407→
+  1408→.btn-submit:hover {
+  1409→  transform: translateY(-3px);
+  1410→  box-shadow: 0 12px 35px rgba(201, 162, 39, 0.45);
+  1411→}
+  1412→
+  1413→.footer-info h3 {
+  1414→  font-size: 1.85rem;
+  1415→  font-weight: 800;
+  1416→  margin-bottom: 1.75rem;
+  1417→  color: white;
+  1418→}
+  1419→
+  1420→.footer-info h3 span {
+  1421→  color: var(--accent-gold);
+  1422→}
+  1423→
+  1424→.company-info {
+  1425→  margin-bottom: 2.25rem;
+  1426→}
+  1427→
+  1428→.company-name {
+  1429→  font-size: 1.22rem;
+  1430→  font-weight: 750;
+  1431→  margin-bottom: 1.25rem;
+  1432→  color: var(--accent-gold);
+  1433→}
+  1434→
+  1435→.contact-details {
+  1436→  display: flex;
+  1437→  flex-direction: column;
+  1438→  gap: 1.15rem;
+  1439→}
+  1440→
+  1441→.contact-detail-item {
+  1442→  display: flex;
+  1443→  align-items: flex-start;
+  1444→  gap: 1.1rem;
+  1445→  color: rgba(255, 255, 255, 0.82);
+  1446→  font-size: 0.98rem;
+  1447→}
+  1448→
+  1449→.contact-detail-icon {
+  1450→  width: 44px;
+  1451→  height: 44px;
+  1452→  background: rgba(255, 255, 255, 0.08);
+  1453→  border-radius: var(--radius-sm);
+  1454→  display: flex;
+  1455→  align-items: center;
+  1456→  justify-content: center;
+  1457→  flex-shrink: 0;
+  1458→  font-size: 1.15rem;
+  1459→}
+  1460→
+  1461→.social-links {
+  1462→  display: flex;
+  1463→  gap: 0.85rem;
+  1464→  margin-top: 2.25rem;
+  1465→}
+  1466→
+  1467→.social-link {
+  1468→  width: 48px;
+  1469→  height: 48px;
+  1470→  background: rgba(255, 255, 255, 0.08);
+  1471→  border-radius: var(--radius-md);
+  1472→  display: flex;
+  1473→  align-items: center;
+  1474→  justify-content: center;
+  1475→  color: white;
+  1476→  text-decoration: none;
+  1477→  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  1478→  font-size: 1.25rem;
+  1479→  font-weight: 600;
+  1480→}
+  1481→
+  1482→.social-link:hover {
+  1483→  background: linear-gradient(135deg, var(--accent-gold), #E8C547);
+  1484→  color: var(--primary-dark);
+  1485→  transform: translateY(-4px);
+  1486→  box-shadow: 0 8px 22px rgba(201, 162, 39, 0.4);
+  1487→}
+  1488→
+  1489→.footer-bottom {
+  1490→  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  1491→  margin-top: 3.5rem;
+  1492→  padding-top: 2.25rem;
+  1493→  text-align: center;
+  1494→  color: rgba(255, 255, 255, 0.5);
+  1495→  font-size: 0.9rem;
+  1496→}
+  1497→
+  1498→/* ===== MOBILE MENU ===== */
+  1499→.mobile-menu {
+  1500→  position: fixed;
+  1501→  top: 0;
+  1502→  right: -100%;
+  1503→  width: 85%;
+  1504→  max-width: 380px;
+  1505→  height: 100vh;
+  1506→  background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary-navy) 100%);
+  1507→  z-index: 10001;
+  1508→  padding: 2rem;
+  1509→  transition: right 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  1510→  box-shadow: -15px 0 45px rgba(0, 0, 0, 0.4);
+  1511→  overflow-y: auto;
+  1512→}
+  1513→
+  1514→[dir="ltr"] .mobile-menu {
+  1515→  right: auto;
+  1516→  left: -100%;
+  1517→  transition: left 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  1518→}
+  1519→
+  1520→[dir="ltr"] .mobile-menu.active {
+  1521→  left: 0;
+  1522→}
+  1523→
+  1524→.mobile-menu.active {
+  1525→  right: 0;
+  1526→}
+  1527→
+  1528→.mobile-menu-overlay {
+  1529→  position: fixed;
+  1530→  top: 0;
+  1531→  left: 0;
+  1532→  width: 100%;
+  1533→  height: 100%;
+  1534→  background: rgba(0, 0, 0, 0.6);
+  1535→  z-index: 10000;
+  1536→  opacity: 0;
+  1537→  visibility: hidden;
+  1538→  transition: all 0.35s ease;
+  1539→  backdrop-filter: blur(4px);
+  1540→}
+  1541→
+  1542→.mobile-menu-overlay.active {
+  1543→  opacity: 1;
+  1544→  visibility: visible;
+  1545→}
+  1546→
+  1547→.mobile-menu-header {
+  1548→  display: flex;
+  1549→  justify-content: space-between;
+  1550→  align-items: center;
+  1551→  margin-bottom: 2.5rem;
+  1552→  padding-bottom: 1.25rem;
+  1553→  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  1554→}
+  1555→
+  1556→.mobile-menu-close {
+  1557→  background: rgba(255, 255, 255, 0.1);
+  1558→  border: none;
+  1559→  color: white;
+  1560→  font-size: 1.5rem;
+  1561→  cursor: pointer;
+  1562→  width: 40px;
+  1563→  height: 40px;
+  1564→  border-radius: var(--radius-sm);
+  1565→  display: flex;
+  1566→  align-items: center;
+  1567→  justify-content: center;
+  1568→  transition: background 0.3s ease;
+  1569→}
+  1570→
+  1571→.mobile-menu-close:hover {
+  1572→  background: rgba(255, 255, 255, 0.2);
+  1573→}
+  1574→
+  1575→.mobile-menu-links {
+  1576→  list-style: none;
+  1577→  padding: 0;
+  1578→  margin: 0;
+  1579→}
+  1580→
+  1581→.mobile-menu-links li {
+  1582→  margin-bottom: 0.35rem;
+  1583→}
+  1584→
+  1585→.mobile-menu-links a {
+  1586→  color: rgba(255, 255, 255, 0.85);
+  1587→  text-decoration: none;
+  1588→  font-size: 1.08rem;
+  1589→  font-weight: 550;
+  1590→  display: block;
+  1591→  padding: 0.9rem 1.1rem;
+  1592→  border-radius: var(--radius-md);
+  1593→  transition: all 0.3s ease;
+  1594→  border: 1px solid transparent;
+  1595→}
+  1596→
+  1597→.mobile-menu-links a:hover {
+  1598→  color: var(--accent-gold);
+  1599→  background: rgba(201, 162, 39, 0.1);
+  1600→  border-color: rgba(201, 162, 39, 0.2);
+  1601→  padding-right: 1.5rem;
+  1602→}
+  1603→
+  1604→[dir="ltr"] .mobile-menu-links a:hover {
+  1605→  padding-right: 1.1rem;
+  1606→  padding-left: 1.5rem;
+  1607→}
+  1608→
+  1609→/* ===== ANIMATION CLASSES ===== */
+  1610→.reveal {
+  1611→  opacity: 0;
+  1612→  transform: translateY(45px);
+  1613→  transition: all 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+  1614→}
+  1615→
+  1616→.reveal.active {
+  1617→  opacity: 1;
+  1618→  transform: translateY(0);
+  1619→}
+  1620→
+  1621→.reveal-left {
+  1622→  opacity: 0;
+  1623→  transform: translateX(-65px);
+  1624→  transition: all 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+  1625→}
+  1626→
+  1627→.reveal-left.active {
+  1628→  opacity: 1;
+  1629→  transform: translateX(0);
+  1630→}
+  1631→
+  1632→.reveal-right {
+  1633→  opacity: 0;
+  1634→  transform: translateX(65px);
+  1635→  transition: all 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+  1636→}
+  1637→
+  1638→.reveal-right.active {
+  1639→  opacity: 1;
+  1640→  transform: translateX(0);
+  1641→}
+  1642→
+  1643→.scale-reveal {
+  1644→  opacity: 0;
+  1645→  transform: scale(0.88);
+  1646→  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  1647→}
+  1648→
+  1649→.scale-reveal.active {
+  1650→  opacity: 1;
+  1651→  transform: scale(1);
+  1652→}
+  1653→
+  1654→/* ===== RESPONSIVE DESIGN ===== */
+  1655→@media (max-width: 1200px) {
+  1656→  .objectives-grid {
+  1657→    grid-template-columns: repeat(3, 1fr);
+  1658→  }
+  1659→  
+  1660→  .sponsorship-grid {
+  1661→    grid-template-columns: repeat(2, 1fr);
+  1662→  }
+  1663→  
+  1664→  .timeline-grid {
+  1665→    grid-template-columns: repeat(5, 1fr);
+  1666→  }
+  1667→  
+  1668→  .stats-grid {
+  1669→    grid-template-columns: repeat(4, 1fr);
+  1670→  }
+  1671→}
+  1672→
+  1673→@media (max-width: 1024px) {
+  1674→  .about-grid {
+  1675→    grid-template-columns: 1fr;
+  1676→    gap: 3.5rem;
+  1677→  }
+  1678→  
+  1679→  .vision-mission-grid {
+  1680→    grid-template-columns: 1fr;
+  1681→  }
+  1682→  
+  1683→  .targets-grid {
+  1684→    grid-template-columns: 1fr;
+  1685→  }
+  1686→  
+  1687→  .production-grid {
+  1688→    grid-template-columns: 1fr;
+  1689→  }
+  1690→  
+  1691→  .contact-footer-grid {
+  1692→    grid-template-columns: 1fr;
+  1693→  }
+  1694→  
+  1695→  .stats-grid {
+  1696→    grid-template-columns: repeat(2, 1fr);
+  1697→    gap: 2rem;
+  1698→  }
+  1699→  
+  1700→  .navbar-links {
+  1701→    display: none;
+  1702→  }
+  1703→  
+  1704→  .mobile-menu-btn {
+  1705→    display: flex;
+  1706→  }
+  1707→  
+  1708→  .timeline-grid {
+  1709→    grid-template-columns: repeat(3, 1fr);
+  1710→  }
+  1711→  
+  1712→  .timeline-line {
+  1713→    display: none;
+  1714→  }
+  1715→  
+  1716→  .stat-number {
+  1717→    font-size: 3rem;
+  1718→  }
+  1719→}
+  1720→
+  1721→@media (max-width: 768px) {
+  1722→  .section {
+  1723→    padding: 5rem 1.35rem;
+  1724→  }
+  1725→  
+  1726→  .hero-title {
+  1727→    font-size: 2.5rem;
+  1728→  }
+  1729→  
+  1730→  .objectives-grid {
+  1731→    grid-template-columns: repeat(2, 1fr);
+  1732→  }
+  1733→  
+  1734→  .audience-cards {
+  1735→    grid-template-columns: repeat(2, 1fr);
+  1736→  }
+  1737→  
+  1738→  .sponsorship-grid {
+  1739→    grid-template-columns: 1fr;
+  1740→  }
+  1741→  
+  1742→  .timeline-grid {
+  1743→    grid-template-columns: repeat(2, 1fr);
+  1744→  }
+  1745→  
+  1746→  .stats-grid {
+  1747→    grid-template-columns: repeat(2, 1fr);
+  1748→    gap: 1.5rem;
+  1749→  }
+  1750→  
+  1751→  .stat-number {
+  1752→    font-size: 2.5rem;
+  1753→  }
+  1754→  
+  1755→  .about-features {
+  1756→    grid-template-columns: 1fr;
+  1757→  }
+  1758→  
+  1759→  .quote-content blockquote {
+  1760→    font-size: 1.5rem;
+  1761→  }
+  1762→  
+  1763→  .contact-footer-section {
+  1764→    padding: 5rem 1.35rem 2rem;
+  1765→  }
+  1766→  
+  1767→  .navbar {
+  1768→    padding: 1rem 1.35rem;
+  1769→  }
+  1770→}
+  1771→
+  1772→@media (max-width: 480px) {
+  1773→  .objectives-grid {
+  1774→    grid-template-columns: 1fr;
+  1775→  }
+  1776→  
+  1777→  .audience-cards {
+  1778→    grid-template-columns: 1fr;
+  1779→  }
+  1780→  
+  1781→  .timeline-grid {
+  1782→    grid-template-columns: 1fr;
+  1783→  }
+  1784→  
+  1785→  .stats-grid {
+  1786→    grid-template-columns: 1fr;
+  1787→  }
+  1788→  
+  1789→  .hero-buttons {
+  1790→    flex-direction: column;
+  1791→    align-items: stretch;
+  1792→  }
+  1793→  
+  1794→  .btn-primary,
+  1795→  .btn-secondary {
+  1796→    width: 100%;
+  1797→    justify-content: center;
+  1798→  }
+  1799→  
+  1800→  .about-stats-mini {
+  1801→    gap: 1.5rem;
+  1802→  }
+  1803→}
+  1804→
