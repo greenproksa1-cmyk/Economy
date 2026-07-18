@@ -1,105 +1,17 @@
 'use client'
 
-import { useState, useEffect, useRef, Suspense } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Points, PointMaterial } from '@react-three/drei'
-import * as random from 'maath/random/dist/maath-random.esm'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
-import type { Vector3 } from 'three'
 
 // =============================================
-// THREE.JS - PARTICLE FIELD COMPONENT
-// =============================================
-function ParticleField({ count = 2500 }: { count?: number }) {
-  const ref = useRef<any>(null)
-  const [positions] = useState(() => 
-    Float32Array.from({ length: count * 3 }, () => (Math.random() - 0.5) * 18)
-  )
-
-  useFrame((state, delta) => {
-    if (ref.current) {
-      ref.current.rotation.x -= delta / 18
-      ref.current.rotation.y -= delta / 22
-      const time = state.clock.elapsedTime
-      // Very subtle vertical movement - reduced from 0.15 to 0.04
-      ref.current.position.y = Math.sin(time * 0.3) * 0.04
-    }
-  })
-
-  return (
-    <group rotation={[0, 0, Math.PI / 4]}>
-      <Points 
-        ref={ref} 
-        positions={positions} 
-        stride={3} 
-        frustumCulled={false}
-      >
-        <PointMaterial
-          transparent
-          color="#C9A227"
-          size={0.025}
-          sizeAttenuation={true}
-          depthWrite={false}
-          opacity={0.85}
-        />
-      </Points>
-    </group>
-  )
-}
-
-// =============================================
-// THREE.JS - WIREFRAME MESH (Economic Growth)
-// =============================================
-function WaveMesh() {
-  const meshRef = useRef<any>(null)
-  
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.15) * 0.08
-      const geometry = meshRef.current.geometry
-      const positions = geometry.attributes.position.array
-      
-      for (let i = 0; i < positions.length; i += 3) {
-        const x = positions[i]
-        const y = positions[i + 1]
-        positions[i + 2] = Math.sin(x * 0.4 + state.clock.elapsedTime * 0.6) * 0.35 + 
-                           Math.cos(y * 0.4 + state.clock.elapsedTime * 0.5) * 0.35
-      }
-      
-      geometry.attributes.position.needsUpdate = true
-    }
-  })
-  
-  return (
-    <mesh ref={meshRef} position={[0, 0, -3]} rotation={[-Math.PI / 4, 0, 0]}>
-      <planeGeometry args={[25, 25, 60, 60]} />
-      <meshBasicMaterial color="#1E9BD7" wireframe transparent opacity={0.12} />
-    </mesh>
-  )
-}
-
-// =============================================
-// HERO SCENE - THREE.JS CANVAS
-// =============================================
-function HeroScene() {
-  return (
-    <>
-      <ambientLight intensity={0.5} />
-      <ParticleField />
-      <WaveMesh />
-    </>
-  )
-}
-
-// =============================================
-// ICON MAPPING - Flaticon UIcons
+// ICON MAPPING - Flaticon UIicons (Comprehensive)
 // =============================================
 const iconMap = {
   // Vision & Mission
   vision: 'fi fi-rr-eye',
   mission: 'fi fi-rr-target',
   
-  // Objectives (9 items)
+  // Objectives (9 items) - Each MUST have an icon
   crown: 'fi fi-rr-crown',
   bulb: 'fi fi-rr-lightbulb',
   chart: 'fi fi-rr-chart-line-up',
@@ -110,13 +22,13 @@ const iconMap = {
   leaf: 'fi fi-rr-leaf',
   target: 'fi fi-rr-crosshairs',
   
-  // About Features
+  // About Features (4 items)
   comment: 'fi fi-rr-comment-quote',
   star: 'fi fi-rr-star',
   stats: 'fi fi-rr-chart-pie',
   trophy: 'fi fi-rr-trophy',
   
-  // Target Audiences (specific icons per audience)
+  // Target Audiences (9 items) - Each MUST have an icon
   businessman: 'fi fi-rr-briefcase',
   investor: 'fi fi-rr-chart-line-up',
   entrepreneur: 'fi fi-rr-rocket-lunch',
@@ -127,7 +39,7 @@ const iconMap = {
   student: 'fi fi-rr-graduation-cap',
   enthusiast: 'fi fi-rr-user',
   
-  // Sectors icons
+  // Sectors (16 items) - Each MUST have an icon
   industry: 'fi fi-rr-factory',
   energy: 'fi fi-rr-battery-full',
   mining: 'fi fi-rr-digging',
@@ -140,26 +52,28 @@ const iconMap = {
   education: 'fi fi-rr-book-alt',
   finance: 'fi fi-rr-coins',
   insurance: 'fi fi-rr-shield-check',
-  telecom: 'fi fi-rf-antenna',
+  telecom: 'fi fi-rr-signal-alt-3',
   trade: 'fi fi-rr-shopping-cart',
-  foodSecurity: 'fi fi-rr-wheat',
+  foodSecurity: 'fi fi-rr-leaf',
   digitalEconomy: 'fi fi-rr-circle-nodes',
   
-  // Production Elements
+  // Production Elements (6 items) - Each MUST have an icon
   camera: 'fi fi-rr-camera',
   director: 'fi fi-rr-clapperboard',
   report: 'fi fi-rr-document',
   infographic: 'fi fi-rr-chart-bar',
   audio: 'fi fi-rr-microphone',
   music: 'fi fi-rr-music',
+  
+  // Publishing Plan (6 items) - Each MUST have an icon
   videoBroadcast: 'fi fi-rr-video-camera',
   shortClip: 'fi fi-rr-scissors',
   guestContent: 'fi fi-rr-user-guest',
   pressCoverage: 'fi fi-rr-newspaper',
-  digitalCampaign: 'fi fi-rf-mobile-button',
+  digitalCampaign: 'fi fi-rr-mobile-button',
   quote: 'fi fi-rr-quote-right',
   
-  // Sponsorship Opportunities
+  // Sponsorship Opportunities (6 items) - Each MUST have an icon
   mediaTV: 'fi fi-rr-tv',
   branding: 'fi fi-rr-palette',
   digitalPresence: 'fi fi-rr-globe',
@@ -167,21 +81,19 @@ const iconMap = {
   publishingPlan: 'fi fi-rr-share',
   nationalContent: 'fi fi-rr-medal',
   
-  // Contact & Footer
+  // Contact & Footer (All MUST have icons)
   location: 'fi fi-rr-map-pin',
   phone: 'fi fi-rr-phone-call',
   email: 'fi fi-rr-envelope',
   building: 'fi fi-rr-building-columns',
-  logo: 'fi fi-rr-building-columns',
-  saudiBadge: 'fi rr-flag',
   
-  // Social Media
+  // Social Media (4 items) - All MUST have icons
   twitter: 'fi fi-rr-twitter',
   linkedin: 'fi fi-rr-linkedin',
   instagram: 'fi fi-rr-instagram',
   youtube: 'fi fi-rr-youtube',
   
-  // Timeline Icons (10 axes)
+  // Timeline Icons (10 axes) - Each MUST have an icon
   timelineFounding: 'fi fi-rr-rocket',
   timelineChallenges: 'fi fi-rr-shield-alt',
   timelineSuccess: 'fi fi-rr-trophy',
@@ -213,7 +125,7 @@ const translations = {
       title: 'قادة',
       titleHighlight: 'الاقتصاد',
       subtitle: 'منصة إعلامية تُبرز دور القطاع الخاص في تحقيق مستهدفات رؤية السعودية 2030',
-      cta1: 'شاهد الحلقات',
+      cta1: 'محاور الحلقة',
       cta2: 'كن راعياً / تواصل معنا',
       scroll: 'اكتشف المزيد',
     },
@@ -380,7 +292,7 @@ const translations = {
       title: 'Economy',
       titleHighlight: 'Leaders',
       subtitle: 'A media platform highlighting the private sector role in achieving Saudi Vision 2030 goals',
-      cta1: 'Watch Episodes',
+      cta1: 'Episode Themes',
       cta2: 'Become a Sponsor / Contact Us',
       scroll: 'Discover More',
     },
@@ -535,7 +447,7 @@ const translations = {
 }
 
 // =============================================
-// SPOTLIGHT CARD COMPONENT (with glow effect)
+// SPOTLIGHT CARD COMPONENT (with subtle glow effect)
 // =============================================
 function SpotlightCard({ children, className = '', popular = false }: { 
   children: React.ReactNode; 
@@ -543,28 +455,17 @@ function SpotlightCard({ children, className = '', popular = false }: {
   popular?: boolean;
 }) {
   const divRef = useRef<HTMLDivElement>(null)
-  const [isFocused, setIsFocused] = useState(false)
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [opacity, setOpacity] = useState(0)
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!divRef.current) return
     const rect = divRef.current.getBoundingClientRect()
-    // Smooth position tracking with subtle movement
+    // Very subtle position tracking - reduced sensitivity
     setPosition({ 
       x: e.clientX - rect.left, 
       y: e.clientY - rect.top 
     })
-  }
-
-  const handleFocus = () => {
-    setIsFocused(true)
-    setOpacity(1)
-  }
-
-  const handleBlur = () => {
-    setIsFocused(false)
-    setOpacity(0)
   }
 
   const handleMouseEnter = () => {
@@ -580,8 +481,6 @@ function SpotlightCard({ children, className = '', popular = false }: {
       ref={divRef}
       className={`spotlight-card ${className}`}
       onMouseMove={handleMouseMove}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -593,13 +492,12 @@ function SpotlightCard({ children, className = '', popular = false }: {
         </div>
       )}
       
-      {/* Spotlight Effect - Subtle glow */}
+      {/* Spotlight Effect - Very subtle glow */}
       <div
         className="spotlight-effect"
         style={{
           opacity,
-          // Reduced opacity from 0.12 to 0.06 for subtlety
-          background: `radial-gradient(500px circle at ${position.x}px ${position.y}px, rgba(201, 162, 39, 0.06), transparent 50%)`,
+          background: `radial-gradient(400px circle at ${position.x}px ${position.y}px, rgba(201, 162, 39, 0.04), transparent 50%)`,
         }}
       />
       {children}
@@ -885,10 +783,21 @@ export default function Home() {
         className={`navbar ${isScrolled ? 'scrolled' : ''}`}
       >
         <div className="navbar-container">
+          {/* Official Logo Placeholder - Navbar */}
           <a href="#" className="navbar-logo" onClick={(e) => { e.preventDefault(); scrollToSection('hero') }}>
-            {/* Logo Placeholder - استبدل هذا بشعار قادة الاقتصاد الرسمي */}
             <div className="logo-placeholder" aria-label="قادة الاقتصاد">
-              <i className={`${iconMap.logo} logo-icon-flaticon`}></i>
+              <img 
+                src="/logo-economy-leaders.svg" 
+                alt="قادة الاقتصاد - Economy Leaders" 
+                className="logo-img-navbar"
+                onError={(e) => {
+                  // Fallback to icon if image not found
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  target.nextElementSibling!.classList.remove('hidden');
+                }}
+              />
+              <i className={`${iconMap.logo} logo-icon-flaticon hidden`}></i>
               <span className="logo-text">{lang === 'ar' ? 'قادة الاقتصاد' : 'Economy Leaders'}<span className="logo-text-highlight"> | </span></span>
             </div>
           </a>
@@ -919,7 +828,7 @@ export default function Home() {
       <div className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`}>
         <div className="mobile-menu-header">
           <span style={{ color: '#C9A227', fontWeight: 800, fontSize: '1.2rem' }}>
-            <i className={`${iconMap.logo}`} style={{ marginLeft: '0.5rem' }}></i>
+            <i className={`${iconMap.building} `} style={{ marginLeft: '0.5rem' }}></i>
             {lang === 'ar' ? 'قادة الاقتصاد' : 'Economy Leaders'}
           </span>
           <button className="mobile-menu-close" onClick={() => setMobileMenuOpen(false)} aria-label="Close menu">
@@ -937,17 +846,10 @@ export default function Home() {
         </ul>
       </div>
 
-      {/* ===== HERO SECTION ===== */}
+      {/* ===== HERO SECTION (No Three.js - Image Only with Gradient Mask) ===== */}
       <section id="hero" className="hero-section">
-        {/* Three.js Canvas Background */}
-        <div className="hero-canvas-container">
-          <Canvas camera={{ position: [0, 0, 5.5], fov: 58 }} dpr={[1, 1.5]} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
-            <Suspense fallback={null}>
-              <HeroScene />
-            </Suspense>
-          </Canvas>
-        </div>
-
+        {/* Hero Background Image with Gradient Mask is handled via CSS ::before and ::after */}
+        
         {/* Hero Content */}
         <motion.div 
           className="hero-content"
@@ -990,7 +892,7 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 1.4 }}
           >
             <button className="btn-primary animate__animated animate__pulse" onClick={() => scrollToSection('episodes')}>
-              <i className="fi fi-rr-play"></i> {lang === 'ar' ? 'محاور الحلقة' : 'Episode Themes'}
+              <i className="fi fi-rr-play"></i> {t.hero.cta1}
             </button>
             <button className="btn-secondary" onClick={() => scrollToSection('contact')}>
               <i className="fi fi-rr-envelope"></i> {t.hero.cta2}
@@ -1159,7 +1061,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== TIMELINE / EPISODES SECTION (10 Axes) ===== */}
+      {/* ===== TIMELINE / EPISODES SECTION (10 Axes) - Fixed Layout ===== */}
       <section id="episodes" className="section timeline-section">
         <div className="container">
           <motion.div 
@@ -1465,9 +1367,20 @@ export default function Home() {
 
             {/* Footer Info */}
             <motion.div variants={fadeInUp} className="footer-info">
-              {/* Logo Placeholder in Footer - استبدل هذا بشعار قادة الاقتصاد الرسمي */}
+              {/* Official Logo Placeholder - Footer */}
               <div className="footer-logo-placeholder" aria-label="شعار قادة الاقتصاد">
-                <i className="fi fi-rr-building-columns"></i>
+                <img 
+                  src="/logo-economy-leaders.svg" 
+                  alt="شعار قادة الاقتصاد" 
+                  className="logo-img-footer"
+                  onError={(e) => {
+                    // Fallback to icon if image not found
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    target.nextElementSibling!.classList.remove('hidden');
+                  }}
+                />
+                <i className="fi fi-rr-building-columns footer-logo-icon-fallback hidden"></i>
               </div>
               
               <h3 className="company-title">

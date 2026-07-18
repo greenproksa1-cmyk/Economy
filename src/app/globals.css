@@ -267,25 +267,62 @@ body {
   gap: 0.75rem;
 }
 
+/* Logo Image - Navbar (32-40px height) */
+.logo-img-navbar {
+  height: 36px;
+  width: auto;
+  max-width: 180px;
+  object-fit: contain;
+  filter: brightness(1.1);
+  transition: all var(--transition-base);
+}
+
+.navbar.scrolled .logo-img-navbar {
+  filter: brightness(1);
+}
+
+.logo-img-navbar:hover {
+  filter: brightness(1.2) drop-shadow(0 0 8px rgba(201, 162, 39, 0.4));
+}
+
+.hidden {
+  display: none !important;
+}
+
 .logo-text {
   font-weight: 700;
   font-size: 1.15rem;
 }
 
-/* Footer Logo Placeholder */
+/* Footer Logo Placeholder - Larger than Navbar */
 .footer-logo-placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 1.5rem 2.5rem;
   margin-bottom: 1.5rem;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   width: fit-content;
+  position: relative;
 }
 
-.footer-logo-placeholder i {
+/* Logo Image - Footer (larger, ~60-80px height) */
+.logo-img-footer {
+  height: 65px;
+  width: auto;
+  max-width: 280px;
+  object-fit: contain;
+  filter: brightness(1.1);
+}
+
+.footer-logo-icon-fallback {
+  font-size: 2.5rem;
+  color: var(--accent-gold);
+}
+
+.footer-logo-placeholder i:not(.footer-logo-icon-fallback) {
   font-size: 2.5rem;
   color: var(--accent-gold);
 }
@@ -481,7 +518,8 @@ body {
   overflow: hidden;
 }
 
-/* Hero Background Image - Professional Economic Scene */
+/* Hero Background Image - Professional Economic Scene with Gradient Mask */
+/* Image shows ONLY at bottom, fading to transparent at top - No Three.js */
 .hero-section::before {
   content: '';
   position: absolute;
@@ -493,25 +531,28 @@ body {
   background-size: cover;
   background-position: center bottom;
   background-repeat: no-repeat;
-  /* Gradient Mask: Transparent at top -> Visible at bottom (only lower 35% shows) */
+  /* Gradient Mask: Transparent at top (0-60%) -> Fading in at bottom (60-100%) */
+  /* Only the bottom ~35% of the image is visible, rest is transparent */
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    transparent 55%,
-    rgba(0, 0, 0, 0.3) 75%,
-    rgba(0, 0, 0, 0.6) 100%
+    transparent 60%,
+    rgba(0, 0, 0, 0.2) 75%,
+    rgba(0, 0, 0, 0.5) 90%,
+    rgba(0, 0, 0, 0.7) 100%
   );
   mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    transparent 55%,
-    rgba(0, 0, 0, 0.3) 75%,
-    rgba(0, 0, 0, 0.6) 100%
+    transparent 60%,
+    rgba(0, 0, 0, 0.2) 75%,
+    rgba(0, 0, 0, 0.5) 90%,
+    rgba(0, 0, 0, 0.7) 100%
   );
   z-index: 0;
 }
 
-/* Darkening overlay on the visible part of the image */
+/* Darkening overlay on the visible part of the image (bottom area only) */
 .hero-section::after {
   content: '';
   position: absolute;
@@ -519,31 +560,30 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  /* Gradient overlay: darker at top (hides image) -> lighter at bottom (shows dimmed image) */
+  /* Gradient overlay: completely dark at top -> slightly lighter at very bottom */
+  /* This ensures text readability while allowing faint image visibility at bottom */
   background: linear-gradient(
     to bottom,
     rgba(7, 22, 39, 1) 0%,
-    rgba(7, 22, 39, 0.95) 50%,
-    rgba(7, 22, 39, 0.7) 75%,
-    rgba(7, 22, 39, 0.45) 100%
+    rgba(7, 22, 39, 0.98) 50%,
+    rgba(7, 22, 39, 0.85) 70%,
+    rgba(7, 22, 39, 0.6) 85%,
+    rgba(7, 22, 39, 0.4) 100%
   );
   z-index: 1;
   pointer-events: none;
 }
 
+/* Three.js Canvas Container - REMOVED COMPLETELY */
+/* No more particle fields, wireframes, or 3D animations in Hero */
 .hero-canvas-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;  /* Above background image, below content */
-  opacity: 0.5;  /* Reduced opacity for subtle integration with new bg */
+  display: none !important;
+  visibility: hidden !important;
 }
 
 .hero-content {
   position: relative;
-  z-index: 3;  /* Above all layers including canvas and overlays */
+  z-index: 10;  /* Above all layers - increased since no canvas */
   text-align: center;
   max-width: 900px;
   padding: 0 2rem;
@@ -661,7 +701,7 @@ body {
   bottom: 2.5rem;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 3;  /* Above all layers */
+  z-index: 10;  /* Above all layers */
   text-align: center;
 }
 
@@ -1217,43 +1257,50 @@ body {
   50% { transform: scale(1.05); }
 }
 
-/* ===== TIMELINE SECTION ===== */
+/* ===== TIMELINE SECTION - FIXED LAYOUT ===== */
 .timeline-section {
   background: linear-gradient(170deg, var(--primary-dark) 0%, #0c2338 50%, var(--primary-navy) 100%);
   color: var(--text-white);
+  overflow-x: hidden;
 }
 
 .timeline-container {
   position: relative;
-  padding: 2rem 0;
+  padding: 2.5rem 0 3rem;
 }
 
 .timeline-line {
   position: absolute;
-  top: 45px;
-  left: 5%;
-  right: 5%;
+  top: 48px;
+  left: 3%;
+  right: 3%;
   height: 2px;
   background: linear-gradient(90deg, var(--accent-gold), var(--primary-blue), var(--accent-gold));
   opacity: 0.25;
+  z-index: 1;
 }
 
+/* Fixed Timeline Grid - 10 items in proper layout */
 .timeline-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 1.25rem;
+  gap: 1.5rem;
   position: relative;
+  z-index: 2;
 }
 
 .timeline-item {
   text-align: center;
   position: relative;
-  padding-top: 1rem;
+  padding-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .timeline-item-dot {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1261,17 +1308,18 @@ body {
   color: var(--primary-dark);
   border-radius: 50%;
   font-weight: 800;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   margin-bottom: 1rem;
-  box-shadow: 0 4px 15px rgba(201, 162, 39, 0.3);
+  box-shadow: 0 4px 16px rgba(201, 162, 39, 0.35);
   transition: all var(--transition-base);
   position: relative;
-  z-index: 2;
+  z-index: 3;
+  flex-shrink: 0;
 }
 
 .timeline-item:hover .timeline-item-dot {
   transform: scale(1.12);
-  box-shadow: 0 6px 25px rgba(201, 162, 39, 0.45);
+  box-shadow: 0 6px 28px rgba(201, 162, 39, 0.5);
 }
 
 .timeline-item-content {
@@ -1280,38 +1328,42 @@ body {
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
-  padding: 1.25rem 0.85rem;
+  padding: 1.25rem 0.9rem;
   transition: all var(--transition-base);
-  min-height: 80px;
+  min-height: 85px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.55rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .timeline-item-icon {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: var(--accent-gold);
-  opacity: 0.9;
+  opacity: 0.95;
   transition: all var(--transition-base);
+  flex-shrink: 0;
 }
 
 .timeline-item:hover .timeline-item-icon {
   color: var(--accent-gold-light);
-  transform: scale(1.15);
+  transform: scale(1.12);
 }
 
 .timeline-item:hover .timeline-item-content {
-  background: rgba(201, 162, 39, 0.1);
-  border-color: rgba(201, 162, 39, 0.25);
-  transform: translateY(-4px);
+  background: rgba(201, 162, 39, 0.12);
+  border-color: rgba(201, 162, 39, 0.28);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .timeline-item-title {
   font-size: 0.88rem;
   font-weight: 600;
-  color: var(--subtitle-dark-bg);  /* Better contrast on dark bg */
+  color: var(--subtitle-dark-bg);  /* WCAG AA compliant on dark bg */
   line-height: 1.5;
 }
 
@@ -2061,8 +2113,19 @@ body {
     grid-template-columns: repeat(2, 1fr);
   }
   
+  /* Timeline - Tablet: 3 columns, allow horizontal scroll if needed */
+  .timeline-section {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .timeline-container {
+    min-width: 700px; /* Ensure proper layout before scroll kicks in */
+  }
+  
   .timeline-grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
   }
   
   .targets-grid {
@@ -2126,12 +2189,62 @@ body {
     grid-template-columns: 1fr;
   }
   
+  /* Timeline - Mobile: 2 columns with horizontal scroll */
+  .timeline-section {
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    /* Hide scrollbar but keep functionality */
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-gold) transparent;
+  }
+  
+  .timeline-section::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .timeline-section::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .timeline-section::-webkit-scrollbar-thumb {
+    background: var(--accent-gold);
+    border-radius: 3px;
+  }
+  
+  .timeline-container {
+    min-width: 600px;
+    padding: 2rem 1.25rem 2.5rem;
+  }
+  
   .timeline-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1.15rem;
   }
   
   .timeline-line {
-    display: none;
+    top: 42px;
+    left: 8%;
+    right: 8%;
+  }
+  
+  .timeline-item-dot {
+    width: 46px;
+    height: 46px;
+    font-size: 0.82rem;
+    margin-bottom: 0.85rem;
+  }
+  
+  .timeline-item-content {
+    padding: 1rem 0.7rem;
+    min-height: 75px;
+  }
+  
+  .timeline-item-title {
+    font-size: 0.82rem;
+  }
+  
+  .timeline-item-icon {
+    font-size: 1.05rem;
   }
   
   .sponsorship-grid {
@@ -2174,6 +2287,17 @@ body {
     width: 32px;
     height: 32px;
     font-size: 0.7rem;
+  }
+  
+  /* Logo responsive sizing */
+  .logo-img-navbar {
+    height: 32px;
+    max-width: 150px;
+  }
+  
+  .logo-img-footer {
+    height: 50px;
+    max-width: 220px;
   }
 }
 
