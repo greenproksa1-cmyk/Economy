@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 
+const BASE_PATH = process.env.NODE_ENV === 'production' ? '/Economy' : '';
+
 // =============================================
 // ICON MAPPING - Flaticon UIicons (Comprehensive)
 // =============================================
@@ -788,7 +790,7 @@ export default function Home() {
           <a href="#" className="navbar-logo" onClick={(e) => { e.preventDefault(); scrollToSection('hero') }}>
             <div className="logo-placeholder" aria-label="قادة الاقتصاد">
               <img 
-                src="/logo.svg" 
+                src={`${BASE_PATH}/logo.svg`} 
                 alt="قادة الاقتصاد - Economy Leaders" 
                 className="logo-img-navbar"
                 onError={(e) => {
@@ -1374,7 +1376,7 @@ export default function Home() {
               {/* Official Logo Placeholder - Footer */}
               <div className="footer-logo-placeholder" aria-label="شعار قادة الاقتصاد">
                 <img 
-                  src="/logo.svg" 
+                  src={`${BASE_PATH}/logo.svg`} 
                   alt="شعار قادة الاقتصاد" 
                   className="logo-img-footer"
                   onError={(e) => {

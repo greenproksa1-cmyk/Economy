@@ -1,7 +1,13 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const nextConfig: NextConfig = {
-  output: "standalone",
+  output: "export",
+  basePath: isProd ? "/Economy" : "",
+  images: {
+    unoptimized: true,
+  },
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,
