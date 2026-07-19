@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 
-const BASE_PATH = process.env.NODE_ENV === 'production' ? '/Economy' : '';
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 // =============================================
 // ICON MAPPING - Flaticon UIicons (Comprehensive)
@@ -25,7 +25,7 @@ const iconMap = {
   target: 'fi fi-rr-target',
   
   // About Features (4 items)
-  comment: 'fi fi-rr-comment-quote',
+  comment: 'fi fi-rr-comment',
   star: 'fi fi-rr-star',
   stats: 'fi fi-rr-chart-pie',
   trophy: 'fi fi-rr-trophy',
@@ -33,8 +33,8 @@ const iconMap = {
   // Target Audiences (9 items) - Each MUST have an icon
   businessman: 'fi fi-rr-briefcase',
   investor: 'fi fi-rr-chart-line-up',
-  entrepreneur: 'fi fi-rr-rocket-lunch',
-  executive: 'fi fi-rr-user-tie',
+  entrepreneur: 'fi fi-rr-rocket',
+  executive: 'fi fi-rr-id-badge',
   decisionMaker: 'fi fi-rr-flag',
   government: 'fi fi-rr-building',
   media: 'fi fi-rr-newspaper',
@@ -42,28 +42,28 @@ const iconMap = {
   enthusiast: 'fi fi-rr-user',
   
   // Sectors (16 items) - Each MUST have an icon
-  industry: 'fi fi-rr-factory',
+  industry: 'fi fi-rr-industry',
   energy: 'fi fi-rr-battery-full',
-  mining: 'fi fi-rr-digging',
+  mining: 'fi fi-rr-settings',
   agriculture: 'fi fi-rr-wheat',
   technology: 'fi fi-rr-microchip',
-  logistics: 'fi fi-rr-truck',
+  logistics: 'fi fi-rr-truck-moving',
   realEstate: 'fi fi-rr-building',
-  tourism: 'fi fi-rr-suitcase',
+  tourism: 'fi fi-rr-plane',
   health: 'fi fi-rr-heart-pulse',
   education: 'fi fi-rr-book-alt',
   finance: 'fi fi-rr-coins',
   insurance: 'fi fi-rr-shield-check',
-  telecom: 'fi fi-rr-signal-alt-3',
+  telecom: 'fi fi-rr-signal-alt',
   trade: 'fi fi-rr-shopping-cart',
   foodSecurity: 'fi fi-rr-leaf',
-  digitalEconomy: 'fi fi-rr-circle-nodes',
+  digitalEconomy: 'fi fi-rr-globe',
   
   // Production Elements (6 items) - Each MUST have an icon
   camera: 'fi fi-rr-camera',
   director: 'fi fi-rr-clapperboard',
   report: 'fi fi-rr-document',
-  infographic: 'fi fi-rr-chart-bar',
+  infographic: 'fi fi-rr-chart-pie',
   audio: 'fi fi-rr-microphone',
   music: 'fi fi-rr-music',
   
@@ -801,7 +801,6 @@ export default function Home() {
                 }}
               />
               <i className={`${iconMap.logo} logo-icon-flaticon hidden`}></i>
-              <span className="logo-text">{lang === 'ar' ? 'قادة الاقتصاد' : 'Economy Leaders'}<span className="logo-text-highlight"> | </span></span>
             </div>
           </a>
 
