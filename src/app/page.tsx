@@ -12,7 +12,7 @@ const iconMap = {
   // Vision & Mission
   vision: 'fa-solid fa-eye',
   mission: 'fa-solid fa-bullseye',
-  
+
   // Objectives (9 items)
   crown: 'fa-solid fa-crown',
   bulb: 'fa-solid fa-lightbulb',
@@ -23,13 +23,13 @@ const iconMap = {
   bolt: 'fa-solid fa-bolt',
   leaf: 'fa-solid fa-leaf',
   target: 'fa-solid fa-bullseye',
-  
+
   // About Features (4 items)
   comment: 'fa-solid fa-comments',
   star: 'fa-solid fa-star',
   stats: 'fa-solid fa-chart-pie',
   trophy: 'fa-solid fa-trophy',
-  
+
   // Target Audiences (9 items)
   businessman: 'fa-solid fa-briefcase',
   investor: 'fa-solid fa-chart-line',
@@ -40,7 +40,7 @@ const iconMap = {
   media: 'fa-solid fa-newspaper',
   student: 'fa-solid fa-graduation-cap',
   enthusiast: 'fa-solid fa-user',
-  
+
   // Sectors (16 items)
   industry: 'fa-solid fa-industry',
   energy: 'fa-solid fa-bolt',
@@ -58,7 +58,7 @@ const iconMap = {
   trade: 'fa-solid fa-cart-shopping',
   foodSecurity: 'fa-solid fa-wheat-awn',
   digitalEconomy: 'fa-solid fa-globe',
-  
+
   // Production Elements (6 items)
   camera: 'fa-solid fa-camera',
   director: 'fa-solid fa-clapperboard',
@@ -66,7 +66,7 @@ const iconMap = {
   infographic: 'fa-solid fa-chart-bar',
   audio: 'fa-solid fa-microphone',
   music: 'fa-solid fa-music',
-  
+
   // Publishing Plan (6 items)
   videoBroadcast: 'fa-solid fa-video',
   shortClip: 'fa-solid fa-scissors',
@@ -74,7 +74,7 @@ const iconMap = {
   pressCoverage: 'fa-solid fa-newspaper',
   digitalCampaign: 'fa-solid fa-mobile-screen',
   quote: 'fa-solid fa-quote-right',
-  
+
   // Sponsorship Opportunities (6 items)
   mediaTV: 'fa-solid fa-tv',
   branding: 'fa-solid fa-star',
@@ -82,20 +82,20 @@ const iconMap = {
   audience: 'fa-solid fa-users',
   publishingPlan: 'fa-solid fa-share-nodes',
   nationalContent: 'fa-solid fa-crown',
-  
+
   // Contact & Footer
   location: 'fa-solid fa-location-dot',
   phone: 'fa-solid fa-phone',
   email: 'fa-solid fa-envelope',
   building: 'fa-solid fa-building',
   logo: 'fa-solid fa-building',
-  
+
   // Social Media
   twitter: 'fa-brands fa-x-twitter',
   linkedin: 'fa-brands fa-linkedin',
   instagram: 'fa-brands fa-instagram',
   youtube: 'fa-brands fa-youtube',
-  
+
   // Timeline Icons (10 axes)
   timelineFounding: 'fa-solid fa-rocket',
   timelineChallenges: 'fa-solid fa-shield-halved',
@@ -277,7 +277,7 @@ const translations = {
       address: 'الرياض - المعذر الشمالي - تقاطع طريق الملك فهد مع موسى بن النصير',
       phone: '+966 59 0401 777',
       email: 'ram@ram-est.com',
-      copyright: '© 2024 قادة الاقتصاد - جميع الحقوق محفوظة | شركة رام الجزيرة للإنتاج الإعلامي',
+      copyright: '© 6 قادة الاقتصاد - جميع الحقوق محفوظة | شركة رام الجزيرة للإنتاج الإعلامي',
     },
   },
   en: {
@@ -444,7 +444,7 @@ const translations = {
       address: 'Riyadh - Al-Muamzar North - Intersection of King Fahd Road with Musa bin Nusair',
       phone: '+966 59 0401 777',
       email: 'ram@ram-est.com',
-      copyright: '© 2024 Economy Leaders - All Rights Reserved | Ram Al-Jazeerah Media Production',
+      copyright: '© 2026 Economy Leaders - All Rights Reserved | Ram Al-Jazeerah Media Production',
     },
   },
 }
@@ -452,8 +452,8 @@ const translations = {
 // =============================================
 // SPOTLIGHT CARD COMPONENT (with subtle glow effect)
 // =============================================
-function SpotlightCard({ children, className = '', popular = false }: { 
-  children: React.ReactNode; 
+function SpotlightCard({ children, className = '', popular = false }: {
+  children: React.ReactNode;
   className?: string;
   popular?: boolean;
 }) {
@@ -465,9 +465,9 @@ function SpotlightCard({ children, className = '', popular = false }: {
     if (!divRef.current) return
     const rect = divRef.current.getBoundingClientRect()
     // Very subtle position tracking - reduced sensitivity
-    setPosition({ 
-      x: e.clientX - rect.left, 
-      y: e.clientY - rect.top 
+    setPosition({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
     })
   }
 
@@ -494,7 +494,7 @@ function SpotlightCard({ children, className = '', popular = false }: {
           <span>الأكثر طلباً</span>
         </div>
       )}
-      
+
       {/* Spotlight Effect - Very subtle glow */}
       <div
         className="spotlight-effect"
@@ -557,7 +557,7 @@ function StatsCounter({ lang }: { lang: 'ar' | 'en' }) {
   return (
     <section ref={ref} className="stats-section">
       <div className="stats-grid">
-        <motion.div 
+        <motion.div
           className="stat-item"
           initial={{ opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -570,7 +570,7 @@ function StatsCounter({ lang }: { lang: 'ar' | 'en' }) {
           </div>
           <div className="stat-label">{t.about.statEpisodes}</div>
         </motion.div>
-        <motion.div 
+        <motion.div
           className="stat-item"
           initial={{ opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -583,7 +583,7 @@ function StatsCounter({ lang }: { lang: 'ar' | 'en' }) {
           </div>
           <div className="stat-label">{t.about.statSectors}</div>
         </motion.div>
-        <motion.div 
+        <motion.div
           className="stat-item"
           initial={{ opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -596,7 +596,7 @@ function StatsCounter({ lang }: { lang: 'ar' | 'en' }) {
           </div>
           <div className="stat-label">{t.about.statGuests}</div>
         </motion.div>
-        <motion.div 
+        <motion.div
           className="stat-item"
           initial={{ opacity: 0, y: 35 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -754,10 +754,10 @@ export default function Home() {
     <div dir={lang === 'ar' ? 'rtl' : 'ltr'} className="main-wrapper">
       {/* Noise Texture Overlay */}
       <div className="noise-overlay" aria-hidden="true"></div>
-      
+
       {/* Scroll Progress Indicator */}
       <ScrollProgressIndicator />
-      
+
       {/* ===== PRELOADER ===== */}
       <AnimatePresence>
         {isLoading && (
@@ -789,9 +789,9 @@ export default function Home() {
           {/* Official Logo Placeholder - Navbar */}
           <a href="#" className="navbar-logo" onClick={(e) => { e.preventDefault(); scrollToSection('hero') }}>
             <div className="logo-placeholder" aria-label="قادة الاقتصاد">
-              <img 
-                src={`${BASE_PATH}/logo.gif`} 
-                alt="قادة الاقتصاد - Economy Leaders" 
+              <img
+                src={`${BASE_PATH}/logo.gif`}
+                alt="قادة الاقتصاد - Economy Leaders"
                 className="logo-img-navbar"
                 onError={(e) => {
                   // Fallback to icon if image not found
@@ -851,15 +851,15 @@ export default function Home() {
       {/* ===== HERO SECTION (No Three.js - Image Only with Gradient Mask) ===== */}
       <section id="hero" className="hero-section">
         {/* Hero Background Image with Gradient Mask is handled via CSS ::before and ::after */}
-        
+
         {/* Hero Content */}
-        <motion.div 
+        <motion.div
           className="hero-content"
           initial={{ opacity: 0 }}
           animate={{ opacity: isLoading ? 0 : 1 }}
           transition={{ duration: 0.85, delay: 0.45 }}
         >
-          <motion.div 
+          <motion.div
             className="hero-badge animate__animated animate__fadeInDown"
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -869,7 +869,7 @@ export default function Home() {
             {t.hero.badge}
           </motion.div>
 
-          <motion.h1 
+          <motion.h1
             className="hero-title"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -878,7 +878,7 @@ export default function Home() {
             {t.hero.title} <span className="highlight">{t.hero.titleHighlight}</span>
           </motion.h1>
 
-          <motion.p 
+          <motion.p
             className="hero-subtitle"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -887,7 +887,7 @@ export default function Home() {
             {t.hero.subtitle}
           </motion.p>
 
-          <motion.div 
+          <motion.div
             className="hero-buttons"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -916,7 +916,7 @@ export default function Home() {
       {/* ===== ABOUT SECTION ===== */}
       <section id="about" className="section section-light">
         <div className="container">
-          <motion.div 
+          <motion.div
             className="about-grid"
             initial="hidden"
             whileInView="visible"
@@ -924,9 +924,9 @@ export default function Home() {
             variants={staggerContainer}
           >
             <motion.div variants={fadeInUp} className="about-image-wrapper">
-              <img 
-                src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=850&q=85" 
-                alt="Saudi Economy Skyline" 
+              <img
+                src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=850&q=85"
+                alt="Saudi Economy Skyline"
                 className="about-image"
                 loading="lazy"
               />
@@ -953,7 +953,7 @@ export default function Home() {
               <h2>{t.about.title}</h2>
               <p>{t.about.p1}</p>
               <p>{t.about.p2}</p>
-              
+
               <div className="about-features">
                 <div className="about-feature-item">
                   <div className="about-feature-icon"><i className={iconMap.comment}></i></div>
@@ -983,7 +983,7 @@ export default function Home() {
       {/* ===== VISION & MISSION SECTION ===== */}
       <section id="vision" className="section section-dark">
         <div className="container">
-          <motion.div 
+          <motion.div
             className="section-header"
             initial="hidden"
             whileInView="visible"
@@ -994,7 +994,7 @@ export default function Home() {
             <h2 className="section-title">{t.vm.badge}</h2>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="vision-mission-grid"
             initial="hidden"
             whileInView="visible"
@@ -1025,7 +1025,7 @@ export default function Home() {
       {/* ===== OBJECTIVES SECTION (9 Objectives) ===== */}
       <section id="objectives" className="section section-light">
         <div className="container">
-          <motion.div 
+          <motion.div
             className="section-header"
             initial="hidden"
             whileInView="visible"
@@ -1036,7 +1036,7 @@ export default function Home() {
             <h2 className="section-title">{t.objectives.title}</h2>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="objectives-grid"
             initial="hidden"
             whileInView="visible"
@@ -1045,7 +1045,7 @@ export default function Home() {
           >
             {t.objectives.items.map((item, index) => (
               <SpotlightCard key={index} className="objective-card-wrapper">
-                <motion.div 
+                <motion.div
                   variants={scaleIn}
                   className="objective-card"
                   whileHover={{ scale: 1.04, y: -8 }}
@@ -1066,7 +1066,7 @@ export default function Home() {
       {/* ===== TIMELINE / EPISODES SECTION (10 Axes) - Fixed Layout ===== */}
       <section id="episodes" className="section timeline-section">
         <div className="container">
-          <motion.div 
+          <motion.div
             className="section-header"
             initial="hidden"
             whileInView="visible"
@@ -1078,7 +1078,7 @@ export default function Home() {
             <p className="section-subtitle">{t.timeline.subtitle}</p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="timeline-container"
             initial="hidden"
             whileInView="visible"
@@ -1088,8 +1088,8 @@ export default function Home() {
             <div className="timeline-line"></div>
             <div className="timeline-grid">
               {t.timeline.items.map((item, index) => (
-                <motion.div 
-                  key={index} 
+                <motion.div
+                  key={index}
                   variants={fadeInUp}
                   className="timeline-item"
                 >
@@ -1111,7 +1111,7 @@ export default function Home() {
       {/* ===== TARGET AUDIENCES & SECTORS SECTION ===== */}
       <section id="targets" className="section section-light">
         <div className="container">
-          <motion.div 
+          <motion.div
             className="section-header"
             initial="hidden"
             whileInView="visible"
@@ -1122,7 +1122,7 @@ export default function Home() {
             <h2 className="section-title">{t.targets.badge}</h2>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="targets-grid"
             initial="hidden"
             whileInView="visible"
@@ -1136,7 +1136,7 @@ export default function Home() {
               </h3>
               <div className="audience-cards">
                 {t.targets.audiences.map((audience, index) => (
-                  <motion.div 
+                  <motion.div
                     key={index}
                     variants={scaleIn}
                     className="audience-card"
@@ -1156,7 +1156,7 @@ export default function Home() {
               </h3>
               <div className="tag-cloud">
                 {t.targets.sectors.map((sector, index) => (
-                  <motion.span 
+                  <motion.span
                     key={index}
                     variants={scaleIn}
                     className={`tag ${sector.size}`}
@@ -1174,15 +1174,15 @@ export default function Home() {
 
       {/* ===== NATIONAL VALUE SECTION ===== */}
       <section id="national-value" className="national-value-section">
-        <img 
-          src="https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?w=1500&q=85" 
-          alt="Saudi Arabia Kingdom Tower" 
+        <img
+          src="https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?w=1500&q=85"
+          alt="Saudi Arabia Kingdom Tower"
           className="national-value-bg"
           loading="lazy"
         />
         <div className="national-value-overlay"></div>
-        
-        <motion.div 
+
+        <motion.div
           className="national-value-content"
           initial="hidden"
           whileInView="visible"
@@ -1202,7 +1202,7 @@ export default function Home() {
       {/* ===== PRODUCTION ELEMENTS SECTION ===== */}
       <section id="production" className="section section-gray">
         <div className="container">
-          <motion.div 
+          <motion.div
             className="section-header"
             initial="hidden"
             whileInView="visible"
@@ -1213,7 +1213,7 @@ export default function Home() {
             <h2 className="section-title">{t.production.badge}</h2>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="production-grid"
             initial="hidden"
             whileInView="visible"
@@ -1227,7 +1227,7 @@ export default function Home() {
               </h3>
               <ul className="production-list">
                 {t.production.productionItems.map((item, index) => (
-                  <motion.li 
+                  <motion.li
                     key={index}
                     variants={fadeInUp}
                     whileHover={{ x: lang === 'ar' ? 10 : -10 }}
@@ -1247,7 +1247,7 @@ export default function Home() {
               </h3>
               <ul className="production-list">
                 {t.production.publishingItems.map((item, index) => (
-                  <motion.li 
+                  <motion.li
                     key={index}
                     variants={fadeInUp}
                     whileHover={{ x: lang === 'ar' ? 10 : -10 }}
@@ -1266,7 +1266,7 @@ export default function Home() {
       {/* ===== SPONSORSHIP OPPORTUNITIES SECTION (6 Cards) ===== */}
       <section id="sponsorship" className="section sponsorship-section">
         <div className="container">
-          <motion.div 
+          <motion.div
             className="section-header"
             initial="hidden"
             whileInView="visible"
@@ -1277,7 +1277,7 @@ export default function Home() {
             <h2 className="section-title">{t.sponsorship.title}</h2>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="sponsorship-grid"
             initial="hidden"
             whileInView="visible"
@@ -1286,10 +1286,10 @@ export default function Home() {
           >
             {t.sponsorship.items.map((item, index) => (
               <SpotlightCard key={index} popular={item.popular} className="sponsorship-card-wrapper">
-                <motion.div 
+                <motion.div
                   variants={scaleIn}
                   className="sponsorship-card"
-                  whileHover={{ 
+                  whileHover={{
                     y: -12,
                     rotateX: 3,
                   }}
@@ -1312,8 +1312,8 @@ export default function Home() {
       <section id="why-us" className="quote-section">
         <div className="quote-decoration quote-left">&ldquo;</div>
         <div className="quote-decoration quote-right">&rdquo;</div>
-        
-        <motion.div 
+
+        <motion.div
           className="quote-content"
           initial="hidden"
           whileInView="visible"
@@ -1332,7 +1332,7 @@ export default function Home() {
       {/* ===== CONTACT & FOOTER SECTION ===== */}
       <section id="contact" className="contact-footer-section">
         <div className="container">
-          <motion.div 
+          <motion.div
             className="contact-footer-grid"
             initial="hidden"
             whileInView="visible"
@@ -1346,7 +1346,7 @@ export default function Home() {
                 {t.contact.title}
               </h3>
               <p className="form-subtitle">{t.contact.subtitle}</p>
-              
+
               <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
                 <div className="form-group">
                   <label>{t.contact.name}</label>
@@ -1374,9 +1374,9 @@ export default function Home() {
             <motion.div variants={fadeInUp} className="footer-info">
               {/* Official Logo Placeholder - Footer */}
               <div className="footer-logo-placeholder" aria-label="شعار قادة الاقتصاد">
-                <img 
-                  src={`${BASE_PATH}/logo.gif`} 
-                  alt="شعار قادة الاقتصاد" 
+                <img
+                  src={`${BASE_PATH}/logo.gif`}
+                  alt="شعار قادة الاقتصاد"
                   className="logo-img-footer"
                   onError={(e) => {
                     // Fallback to icon if image not found
@@ -1387,16 +1387,16 @@ export default function Home() {
                 />
                 <i className="fi fi-rr-building-columns footer-logo-icon-fallback hidden"></i>
               </div>
-              
+
               <h3 className="company-title">
                 <i className={iconMap.building}></i>
-                {t.contact.companyTitle} <br/>
+                {t.contact.companyTitle} <br />
                 <span className="company-subtitle">{t.contact.companySubtitle}</span>
               </h3>
 
               <div className="company-info">
                 <div className="company-name">شركة رام الجزيرة للإنتاج الإعلامي</div>
-                
+
                 <div className="contact-details">
                   <div className="contact-detail-item">
                     <div className="contact-detail-icon"><i className={iconMap.location}></i></div>
@@ -1430,7 +1430,7 @@ export default function Home() {
             </motion.div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="footer-bottom"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
