@@ -6,107 +6,107 @@ import { motion, AnimatePresence, useInView } from 'framer-motion'
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 // =============================================
-// ICON MAPPING - Flaticon UIicons (Comprehensive)
+// ICON MAPPING - Font Awesome 6 (Comprehensive)
 // =============================================
 const iconMap = {
   // Vision & Mission
-  vision: 'fi fi-rr-eye',
-  mission: 'fi fi-rr-target',
+  vision: 'fa-solid fa-eye',
+  mission: 'fa-solid fa-bullseye',
   
-  // Objectives (9 items) - Each MUST have an icon
-  crown: 'fi fi-rr-crown',
-  bulb: 'fi fi-rr-lightbulb',
-  chart: 'fi fi-rr-chart-line-up',
-  handshake: 'fi fi-rr-handshake',
-  book: 'fi fi-rr-book-alt',
-  rocket: 'fi fi-rr-rocket',
-  bolt: 'fi fi-rr-bolt',
-  leaf: 'fi fi-rr-leaf',
-  target: 'fi fi-rr-target',
+  // Objectives (9 items)
+  crown: 'fa-solid fa-crown',
+  bulb: 'fa-solid fa-lightbulb',
+  chart: 'fa-solid fa-chart-line',
+  handshake: 'fa-solid fa-handshake',
+  book: 'fa-solid fa-book',
+  rocket: 'fa-solid fa-rocket',
+  bolt: 'fa-solid fa-bolt',
+  leaf: 'fa-solid fa-leaf',
+  target: 'fa-solid fa-bullseye',
   
   // About Features (4 items)
-  comment: 'fi fi-rr-comment',
-  star: 'fi fi-rr-star',
-  stats: 'fi fi-rr-chart-pie',
-  trophy: 'fi fi-rr-trophy',
+  comment: 'fa-solid fa-comments',
+  star: 'fa-solid fa-star',
+  stats: 'fa-solid fa-chart-pie',
+  trophy: 'fa-solid fa-trophy',
   
-  // Target Audiences (9 items) - Each MUST have an icon
-  businessman: 'fi fi-rr-briefcase',
-  investor: 'fi fi-rr-chart-line-up',
-  entrepreneur: 'fi fi-rr-rocket',
-  executive: 'fi fi-rr-id-badge',
-  decisionMaker: 'fi fi-rr-flag',
-  government: 'fi fi-rr-building',
-  media: 'fi fi-rr-newspaper',
-  student: 'fi fi-rr-graduation-cap',
-  enthusiast: 'fi fi-rr-user',
+  // Target Audiences (9 items)
+  businessman: 'fa-solid fa-briefcase',
+  investor: 'fa-solid fa-chart-line',
+  entrepreneur: 'fa-solid fa-rocket',
+  executive: 'fa-solid fa-user-tie',
+  decisionMaker: 'fa-solid fa-flag',
+  government: 'fa-solid fa-building-columns',
+  media: 'fa-solid fa-newspaper',
+  student: 'fa-solid fa-graduation-cap',
+  enthusiast: 'fa-solid fa-user',
   
-  // Sectors (16 items) - Each MUST have an icon
-  industry: 'fi fi-rr-industry',
-  energy: 'fi fi-rr-battery-full',
-  mining: 'fi fi-rr-settings',
-  agriculture: 'fi fi-rr-wheat',
-  technology: 'fi fi-rr-microchip',
-  logistics: 'fi fi-rr-truck-moving',
-  realEstate: 'fi fi-rr-building',
-  tourism: 'fi fi-rr-plane',
-  health: 'fi fi-rr-heart-pulse',
-  education: 'fi fi-rr-book-alt',
-  finance: 'fi fi-rr-coins',
-  insurance: 'fi fi-rr-shield-check',
-  telecom: 'fi fi-rr-signal-alt',
-  trade: 'fi fi-rr-shopping-cart',
-  foodSecurity: 'fi fi-rr-leaf',
-  digitalEconomy: 'fi fi-rr-globe',
+  // Sectors (16 items)
+  industry: 'fa-solid fa-industry',
+  energy: 'fa-solid fa-bolt',
+  mining: 'fa-solid fa-mountain',
+  agriculture: 'fa-solid fa-seedling',
+  technology: 'fa-solid fa-microchip',
+  logistics: 'fa-solid fa-truck',
+  realEstate: 'fa-solid fa-building',
+  tourism: 'fa-solid fa-plane',
+  health: 'fa-solid fa-heart-pulse',
+  education: 'fa-solid fa-graduation-cap',
+  finance: 'fa-solid fa-coins',
+  insurance: 'fa-solid fa-shield-halved',
+  telecom: 'fa-solid fa-signal',
+  trade: 'fa-solid fa-cart-shopping',
+  foodSecurity: 'fa-solid fa-wheat-awn',
+  digitalEconomy: 'fa-solid fa-globe',
   
-  // Production Elements (6 items) - Each MUST have an icon
-  camera: 'fi fi-rr-camera',
-  director: 'fi fi-rr-clapperboard',
-  report: 'fi fi-rr-document',
-  infographic: 'fi fi-rr-chart-pie',
-  audio: 'fi fi-rr-microphone',
-  music: 'fi fi-rr-music',
+  // Production Elements (6 items)
+  camera: 'fa-solid fa-camera',
+  director: 'fa-solid fa-clapperboard',
+  report: 'fa-solid fa-file-lines',
+  infographic: 'fa-solid fa-chart-bar',
+  audio: 'fa-solid fa-microphone',
+  music: 'fa-solid fa-music',
   
-  // Publishing Plan (6 items) - Each MUST have an icon
-  videoBroadcast: 'fi fi-rr-video-camera',
-  shortClip: 'fi fi-rr-scissors',
-  guestContent: 'fi fi-rr-user',
-  pressCoverage: 'fi fi-rr-newspaper',
-  digitalCampaign: 'fi fi-rr-smartphone',
-  quote: 'fi fi-rr-quote-right',
+  // Publishing Plan (6 items)
+  videoBroadcast: 'fa-solid fa-video',
+  shortClip: 'fa-solid fa-scissors',
+  guestContent: 'fa-solid fa-user-pen',
+  pressCoverage: 'fa-solid fa-newspaper',
+  digitalCampaign: 'fa-solid fa-mobile-screen',
+  quote: 'fa-solid fa-quote-right',
   
-  // Sponsorship Opportunities (6 items) - Each MUST have an icon
-  mediaTV: 'fi fi-rr-play-circle',
-  branding: 'fi fi-rr-star',
-  digitalPresence: 'fi fi-rr-globe',
-  audience: 'fi fi-rr-users',
-  publishingPlan: 'fi fi-rr-share',
-  nationalContent: 'fi fi-rr-crown',
+  // Sponsorship Opportunities (6 items)
+  mediaTV: 'fa-solid fa-tv',
+  branding: 'fa-solid fa-star',
+  digitalPresence: 'fa-solid fa-globe',
+  audience: 'fa-solid fa-users',
+  publishingPlan: 'fa-solid fa-share-nodes',
+  nationalContent: 'fa-solid fa-crown',
   
-  // Contact & Footer (All MUST have icons)
-  location: 'fi fi-rr-marker',
-  phone: 'fi fi-rr-phone-call',
-  email: 'fi fi-rr-envelope',
-  building: 'fi fi-rr-building',
-  logo: 'fi fi-rr-building',
+  // Contact & Footer
+  location: 'fa-solid fa-location-dot',
+  phone: 'fa-solid fa-phone',
+  email: 'fa-solid fa-envelope',
+  building: 'fa-solid fa-building',
+  logo: 'fa-solid fa-building',
   
-  // Social Media (4 items) - All MUST have icons
-  twitter: 'fi fi-brands-twitter',
-  linkedin: 'fi fi-brands-linkedin',
-  instagram: 'fi fi-brands-instagram',
-  youtube: 'fi fi-brands-youtube',
+  // Social Media
+  twitter: 'fa-brands fa-x-twitter',
+  linkedin: 'fa-brands fa-linkedin',
+  instagram: 'fa-brands fa-instagram',
+  youtube: 'fa-brands fa-youtube',
   
-  // Timeline Icons (10 axes) - Each MUST have an icon
-  timelineFounding: 'fi fi-rr-rocket',
-  timelineChallenges: 'fi fi-rr-shield-check',
-  timelineSuccess: 'fi fi-rr-trophy',
-  timelineLeadership: 'fi fi-rr-briefcase',
-  timelineInvestment: 'fi fi-rr-chart-line-up',
-  timelineTalent: 'fi fi-rr-graduation-cap',
-  timelineInnovation: 'fi fi-rr-lightbulb',
-  timelineSocial: 'fi fi-rr-heart',
-  timelineFuture: 'fi fi-rr-telescope',
-  timelineVision2030: 'fi fi-rr-flag',
+  // Timeline Icons (10 axes)
+  timelineFounding: 'fa-solid fa-rocket',
+  timelineChallenges: 'fa-solid fa-shield-halved',
+  timelineSuccess: 'fa-solid fa-trophy',
+  timelineLeadership: 'fa-solid fa-briefcase',
+  timelineInvestment: 'fa-solid fa-chart-line',
+  timelineTalent: 'fa-solid fa-graduation-cap',
+  timelineInnovation: 'fa-solid fa-lightbulb',
+  timelineSocial: 'fa-solid fa-heart',
+  timelineFuture: 'fa-solid fa-binoculars',
+  timelineVision2030: 'fa-solid fa-flag',
 }
 
 // =============================================
@@ -490,7 +490,7 @@ function SpotlightCard({ children, className = '', popular = false }: {
       {/* Popular Badge */}
       {popular && (
         <div className="popular-badge">
-          <i className="fi fi-rr-star"></i>
+          <i className="fa-solid fa-star"></i>
           <span>الأكثر طلباً</span>
         </div>
       )}
@@ -769,7 +769,7 @@ export default function Home() {
           >
             <div className="preloader-content">
               <div className="preloader-logo">
-                <i className="fi fi-rr-building-columns preloader-icon"></i>
+                <i className="fa-solid fa-building-columns preloader-icon"></i>
                 {lang === 'ar' ? 'قادة الاقتصاد' : 'Economy Leaders'}
               </div>
               <div className="preloader-spinner"></div>
@@ -819,7 +819,7 @@ export default function Home() {
               {lang === 'ar' ? 'EN' : 'عربي'}
             </button>
             <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(true)} aria-label="Open menu">
-              <i className="fi fi-rr-menu-burger"></i>
+              <i className="fa-solid fa-bars"></i>
             </button>
           </div>
         </div>
@@ -834,7 +834,7 @@ export default function Home() {
             {lang === 'ar' ? 'قادة الاقتصاد' : 'Economy Leaders'}
           </span>
           <button className="mobile-menu-close" onClick={() => setMobileMenuOpen(false)} aria-label="Close menu">
-            <i className="fi fi-rr-cross-small"></i>
+            <i className="fa-solid fa-xmark"></i>
           </button>
         </div>
         <ul className="mobile-menu-links">
@@ -865,7 +865,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.75 }}
           >
-            <i className="fi fi-rr-flag hero-badge-icon"></i>
+            <i className="fa-solid fa-flag hero-badge-icon"></i>
             {t.hero.badge}
           </motion.div>
 
@@ -894,10 +894,10 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 1.4 }}
           >
             <button className="btn-primary animate__animated animate__pulse" onClick={() => scrollToSection('episodes')}>
-              <i className="fi fi-rr-play"></i> {t.hero.cta1}
+              <i className="fa-solid fa-play"></i> {t.hero.cta1}
             </button>
             <button className="btn-secondary" onClick={() => scrollToSection('contact')}>
-              <i className="fi fi-rr-envelope"></i> {t.hero.cta2}
+              <i className="fa-solid fa-envelope"></i> {t.hero.cta2}
             </button>
           </motion.div>
         </motion.div>
@@ -1052,7 +1052,7 @@ export default function Home() {
                 >
                   <div className="objective-card-number">{String(index + 1).padStart(2, '0')}</div>
                   <div className="objective-card-icon">
-                    <i className={iconMap[item.icon as keyof typeof iconMap] || 'fi fi-rr-star'}></i>
+                    <i className={iconMap[item.icon as keyof typeof iconMap] || 'fa-solid fa-star'}></i>
                   </div>
                   <h4>{item.title}</h4>
                   <p>{item.desc}</p>
@@ -1095,7 +1095,7 @@ export default function Home() {
                 >
                   <div className="timeline-item-dot">{String(index + 1).padStart(2, '0')}</div>
                   <div className="timeline-item-content">
-                    <i className={`timeline-item-icon ${iconMap[item.icon as keyof typeof iconMap] || 'fi fi-rr-star'}`}></i>
+                    <i className={`timeline-item-icon ${iconMap[item.icon as keyof typeof iconMap] || 'fa-solid fa-star'}`}></i>
                     <span className="timeline-item-title">{item.text}</span>
                   </div>
                 </motion.div>
@@ -1131,7 +1131,7 @@ export default function Home() {
           >
             <motion.div variants={fadeInUp} className="target-category">
               <h3 className="category-title">
-                <i className="fi fi-rr-users category-icon"></i>
+                <i className="fa-solid fa-users category-icon"></i>
                 {t.targets.audiencesTitle}
               </h3>
               <div className="audience-cards">
@@ -1142,7 +1142,7 @@ export default function Home() {
                     className="audience-card"
                     whileHover={{ scale: 1.05, y: -6 }}
                   >
-                    <i className={`audience-card-icon ${iconMap[audience.icon as keyof typeof iconMap] || 'fi fi-rr-user'}`}></i>
+                    <i className={`audience-card-icon ${iconMap[audience.icon as keyof typeof iconMap] || 'fa-solid fa-user'}`}></i>
                     <span>{audience.text}</span>
                   </motion.div>
                 ))}
@@ -1151,7 +1151,7 @@ export default function Home() {
 
             <motion.div variants={fadeInUp} className="target-category">
               <h3 className="category-title">
-                <i className="fi fi-rr-grid category-icon"></i>
+                <i className="fa-solid fa-circle-nodes category-icon"></i>
                 {t.targets.sectorsTitle}
               </h3>
               <div className="tag-cloud">
@@ -1162,7 +1162,7 @@ export default function Home() {
                     className={`tag ${sector.size}`}
                     whileHover={{ scale: 1.1 }}
                   >
-                    <i className={`tag-icon ${iconMap[sector.icon as keyof typeof iconMap] || 'fi fi-rr-folder'}`}></i>
+                    <i className={`tag-icon ${iconMap[sector.icon as keyof typeof iconMap] || 'fa-solid fa-folder'}`}></i>
                     {sector.text}
                   </motion.span>
                 ))}
@@ -1190,7 +1190,7 @@ export default function Home() {
           variants={staggerContainer}
         >
           <motion.div variants={fadeInUp} className="national-value-icon-wrapper">
-            <i className="fi fi-rr-globe national-value-icon"></i>
+            <i className="fa-solid fa-globe national-value-icon"></i>
           </motion.div>
           <motion.h2 variants={fadeInUp}>{t.nationalValue.title}</motion.h2>
           <motion.p variants={fadeInUp}>
@@ -1222,7 +1222,7 @@ export default function Home() {
           >
             <motion.div variants={fadeInUp} className="production-column">
               <h3 className="column-title">
-                <i className="fi fi-rr-clapperboard column-icon"></i>
+                <i className="fa-solid fa-clapperboard column-icon"></i>
                 {t.production.productionTitle}
               </h3>
               <ul className="production-list">
@@ -1233,7 +1233,7 @@ export default function Home() {
                     whileHover={{ x: lang === 'ar' ? 10 : -10 }}
                     className="production-list-item"
                   >
-                    <div className="check-icon"><i className={iconMap[item.icon as keyof typeof iconMap] || 'fi fi-rr-check'}></i></div>
+                    <div className="check-icon"><i className={iconMap[item.icon as keyof typeof iconMap] || 'fa-solid fa-check'}></i></div>
                     <span>{item.text}</span>
                   </motion.li>
                 ))}
@@ -1242,7 +1242,7 @@ export default function Home() {
 
             <motion.div variants={fadeInUp} className="production-column">
               <h3 className="column-title">
-                <i className="fi fi-rr-broadcast-tower column-icon"></i>
+                <i className="fa-solid fa-tower-broadcast column-icon"></i>
                 {t.production.publishingTitle}
               </h3>
               <ul className="production-list">
@@ -1253,7 +1253,7 @@ export default function Home() {
                     whileHover={{ x: lang === 'ar' ? 10 : -10 }}
                     className="production-list-item"
                   >
-                    <div className="check-icon"><i className={iconMap[item.icon as keyof typeof iconMap] || 'fi fi-rr-check'}></i></div>
+                    <div className="check-icon"><i className={iconMap[item.icon as keyof typeof iconMap] || 'fa-solid fa-check'}></i></div>
                     <span>{item.text}</span>
                   </motion.li>
                 ))}
@@ -1296,7 +1296,7 @@ export default function Home() {
                   style={{ transformStyle: 'preserve-3d' }}
                 >
                   <div className="sponsorship-card-icon">
-                    <i className={iconMap[item.icon as keyof typeof iconMap] || 'fi fi-rr-star'}></i>
+                    <i className={iconMap[item.icon as keyof typeof iconMap] || 'fa-solid fa-star'}></i>
                   </div>
                   <h4>{item.title}</h4>
                   <p>{item.desc}</p>
@@ -1365,7 +1365,7 @@ export default function Home() {
                   <textarea placeholder={t.contact.message} required></textarea>
                 </div>
                 <button type="submit" className="btn-submit">
-                  {t.contact.submit} <i className="fi fi-rr-arrow-left"></i>
+                  {t.contact.submit} <i className="fa-solid fa-arrow-left"></i>
                 </button>
               </form>
             </motion.div>

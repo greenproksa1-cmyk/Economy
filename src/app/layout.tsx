@@ -29,25 +29,11 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700;800&family=Almarai:wght@300;400;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" 
           rel="stylesheet" 
         />
-        {/* Flaticon UIcons - Regular Rounded */}
+        {/* Font Awesome 6 Free - All Icons */}
         <link 
           rel="stylesheet" 
-          href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css"
-        />
-        {/* Flaticon UIcons - Bold Rounded */}
-        <link 
-          rel="stylesheet" 
-          href="https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css"
-        />
-        {/* Flaticon UIcons - Solid Rounded */}
-        <link 
-          rel="stylesheet" 
-          href="https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css"
-        />
-        {/* Flaticon UIcons - Brands */}
-        <link 
-          rel="stylesheet" 
-          href="https://cdn-uicons.flaticon.com/2.6.0/uicons-brands/css/uicons-brands.css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          crossOrigin="anonymous"
         />
         {/* Animate.css */}
         <link 
