@@ -44,6 +44,11 @@ export default function RootLayout({
           rel="stylesheet" 
           href="https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css"
         />
+        {/* Flaticon UIcons - Brands */}
+        <link 
+          rel="stylesheet" 
+          href="https://cdn-uicons.flaticon.com/2.6.0/uicons-brands/css/uicons-brands.css"
+        />
         {/* Animate.css */}
         <link 
           rel="stylesheet" 

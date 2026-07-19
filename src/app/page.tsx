@@ -70,42 +70,42 @@ const iconMap = {
   // Publishing Plan (6 items) - Each MUST have an icon
   videoBroadcast: 'fi fi-rr-video-camera',
   shortClip: 'fi fi-rr-scissors',
-  guestContent: 'fi fi-rr-user-guest',
+  guestContent: 'fi fi-rr-user',
   pressCoverage: 'fi fi-rr-newspaper',
-  digitalCampaign: 'fi fi-rr-mobile-button',
+  digitalCampaign: 'fi fi-rr-smartphone',
   quote: 'fi fi-rr-quote-right',
   
   // Sponsorship Opportunities (6 items) - Each MUST have an icon
-  mediaTV: 'fi fi-rr-tv',
-  branding: 'fi fi-rr-palette',
+  mediaTV: 'fi fi-rr-play-circle',
+  branding: 'fi fi-rr-star',
   digitalPresence: 'fi fi-rr-globe',
   audience: 'fi fi-rr-users',
   publishingPlan: 'fi fi-rr-share',
-  nationalContent: 'fi fi-rr-medal',
+  nationalContent: 'fi fi-rr-crown',
   
   // Contact & Footer (All MUST have icons)
-  location: 'fi fi-rr-map-pin',
+  location: 'fi fi-rr-marker',
   phone: 'fi fi-rr-phone-call',
   email: 'fi fi-rr-envelope',
-  building: 'fi fi-rr-building-columns',
-  logo: 'fi fi-rr-building-columns',
+  building: 'fi fi-rr-building',
+  logo: 'fi fi-rr-building',
   
   // Social Media (4 items) - All MUST have icons
-  twitter: 'fi fi-rr-twitter',
-  linkedin: 'fi fi-rr-linkedin',
-  instagram: 'fi fi-rr-instagram',
-  youtube: 'fi fi-rr-youtube',
+  twitter: 'fi fi-brands-twitter',
+  linkedin: 'fi fi-brands-linkedin',
+  instagram: 'fi fi-brands-instagram',
+  youtube: 'fi fi-brands-youtube',
   
   // Timeline Icons (10 axes) - Each MUST have an icon
   timelineFounding: 'fi fi-rr-rocket',
-  timelineChallenges: 'fi fi-rr-shield-alt',
+  timelineChallenges: 'fi fi-rr-shield-check',
   timelineSuccess: 'fi fi-rr-trophy',
-  timelineLeadership: 'fi fi-rr-user-tie',
-  timelineInvestment: 'fi fi-rr-chart-pie',
+  timelineLeadership: 'fi fi-rr-briefcase',
+  timelineInvestment: 'fi fi-rr-chart-line-up',
   timelineTalent: 'fi fi-rr-graduation-cap',
   timelineInnovation: 'fi fi-rr-lightbulb',
-  timelineSocial: 'fi fi-rr-heart-handshake',
-  timelineFuture: 'fi fi-rr-compass',
+  timelineSocial: 'fi fi-rr-heart',
+  timelineFuture: 'fi fi-rr-telescope',
   timelineVision2030: 'fi fi-rr-flag',
 }
 
@@ -790,7 +790,7 @@ export default function Home() {
           <a href="#" className="navbar-logo" onClick={(e) => { e.preventDefault(); scrollToSection('hero') }}>
             <div className="logo-placeholder" aria-label="قادة الاقتصاد">
               <img 
-                src={`${BASE_PATH}/logo.svg`} 
+                src={`${BASE_PATH}/logo.gif`} 
                 alt="قادة الاقتصاد - Economy Leaders" 
                 className="logo-img-navbar"
                 onError={(e) => {
@@ -1376,7 +1376,7 @@ export default function Home() {
               {/* Official Logo Placeholder - Footer */}
               <div className="footer-logo-placeholder" aria-label="شعار قادة الاقتصاد">
                 <img 
-                  src={`${BASE_PATH}/logo.svg`} 
+                  src={`${BASE_PATH}/logo.gif`} 
                   alt="شعار قادة الاقتصاد" 
                   className="logo-img-footer"
                   onError={(e) => {
